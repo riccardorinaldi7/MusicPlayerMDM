@@ -1,7 +1,7 @@
 # MusicPlayerMDM
 A very simple music player
 
-##ToDo List
+## ToDo List
 - [ ] Fare menu in alto con File, Help, etc
 - [ ] Tradurre in un'altra lingua, che sia inglese o italiano o altro
 - [ ] Fare interfaccia base per utenti non esperti, anziani, bambini e interfaccia avanzata
