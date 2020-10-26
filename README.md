@@ -2,6 +2,8 @@
 A very simple music player
 
 ## ToDo List
+- [ ] Correggere errore riproduzione automatica
+- [ ] Evitare che cliccando nella lista canzoni il player si sinterrompa
 - [ ] Fare menu in alto con File, Help, etc
 - [ ] Tradurre in un'altra lingua, che sia inglese o italiano o altro
 - [ ] Fare interfaccia base per utenti non esperti, anziani, bambini e interfaccia avanzata
@@ -12,3 +14,4 @@ A very simple music player
 - [ ] Aggiungere il pausa/play se premi la barra spaziatrice
 - [ ] Modificare ampiezza programma: full screen e personalizzato
 - [ ] Aggiungere 4/5 shortcut
+- [ ] Visualizzazione copertina album

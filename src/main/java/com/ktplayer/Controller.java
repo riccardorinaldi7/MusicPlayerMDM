@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -119,7 +120,7 @@ public class Controller {
     private MediaView mediaView;
 
     private boolean isAutoplay;
-    private double volume = 10;
+    private double volume = 50;
     private String path;
 
     private double xOffset = 0;
@@ -133,13 +134,29 @@ public class Controller {
         players = new ArrayList<>();
         songSlider = new JFXSlider();
         isAutoplay = false;
-        volume = 0.1;
+        volume = 0.5; // between 0 and 1
         stage = Main.getStage();
         stage.getIcons().add(new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
     }
 
     @FXML
     private void initialize() throws Exception {
+
+        // Shortcuts handler
+        // Add any shortcut you want here
+        window.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode().getName() == "Space"){
+                    try {
+                        System.out.println("do something");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
 
         window.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -590,9 +607,9 @@ public class Controller {
         path = ClassLoader.getSystemResource("images/Question.PNG").toExternalForm();
         System.out.println(path);
 
-        imagePane.setStyle("-fx-background-image: url(\"" + path + "\"); " +
+        /*imagePane.setStyle("-fx-background-image: url(\"" + path + "\"); " +
                 "-fx-background-position: center center; " +
-                "-fx-background-repeat: stretch;");
+                "-fx-background-repeat: stretch;");*/
 
     }
 
