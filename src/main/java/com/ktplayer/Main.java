@@ -11,8 +11,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class Main extends Application {
@@ -26,24 +29,42 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		setStage(primaryStage);
 
-		//Creating a choice box asking for the language
-		ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>("English");
-		//Retrieving the observable list
-		ObservableList<String> list = choiceDialog.getItems();
-		//Adding items to the language list
-		list.add("English");
-		list.add("Italian");
+		String rootPath = "src\\main\\resources\\";
+		String appConfigPath = rootPath + "application.properties";
 
-		// Show the dialog box and wait for a selection
-		Optional<String> language =  choiceDialog.showAndWait();
-		System.out.println("Selected language: " + language.get());
+		Properties appProps = new Properties();
+		appProps.load(new FileInputStream(appConfigPath));
+
+		// Trying to get the language setting
+		String language = appProps.getProperty("language");
+
+		// If no language setting exists a dialog box is shown to the user to ask for it
+		if(language == null) {
+
+			//Creating a choice box asking for the language
+			ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>("English");
+			//Retrieving the observable list
+			ObservableList<String> list = choiceDialog.getItems();
+			//Adding items to the language list
+			list.add("English");
+			list.add("Italian");
+
+			// Show the dialog box and wait for a selection
+			Optional<String> selectedLanguage = choiceDialog.showAndWait();
+			language = selectedLanguage.get();
+
+			appProps.setProperty("language", language);
+			appProps.store(new FileWriter(appConfigPath), null);
+		}
+		System.out.println("Selected language: " + language);
 
 		// Set the language Bundle according to the selected language
-		ResourceBundle bundle;
-		switch (language.get()){
-			case "Italian": bundle = ResourceBundle.getBundle("UIText", Locale.ITALIAN); break;
-			default: bundle = ResourceBundle.getBundle("UIText", Locale.ROOT);
+		Locale locale;
+		switch (language){
+			case "Italian": locale = Locale.ITALIAN; break;
+			default: locale = Locale.ROOT;
 		}
+		ResourceBundle bundle = ResourceBundle.getBundle("UIText", locale);
 		
 		// Load FXML file
 		FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName), bundle);
