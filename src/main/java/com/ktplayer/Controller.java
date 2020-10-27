@@ -20,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -37,6 +38,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 public class Controller {
@@ -111,6 +113,9 @@ public class Controller {
     private ToggleButton autoPlayIcon;
 
     @FXML
+    private ResourceBundle resources ;
+
+    @FXML
     private Stage stage;
 
     private Main main;
@@ -120,7 +125,7 @@ public class Controller {
     private MediaView mediaView;
 
     private boolean isAutoplay;
-    private double volume = 50;
+    private double volume;
     private String path;
 
     private double xOffset = 0;
@@ -141,6 +146,8 @@ public class Controller {
 
     @FXML
     private void initialize() throws Exception {
+
+        if(stage.getScene() == null) System.out.println("scene null");
 
         // Shortcuts handler
         // Add any shortcut you want here

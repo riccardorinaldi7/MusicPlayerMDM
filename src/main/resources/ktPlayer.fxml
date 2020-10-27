@@ -51,19 +51,19 @@
                                           <String fx:value="column-header" />
                                           <String fx:value="filler" />
                                        </styleClass></TableColumn>
-                                    <TableColumn fx:id="artistNameColumn" prefWidth="128.0" text="Artist">
+                                    <TableColumn fx:id="artistNameColumn" prefWidth="128.0" text="%artist">
                                        <styleClass>
                                           <String fx:value="column-header-background" />
                                           <String fx:value="column-header" />
                                           <String fx:value="filler" />
                                        </styleClass></TableColumn>
-                                    <TableColumn fx:id="songNameColumn" prefWidth="133.0" text="Song">
+                                    <TableColumn fx:id="songNameColumn" prefWidth="133.0" text="%song">
                                        <styleClass>
                                           <String fx:value="column-header-background" />
                                           <String fx:value="column-header" />
                                           <String fx:value="filler" />
                                        </styleClass></TableColumn>
-                                    <TableColumn fx:id="durationColumn" prefWidth="73.0" text="Width">
+                                    <TableColumn fx:id="durationColumn" prefWidth="73.0" text="%width">
                                        <styleClass>
                                           <String fx:value="column-header-background" />
                                           <String fx:value="column-header" />
@@ -172,14 +172,14 @@
                                                 <Image url="@/images/speaker.png" />
                                              </image>
                                           </ImageView>
-                                          <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="10" textAlignment="CENTER">
+                                          <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="50" textAlignment="CENTER">
                                              <font>
                                                 <Font name="Berlin Sans FB" size="17.0" />
                                              </font>
                                           </Label>
-                                          <JFXSlider fx:id="volumeSlider" layoutX="44.0" layoutY="24.0" value="10.0" />
+                                          <JFXSlider fx:id="volumeSlider" layoutX="44.0" layoutY="24.0" value="50.0" />
                                           <JFXToggleButton fx:id="autoPlayIcon" layoutX="411.0" layoutY="2.0" prefHeight="58.0" prefWidth="77.0" text=" " toggleColor="#00944f" />
-                                          <Label layoutX="488.0" layoutY="20.0" text="Repeat Track">
+                                          <Label layoutX="488.0" layoutY="20.0" text="%loop">
                                              <font>
                                                 <Font name="Berlin Sans FB" size="17.0" />
                                              </font>
@@ -208,28 +208,28 @@
 					        <menus>
 					         <Menu mnemonicParsing="false" text="File">
 					             <items>
-              						<MenuItem mnemonicParsing="false" text="Open" />
-                  					<MenuItem mnemonicParsing="false" text="Close" />
+              						<MenuItem mnemonicParsing="false" text="%open" />
+                  					<MenuItem mnemonicParsing="false" text="%close" />
             					</items>
 					          </Menu>
 					          
-					          <Menu mnemonicParsing="false" text="Language">
+					          <!-- <Menu mnemonicParsing="false" text="%language">
 					          	<items>
               						<MenuItem mnemonicParsing="false" text="English" />
               						<MenuItem mnemonicParsing="false" text="Italian" />
             					</items>
-					          </Menu>
+					          </Menu> -->
 					          
-					          <Menu mnemonicParsing="false" text="Help">
+					          <Menu mnemonicParsing="false" text="%help">
 					           	<items>
-              						<MenuItem mnemonicParsing="false" text="About" />
+              						<MenuItem mnemonicParsing="false" text="%about" />
             					</items>
 					          </Menu>
 					        </menus>
 					      </MenuBar>
 			      	</VBox>
 			      
-			      <Label alignment="CENTER" layoutY="50.0" text="Riproduttore di cartelle musicali" prefWidth="600.0">
+			      <Label alignment="CENTER" layoutY="50.0" text="%app-header-title" prefWidth="600.0">
                      <font>
                         <Font name="Berlin Sans FB" size="20.0" />
                      </font>
@@ -267,7 +267,7 @@
                      </cursor>
                   </Pane>
                   
-                  <Label fx:id="songsCounter" alignment="CENTER" contentDisplay="BOTTOM" layoutX="227.0" layoutY="30.0" prefHeight="16.0" prefWidth="147.0" text="Tracce:" AnchorPane.topAnchor="33.0">
+                  <Label fx:id="songsCounter" alignment="CENTER" contentDisplay="BOTTOM" layoutX="227.0" layoutY="30.0" prefHeight="16.0" prefWidth="147.0" text="%tracks" AnchorPane.topAnchor="33.0">
                      <font>
                         <Font name="Berlin Sans FB" size="14.0" />
                      </font>
