@@ -137,21 +137,21 @@
 
                                           <ImageView fx:id="playButton" accessibleRole="BUTTON" fitHeight="40.0" fitWidth="40.0" layoutX="285.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="285.0" AnchorPane.rightAnchor="284.0" AnchorPane.topAnchor="10.0">
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                                             <image> <Image url="@/images/old/play.png" /> </image>
+                                             <image> <Image url="@/images/play.png" /> </image>
                                           </ImageView>
 
                                           <ImageView fx:id="pauseButton" fitHeight="40.0" fitWidth="40.0" layoutX="285.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="285.0" AnchorPane.rightAnchor="284.0" AnchorPane.topAnchor="10.0">
-                                             <image> <Image url="@/images/old/pause.png" /> </image>
+                                             <image> <Image url="@/images/pause.png" /> </image>
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
 
                                           <ImageView fx:id="nextSongButton" fitHeight="30.0" fitWidth="30.0" layoutX="360.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="10.0">
-                                             <image> <Image url="@/images/old/forward-arrows.png" /> </image>
+                                             <image> <Image url="@/images/forward-arrows.png" /> </image>
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
 
                                           <ImageView fx:id="previousSongButton" fitHeight="30.0" fitWidth="30.0" layoutX="179.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="10.0">
-                                             <image> <Image url="@/images/old/back-arrows.png" /> </image>
+                                             <image> <Image url="@/images/back-arrows.png" /> </image>
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
 
@@ -172,7 +172,7 @@
                                           </ImageView>
 
                                           <ImageView fx:id="volumeIcon" fitHeight="30.0" fitWidth="30.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                                             <image> <Image url="@/images/old/speaker.png" /> </image>
+                                             <image> <Image url="@/images/speaker.png" /> </image>
                                           </ImageView>
 
                                           <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="100" textAlignment="CENTER">
@@ -350,7 +350,7 @@
             </Label>
 
             <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="7.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
-               <image> <Image url="@/images/old/logo.png" /> </image>
+               <image> <Image url="@/images/logo.png" /> </image>
             </ImageView>
          </children>
 
