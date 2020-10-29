@@ -1,3 +1,5 @@
+//Riccardo Rinaldi e Laura Gruppioni
+
 package com.ktplayer;
 
 import javafx.application.Application;
