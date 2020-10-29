@@ -64,8 +64,8 @@ public class Main extends Application {
 			//Adding items to the language list
 			list.add("English");
 			list.add("Italiano");
-			list.add("FranÃ§ais");
-			list.add("EspaÃ±ol");
+			list.add("Français");
+			list.add("Español");
 
 			// Show the dialog box and wait for a selection
 			Optional<String> selectedLanguage = choiceDialog.showAndWait();
@@ -80,8 +80,8 @@ public class Main extends Application {
 		Locale locale;
 		switch (language){
 			case "Italiano": locale = Locale.ITALIAN; break;
-			case "FranÃ§ais": locale = Locale.FRENCH; break;
-			case "EspaÃ±ol": locale = new Locale("es", "ES"); break;
+			case "Français": locale = Locale.FRENCH; break;
+			case "Español": locale = new Locale("es", "ES"); break;
 			default: locale = Locale.ROOT;
 		}
 		ResourceBundle bundle = ResourceBundle.getBundle("UIText", locale);

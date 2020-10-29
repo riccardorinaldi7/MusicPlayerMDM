@@ -708,10 +708,10 @@ public class Controller {
         //Adding items to the language list
         list.add("English");
         list.add("Italiano");
-        list.add("Fran√ßais");
-        list.add("Espa√±ol");
+        list.add("FranÁais");
+        list.add("EspaÒol");
         list.remove(language); //rimuovo lingua corrente affinch√© non sia selezionabile
-
+        
         // Show the dialog box and wait for a selection
         Optional<String> selectedLanguage = choiceDialog.showAndWait();
 
