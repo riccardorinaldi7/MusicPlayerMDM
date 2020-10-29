@@ -17,7 +17,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.*;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -31,13 +30,19 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.scene.control.Alert.AlertType;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 
@@ -72,7 +77,6 @@ public class Controller {
     private TableColumn<Song, String> rateColumn;
     @FXML
     private TableColumn<Song, String> formatColumn;
-
 
     @FXML
     private Label artistName;
@@ -118,6 +122,17 @@ public class Controller {
     @FXML
     private Stage stage;
 
+    // -------------------------------------------------------------------------
+    // AGGIUNTI DA NOI
+    // --------------------------------------------------------------------------
+
+    @FXML
+    private Menu settings_menu;
+    @FXML
+    private Menu audio_menu;
+    @FXML
+    private Pane volumePane;
+
     private Main main;
 
     private List<MediaPlayer> players;
@@ -149,6 +164,10 @@ public class Controller {
 
         if(stage.getScene() == null) System.out.println("scene null");
 
+        insertSubMenus_menuBar();
+        insertToolTips();
+        volumeIconChanger();
+
         // Shortcuts handler
         // Add any shortcut you want here
         window.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
@@ -178,6 +197,13 @@ public class Controller {
             public void handle(MouseEvent event) {
                 stage.setX(event.getScreenX() + xOffset);
                 stage.setY(event.getScreenY() + yOffset);
+            }
+        });
+
+        volumeSlider.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                volumeIconChanger();
             }
         });
 
@@ -264,8 +290,6 @@ public class Controller {
         });
     }
 
-    
-    
     public void showSongInfo(Song song) {
         if(song != null) {
             artistName.setText(song.getArtistName());
@@ -335,8 +359,8 @@ public class Controller {
             pauseIcon();
             mediaView = new MediaView(players.get(Integer.parseInt(song.getId()) - 1));
 
-            volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
-            volumeSlider.setValue(volume * 100);
+            //volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
+            volumeSlider.setValue(volume*100);
             mediaView.getMediaPlayer().setVolume(volume);
             mediaView.getMediaPlayer().seek(Duration.ZERO);
             updateSliderPosition(Duration.ZERO);
@@ -354,7 +378,6 @@ public class Controller {
                     catch(InvalidDataException e) {}
                 }
             });
-
 
             playButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
@@ -569,8 +592,8 @@ public class Controller {
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
-                mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
-                volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
+                mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() /100);
+                //volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
                 volume = mediaView.getMediaPlayer().getVolume();
                 volumeIconChanger();
             }
@@ -649,13 +672,103 @@ public class Controller {
             }
         });
     }
-    
-    
+
+    //----------------------------------------------------------------------------------------------------------------
+    // NOSTRE MODIFICHE
+    //----------------------------------------------------------------------------------------------------------------
+
+    //ATTENZIONE --> ECCEZIONE SE FACCIAMO ANNULLA!!!!!! DA GESTIRE!!!!!!
     @FXML
-    private void handleInglese(ActionEvent event){
-    	//QUI BISOGNA CAMBIARE IL FXML... come?
+    private void languageSelection(ActionEvent event){
+        String rootPath = "src\\main\\resources\\";
+        String appConfigPath = rootPath + "application.properties";
+
+        Properties appProps = new Properties();
+        try {
+            appProps.load(new FileInputStream(appConfigPath));
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Trying to get the language setting
+        String language = appProps.getProperty("language");
+
+        //Creating a choice box asking for the language
+        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
+        choiceDialog.setHeaderText(resources.getString("selectlanguage"));
+        choiceDialog.setTitle(resources.getString("language"));
+        Image img = new Image("file:src/main/resources/images/languages.png");
+        choiceDialog.setGraphic(new ImageView(img));
+
+        //Retrieving the observable list
+        ObservableList<String> list = choiceDialog.getItems();
+        //Adding items to the language list
+        list.add("English");
+        list.add("Italiano");
+        list.add("Français");
+        list.add("Español");
+        list.remove(language); //rimuovo lingua corrente affinché non sia selezionabile
+
+        // Show the dialog box and wait for a selection
+        Optional<String> selectedLanguage = choiceDialog.showAndWait();
+
+        try {
+            language = selectedLanguage.get();
+            appProps.setProperty("language", language);
+
+            appProps.store(new FileWriter(appConfigPath), null);
+
+            //alert per dire che bisogna riavviare il programma
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle(resources.getString("attention"));
+            alert.setHeaderText(null);
+            alert.setContentText(resources.getString("restart"));
+            alert.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
-    
-    
+
+    private void insertToolTips() {
+        //Tooltip.install(imageView, tooltip);
+        Tooltip.install(playButton, new Tooltip(resources.getString("playbutton")));
+        Tooltip.install(pauseButton, new Tooltip(resources.getString("pausebutton")));
+        Tooltip.install(nextSongButton, new Tooltip(resources.getString("nextsong")));
+        Tooltip.install(previousSongButton, new Tooltip(resources.getString("previoussong")));
+        Tooltip.install(volumePane, new Tooltip(resources.getString("volumepane")));
+    }
+
+    //----------------------------------------------------------------------------------------------------
+    // SUB MENU
+    //----------------------------------------------------------------------------------------------------
+
+    private void insertSubMenus_menuBar() {
+        Menu menuInterface = new Menu();
+        menuInterface.setText(resources.getString("interface"));
+        settings_menu.getItems().add(menuInterface);
+        MenuItem simpleInterface = new MenuItem();
+        simpleInterface.setText(resources.getString("simple"));
+        MenuItem advancedInterface = new MenuItem();
+        advancedInterface.setText(resources.getString("advanced"));
+        menuInterface.getItems().addAll(simpleInterface, advancedInterface);
+
+        Menu menuVolume = new Menu();
+        menuVolume.setText(resources.getString("volume"));
+        audio_menu.getItems().add(menuVolume);
+        MenuItem decrVol = new MenuItem();
+        decrVol.setText(resources.getString("decreasevolume"));
+        MenuItem incrVol = new MenuItem();
+        incrVol.setText(resources.getString("increasevolume"));
+        MenuItem muteVol = new MenuItem();
+        muteVol.setText(resources.getString("novolume"));
+        menuVolume.getItems().addAll(decrVol, incrVol, muteVol);
+    }
+
 }
 
