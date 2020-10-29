@@ -256,8 +256,8 @@
                   <Pane layoutX="0.0" layoutY="30.0" prefHeight="50.0" prefWidth="50.0" styleClass="pane-background">
 
                      <children>
-                        <ImageView fx:id="folderChooser" fitHeight="32.0" fitWidth="32.0" layoutX="9.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
-                           <image> <Image url="@/images/old/music-folder.png" /> </image>
+                        <ImageView fx:id="folderChooser" fitHeight="35.0" fitWidth="35.0" layoutX="9.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+                           <image> <Image url="@/images/music-folder.png" /> </image>
                            <cursor> <Cursor fx:constant="HAND" /> </cursor>
                         </ImageView>
                      </children>
@@ -268,8 +268,8 @@
                   <Pane fx:id="showPlaylist" layoutX="550.0" layoutY="30.0" prefHeight="50.0" prefWidth="50.0" styleClass="pane-background">
 
                      <children>
-                        <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="9.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
-                           <image> <Image url="@/images/old/playlist.png" /> </image>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="9.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+                           <image> <Image url="@/images/playlist.png" /> </image>
                            <cursor> <Cursor fx:constant="HAND" /> </cursor>
                         </ImageView>
                      </children>
@@ -329,7 +329,7 @@
 
                <children>
                   <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="13.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
-                     <image> <Image url="@/images/old/minimize.png" /> </image>
+                     <image> <Image url="@/images/minimize.png" /> </image>
                   </ImageView>
                </children>
             </Pane>
@@ -337,7 +337,7 @@
             <Pane fx:id="exit" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="17.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
-                     <image> <Image url="@/images/old/cancel.png" /> </image>
+                     <image> <Image url="@/images/cancel.png" /> </image>
                      <cursor> <Cursor fx:constant="HAND" /> </cursor>
                   </ImageView>
                </children>

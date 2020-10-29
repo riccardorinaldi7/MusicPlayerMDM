@@ -737,11 +737,13 @@ public class Controller {
 
     private void insertToolTips() {
         //Tooltip.install(imageView, tooltip);
-        Tooltip.install(playButton, new Tooltip(resources.getString("playbutton")));
-        Tooltip.install(pauseButton, new Tooltip(resources.getString("pausebutton")));
-        Tooltip.install(nextSongButton, new Tooltip(resources.getString("nextsong")));
-        Tooltip.install(previousSongButton, new Tooltip(resources.getString("previoussong")));
-        Tooltip.install(volumePane, new Tooltip(resources.getString("volumepane")));
+        Tooltip.install(playButton, new Tooltip(resources.getString("tt_playbutton")));
+        Tooltip.install(pauseButton, new Tooltip(resources.getString("tt_pausebutton")));
+        Tooltip.install(nextSongButton, new Tooltip(resources.getString("tt_nextsong")));
+        Tooltip.install(previousSongButton, new Tooltip(resources.getString("tt_previoussong")));
+        Tooltip.install(volumePane, new Tooltip(resources.getString("tt_volumepane")));
+        Tooltip.install(showPlaylist, new Tooltip(resources.getString("tt_playlist")));
+        Tooltip.install(folderChooser, new Tooltip(resources.getString("tt_folder")));
     }
 
     //----------------------------------------------------------------------------------------------------
