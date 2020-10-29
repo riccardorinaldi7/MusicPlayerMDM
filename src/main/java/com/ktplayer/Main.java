@@ -1,4 +1,5 @@
 //Riccardo Rinaldi e Laura Gruppioni
+//Attività progettuale MDM
 
 package com.ktplayer;
 
