@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -290,6 +291,7 @@ public class Controller {
             	alert.setContentText(resources.getString("sureToClose"));
             	alert.setHeaderText(null);
             	alert.setTitle(resources.getString("confirmExit"));
+            	((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
             	
             	Optional<ButtonType> result = alert.showAndWait();
             	if (result.get() == ButtonType.OK){
@@ -334,12 +336,13 @@ public class Controller {
             			+ "\nIf you want to join our team, here you can take a look at our highly evolved project:\nhttps://github.com/riccardorinaldi7/MusicPlayerMDM";
             	            	
             	Alert alert = new Alert(AlertType.INFORMATION);
-			    alert.setTitle("About us");
+			    alert.setTitle(resources.getString("about"));
 			    alert.setHeaderText(null);
 			    alert.setResizable(false);
 			    alert.getDialogPane().setMinWidth(850);
 			    alert.getDialogPane().setMinHeight(400);
 			    alert.setContentText(toShow);
+			    ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
 			    alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/almamater.png")));
 			    
 			    alert.showAndWait();
@@ -814,6 +817,7 @@ public class Controller {
         ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
         choiceDialog.setHeaderText(resources.getString("selectlanguage"));
         choiceDialog.setTitle(resources.getString("language"));
+        ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
         Image img = new Image("file:src/main/resources/images/languages.png");
         choiceDialog.setGraphic(new ImageView(img));
 
@@ -840,7 +844,9 @@ public class Controller {
             alert.setTitle(resources.getString("attention"));
             alert.setHeaderText(null);
             alert.setContentText(resources.getString("restart"));
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
             alert.showAndWait();
+            
 
         } catch (IOException e) {
             e.printStackTrace();
