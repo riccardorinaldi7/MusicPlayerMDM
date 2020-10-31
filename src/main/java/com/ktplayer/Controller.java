@@ -132,7 +132,47 @@ public class Controller {
     private Menu audio_menu;
     @FXML
     private Pane volumePane;
-
+    @FXML
+    private MenuItem openfile_menu; 
+    @FXML
+    private MenuItem openfolder_menu; 
+    @FXML
+    private MenuItem close_menu; 
+    
+    @FXML
+    private Pane maximize;
+    
+    @FXML
+    private MenuItem playpause_menu;
+    @FXML
+    private MenuItem next_menu;
+    @FXML
+    private MenuItem previous_menu;
+    @FXML
+    private MenuItem fullscreen_menu;
+    @FXML
+    private MenuItem minimize_menu;
+    @FXML
+    private MenuItem language_menu;
+    @FXML
+    private MenuItem about_menu;
+    @FXML
+    private MenuItem preview_menu;
+    @FXML
+    private MenuItem shortcuts_menu;
+        
+    private Menu menuVolume;
+    private MenuItem decrVol;
+    private MenuItem incrVol;
+    private MenuItem muteVol;
+    
+    private Menu menuInterface;
+    private MenuItem simpleInterface;
+    private MenuItem advancedInterface;
+    
+    
+    // --------------------------------------------------------------------------
+    
     private Main main;
 
     private List<MediaPlayer> players;
@@ -149,7 +189,6 @@ public class Controller {
     private FadeTransition fadeIn = new FadeTransition();
     private FadeTransition fadeOut = new FadeTransition();
 
-
     public Controller() {
         players = new ArrayList<>();
         songSlider = new JFXSlider();
@@ -164,10 +203,16 @@ public class Controller {
 
         if(stage.getScene() == null) System.out.println("scene null");
 
-        insertSubMenus_menuBar();
-        insertToolTips();
-        volumeIconChanger();
+        //--------------------------------------------------------------------------------------
+        // AGGIUNTI DA NOI
+        
+        insertSubMenus_menuBar();	//enrich the menubar with submenus
+        iconsMenubar();				//enrich the manubar with icons 
+        insertToolTips();			//attach tooltip to the main buttons
+        volumeIconChanger(); 		//update volume icon if volume == 0
 
+        //--------------------------------------------------------------------------------------
+        
         // Shortcuts handler
         // Add any shortcut you want here
         window.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
@@ -731,19 +776,47 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
+    private void iconsMenubar() {
+    	openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
+    	openfolder_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
+    	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/close.png"));
+    	
+    	playpause_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/playpause.png"));
+    	next_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/forward.png"));
+    	previous_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/rewind.png"));
+    	menuVolume.setGraphic(new ImageView("file:src/main/resources/images/menubar/volume.png"));
+    	
+    	decrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/minus.png"));
+    	incrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/plus.png"));
+    	muteVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/speakermute.png"));
+    	
+    	fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
+    	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimize.png"));
+    	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languages.png"));
+    	
+    	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interface.png"));
+    	
+    	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logo.png"));
+    	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
+    	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tips.png"));
+   }
+    
     private void insertToolTips() {
-        //Tooltip.install(imageView, tooltip);
-        Tooltip.install(playButton, new Tooltip(resources.getString("tt_playbutton")));
-        Tooltip.install(pauseButton, new Tooltip(resources.getString("tt_pausebutton")));
-        Tooltip.install(nextSongButton, new Tooltip(resources.getString("tt_nextsong")));
+        //SIGNATURE: Tooltip.install(imageView, tooltip);
+        Tooltip.install(playButton, 		new Tooltip(resources.getString("tt_playbutton")));
+        Tooltip.install(pauseButton, 		new Tooltip(resources.getString("tt_pausebutton")));
+        Tooltip.install(nextSongButton, 	new Tooltip(resources.getString("tt_nextsong")));
         Tooltip.install(previousSongButton, new Tooltip(resources.getString("tt_previoussong")));
-        Tooltip.install(volumePane, new Tooltip(resources.getString("tt_volumepane")));
-        Tooltip.install(showPlaylist, new Tooltip(resources.getString("tt_playlist")));
-        Tooltip.install(folderChooser, new Tooltip(resources.getString("tt_folder")));
+        Tooltip.install(volumePane, 		new Tooltip(resources.getString("tt_volumepane")));
+        Tooltip.install(showPlaylist, 		new Tooltip(resources.getString("tt_playlist")));
+        Tooltip.install(folderChooser, 		new Tooltip(resources.getString("tt_folder")));
+        
+        //in alto a dx
+        Tooltip.install(minimize, 		new Tooltip(resources.getString("tt_minimize")));
+        Tooltip.install(maximize, 		new Tooltip(resources.getString("tt_maximize")));
+        Tooltip.install(exit, 		new Tooltip(resources.getString("tt_exit")));
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -751,23 +824,23 @@ public class Controller {
     //----------------------------------------------------------------------------------------------------
 
     private void insertSubMenus_menuBar() {
-        Menu menuInterface = new Menu();
+        menuInterface = new Menu();
         menuInterface.setText(resources.getString("interface"));
         settings_menu.getItems().add(menuInterface);
-        MenuItem simpleInterface = new MenuItem();
+        simpleInterface = new MenuItem();
         simpleInterface.setText(resources.getString("simple"));
-        MenuItem advancedInterface = new MenuItem();
+        advancedInterface = new MenuItem();
         advancedInterface.setText(resources.getString("advanced"));
         menuInterface.getItems().addAll(simpleInterface, advancedInterface);
 
-        Menu menuVolume = new Menu();
+        menuVolume = new Menu();
         menuVolume.setText(resources.getString("volume"));
         audio_menu.getItems().add(menuVolume);
-        MenuItem decrVol = new MenuItem();
+        decrVol = new MenuItem();
         decrVol.setText(resources.getString("decreasevolume"));
-        MenuItem incrVol = new MenuItem();
+        incrVol = new MenuItem();
         incrVol.setText(resources.getString("increasevolume"));
-        MenuItem muteVol = new MenuItem();
+        muteVol = new MenuItem();
         muteVol.setText(resources.getString("novolume"));
         menuVolume.getItems().addAll(decrVol, incrVol, muteVol);
     }

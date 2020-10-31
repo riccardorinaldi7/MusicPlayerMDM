@@ -211,38 +211,38 @@
                         <menus>
                            <Menu mnemonicParsing="false" text="%file">
                               <items>
-                                 <MenuItem mnemonicParsing="false" text="%openfile" />
-                                 <MenuItem mnemonicParsing="false" text="%openfolder" />
-                                 <MenuItem mnemonicParsing="false" text="%close" />
+                                 <MenuItem fx:id="openfile_menu" mnemonicParsing="false" text="%openfile" />
+                                 <MenuItem fx:id="openfolder_menu" mnemonicParsing="false" text="%openfolder" />
+                                 <MenuItem fx:id="close_menu" mnemonicParsing="false" text="%close" />
                               </items>
                            </Menu>
 
                            <Menu fx:id="audio_menu" mnemonicParsing="false" text="%audio">
                               <items>
-                                 <MenuItem mnemonicParsing="false" text="%playpause" />
-                                 <MenuItem mnemonicParsing="false" text="%next" />
-                                 <MenuItem mnemonicParsing="false" text="%previous" />
+                                 <MenuItem fx:id="playpause_menu" mnemonicParsing="false" text="%playpause" />
+                                 <MenuItem fx:id="next_menu" mnemonicParsing="false" text="%next" />
+                                 <MenuItem fx:id="previous_menu" mnemonicParsing="false" text="%previous" />
                               </items>
                            </Menu>
 
                            <Menu mnemonicParsing="false" text="%view">
                               <items>
-                                 <MenuItem mnemonicParsing="false" text="%fullscreen" />
-                                 <MenuItem mnemonicParsing="false" text="%minimize" />
+                                 <MenuItem fx:id="fullscreen_menu" mnemonicParsing="false" text="%fullscreen" />
+                                 <MenuItem fx:id="minimize_menu" mnemonicParsing="false" text="%minimize" />
                               </items>
                            </Menu>
 
                            <Menu fx:id="settings_menu" mnemonicParsing="false" text="%settings">
                               <items>
-                                 <MenuItem onAction="#languageSelection" mnemonicParsing="false" text="%language"/>
+                                 <MenuItem fx:id="language_menu" onAction="#languageSelection" mnemonicParsing="false" text="%language"/>
                               </items>
                            </Menu>
 
                            <Menu mnemonicParsing="false" text="%help">
                               <items>
-                                 <MenuItem mnemonicParsing="false" text="%about" />
-                                 <MenuItem mnemonicParsing="false" text="%preview" />
-                                 <MenuItem mnemonicParsing="false" text="%shortcuts" />
+                                 <MenuItem fx:id="about_menu" mnemonicParsing="false" text="%about" />
+                                 <MenuItem fx:id="preview_menu" mnemonicParsing="false" text="%preview" />
+                                 <MenuItem fx:id="shortcuts_menu" mnemonicParsing="false" text="%shortcuts" />
                               </items>
                            </Menu>
                         </menus>
@@ -324,16 +324,25 @@
 
       <AnchorPane layoutY="7.0" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: #f0f0f0;" AnchorPane.bottomAnchor="700.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane fx:id="minimize" layoutX="500.0" layoutY="1.0" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.rightAnchor="50.0">
+            <Pane fx:id="minimize" layoutX="500.0" layoutY="1.0" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.rightAnchor="100.0">
                <cursor> <Cursor fx:constant="HAND" /> </cursor>
-
                <children>
-                  <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="13.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="17.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                      <image> <Image url="@/images/minimize.png" /> </image>
                   </ImageView>
                </children>
             </Pane>
 
+            <Pane fx:id="maximize" layoutX="500.0" layoutY="1.0" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.rightAnchor="50.0">
+               <children>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="17.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                     <image> <Image url="@/images/fullscreen.png" /> </image>
+                     <cursor> <Cursor fx:constant="HAND" /> </cursor>
+                  </ImageView>
+               </children>
+               <cursor> <Cursor fx:constant="HAND" /> </cursor>
+            </Pane>
+            
             <Pane fx:id="exit" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="17.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
@@ -341,7 +350,6 @@
                      <cursor> <Cursor fx:constant="HAND" /> </cursor>
                   </ImageView>
                </children>
-
                <cursor> <Cursor fx:constant="HAND" /> </cursor>
             </Pane>
 
