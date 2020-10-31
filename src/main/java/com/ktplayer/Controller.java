@@ -225,7 +225,6 @@ public class Controller {
             }
         });
 
-
         window.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -368,11 +367,15 @@ public class Controller {
                 songTable.setItems(songsUrls(selectedDirectory));
 
                 songTable.setOnMouseClicked((MouseEvent e) -> {
-                    if((e.getClickCount() > 0) && (e.getClickCount() < 2)) {
+                    if(e.getClickCount() == 1) {
                         try {
                             takeCare();
                         }
                         catch (Exception ex) {};
+                    }
+                    //con doppio click, parte la canzone!
+                    if (e.getClickCount() == 2) {
+                    	playPauseSong();
                     }
                 });
             }
