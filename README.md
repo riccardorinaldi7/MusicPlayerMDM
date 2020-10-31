@@ -18,3 +18,5 @@ A very simple music player
 - [X] Tradurre in un'altra lingua, che sia inglese o italiano o altro
 - [X] Aggiungere info quando con il mouse vai sopra ai bottoni
 - [X] Fare partire la canzone con un doppio click 
+
+--- Trovata lista shortcut per player musicali: https://support.google.com/youtubemusic/thread/180145?hl=en ---
