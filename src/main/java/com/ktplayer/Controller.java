@@ -306,8 +306,38 @@ public class Controller {
                 chooseFolder();
             }
         });
+        
+        // ----------------------------------------------------------------------------------------------------------
+        // HANDLER AGGIUNTI DA NOI
+        // ----------------------------------------------------------------------------------------------------------
+        
+        //Click sul MenuItem "About"
+        about_menu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+            	
+            	String toShow = "WG Player has been developed for the Work Project on Multimedia Data Management M,"
+            			+ " a course of Computer Science Engineering at the University of Bologna held by Prof. Ilaria Bartolini.\n"
+            			+ "\nThe students Riccardo Rinaldi and Laura Gruppioni started using a very simple Music Player software created by Alexey Ktualhu" 
+            			+ " with the aim of improving the User Interface by applying some of the most famous Design Principles written by Ben Shneiderman and his research partners.\n\n"
+            			+ " _________________________________________________ \n\n"
+            			+ "Here you can find the original software:\nhttps://github.com/ktualhu/ktPlayer-Music-Player\n"
+            			+ "\nIf you want to join our team, here you can take a look at our highly evolved project:\nhttps://github.com/riccardorinaldi7/MusicPlayerMDM";
+            	            	
+            	Alert alert = new Alert(AlertType.INFORMATION);
+			    alert.setTitle("About us");
+			    alert.setHeaderText(null);
+			    alert.setResizable(false);
+			    alert.getDialogPane().setMinWidth(850);
+			    alert.getDialogPane().setMinHeight(400);
+			    alert.setContentText(toShow);
+			    alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/almamater.png")));
+			    
+			    alert.showAndWait();
+            }
+        });
     }
-
+    
+    
     @FXML
     private void chooseFolder() {
         DirectoryChooser chooser = new DirectoryChooser();

@@ -207,7 +207,7 @@
 
                <children>
                   <VBox  layoutY="126.0" prefHeight="55.0" prefWidth="100.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                     <MenuBar>
+                     <MenuBar style="-fx-background-color: #f0f0f0;">
                         <menus>
                            <Menu mnemonicParsing="false" text="%file">
                               <items>

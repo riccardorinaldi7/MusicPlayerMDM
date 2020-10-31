@@ -10,7 +10,6 @@
     -fx-background-color: transparent;
 }
 
-
 .table-view .column-header .label {
     -fx-font-size: 12pt;
     -fx-font-family: "Berlin Sans FB";
@@ -63,4 +62,23 @@
     -fx-background-position: center center;
     -fx-effect: dropshadow(gaussian, black, 10, 0.1, 0, 0);
 }
-/*C:/Users/peka/Desktop/music/2006 - Pulver/folder.jpg*/
+
+/* --------------------------------------------------------------------------------------------------------- */
+/* Aggiunti da noi */
+/* --------------------------------------------------------------------------------------------------------- */
+
+.menu:hover, .menu:showing{
+  -fx-background-color: e0e0e0;
+}
+
+.menu-item:focused {
+   -fx-background-color : e0e0e0;
+}
+
+.menu .label{
+    -fx-text-fill: black;
+}
+
+.menu-item .label{
+    -fx-text-fill: black;
+}
