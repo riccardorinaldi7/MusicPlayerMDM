@@ -32,6 +32,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyCodeCombination;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -167,7 +169,6 @@ public class Controller {
     private MenuItem simpleInterface;
     private MenuItem advancedInterface;
     
-    
     // --------------------------------------------------------------------------
     
     private Main main;
@@ -207,10 +208,11 @@ public class Controller {
         iconsMenubar();				//enrich the manubar with icons 
         insertToolTips();			//attach tooltip to the main buttons
         volumeIconChanger(); 		//update volume icon if volume == 0
-
+        addShortcutsMenubar();
+        
         // Shortcuts handler
         // Add any shortcut you want here
-        window.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+        /*window.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if(event.getCode().getName() == "Space"){
@@ -222,6 +224,8 @@ public class Controller {
                 }
             }
         });
+        */
+       
 
         //--------------------------------------------------------------------------------------
         
@@ -281,23 +285,7 @@ public class Controller {
             }
         });
 
-        exit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                
-            	//aggiunta alert di conferma prima di chiudere l'applicazione
-            	Alert alert = new Alert(AlertType.CONFIRMATION);
-            	alert.setContentText(resources.getString("sureToClose"));
-            	alert.setHeaderText(null);
-            	alert.setTitle(resources.getString("confirmExit"));
-            	((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
-            	
-            	Optional<ButtonType> result = alert.showAndWait();
-            	if (result.get() == ButtonType.OK){
-            		System.exit(0);
-            	} else { }
-            }
-        });
+        exit.addEventHandler(MouseEvent.MOUSE_CLICKED, handleExit); //creato handler da riutilizzare               	
 
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
         artistNameColumn.setCellValueFactory(cellData -> cellData.getValue().artistNameProperty());
@@ -321,6 +309,31 @@ public class Controller {
         // ----------------------------------------------------------------------------------------------------------
         // HANDLER AGGIUNTI DA NOI
         // ----------------------------------------------------------------------------------------------------------
+        
+        //ripeto stesso codice di close perché non ho capito come poterlo riutilizzare eheh
+        close_menu.setOnAction( new EventHandler<ActionEvent>() {
+    	    public void handle(ActionEvent t) {
+    	    	//aggiunta alert di conferma prima di chiudere l'applicazione
+            	Alert alert = new Alert(AlertType.CONFIRMATION);
+            	alert.setContentText(resources.getString("sureToClose"));
+            	alert.setHeaderText(null);
+            	alert.setTitle(resources.getString("confirmExit"));
+            	((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+            	
+            	Optional<ButtonType> result = alert.showAndWait();
+            	if (result.get() == ButtonType.OK){
+            		System.exit(0);
+            	} else { }
+
+    	    }
+    	});          
+        
+        //Play/Pausa
+        playpause_menu.setOnAction(new EventHandler<ActionEvent>() {
+    	    public void handle(ActionEvent t) {
+    	        playPauseSong();
+    	    }
+    	});
         
         //Click sul MenuItem "About"
         about_menu.setOnAction(new EventHandler<ActionEvent>() {
@@ -349,6 +362,22 @@ public class Controller {
         });
     }
     
+    EventHandler<MouseEvent> handleExit = new EventHandler<MouseEvent>() {
+    	@Override 
+    	public void handle(javafx.scene.input.MouseEvent e) { 
+    		//aggiunta alert di conferma prima di chiudere l'applicazione
+        	Alert alert = new Alert(AlertType.CONFIRMATION);
+        	alert.setContentText(resources.getString("sureToClose"));
+        	alert.setHeaderText(null);
+        	alert.setTitle(resources.getString("confirmExit"));
+        	((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+        	
+        	Optional<ButtonType> result = alert.showAndWait();
+        	if (result.get() == ButtonType.OK){
+        		System.exit(0);
+        	} else { }
+    	}
+    };
     
     @FXML
     private void chooseFolder() {
@@ -373,8 +402,7 @@ public class Controller {
 		                    	 takeCare();
 		                     }		                        
 		                     catch (Exception ex) {}
-                    	 }
-                     
+                    	 } 
                 	
                     //con doppio click, parte la canzone!
                     if (e.getClickCount() == 2) {
@@ -529,8 +557,6 @@ public class Controller {
                     seekAndUpdate(Duration.ZERO);
                 }
             });
-
-
 
             songSlider.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                 @Override
@@ -892,6 +918,16 @@ public class Controller {
     	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tips.png"));
    }
     
+    private void addShortcutsMenubar() {
+    	previous_menu.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
+    	next_menu.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN));
+    	playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
+    	language_menu.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
+    	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
+    	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
+    	//ho scoperto che con CTRL+W, se hai una cartella aperta nella lista delle canzoni, ti cancella la lista
+    }
+	
     private void insertToolTips() {
         //SIGNATURE: Tooltip.install(imageView, tooltip);
         Tooltip.install(playButton, 		new Tooltip(resources.getString("tt_playbutton")));
