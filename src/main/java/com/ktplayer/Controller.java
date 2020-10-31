@@ -208,8 +208,6 @@ public class Controller {
         insertToolTips();			//attach tooltip to the main buttons
         volumeIconChanger(); 		//update volume icon if volume == 0
 
-        //--------------------------------------------------------------------------------------
-        
         // Shortcuts handler
         // Add any shortcut you want here
         window.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
@@ -225,6 +223,8 @@ public class Controller {
             }
         });
 
+        //--------------------------------------------------------------------------------------
+        
         window.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -367,12 +367,15 @@ public class Controller {
                 songTable.setItems(songsUrls(selectedDirectory));
 
                 songTable.setOnMouseClicked((MouseEvent e) -> {
-                    if(e.getClickCount() == 1) {
-                        try {
-                            takeCare();
-                        }
-                        catch (Exception ex) {};
-                    }
+                                    	
+                     if(e.getClickCount() == 1) {
+                    	     try {
+		                    	 takeCare();
+		                     }		                        
+		                     catch (Exception ex) {}
+                    	 }
+                     
+                	
                     //con doppio click, parte la canzone!
                     if (e.getClickCount() == 2) {
                     	playPauseSong();
@@ -431,12 +434,17 @@ public class Controller {
 
     public void playPauseSong(Song song) throws Exception{
         if(song != null) {
+        	
             File file = new File(song.getUrl());
             String path = file.getAbsolutePath();
             path.replace("\\", "/");
-
+            
             if((mediaView != null) && (mediaPlayer != null)) {
+            	
+            	System.out.println(mediaPlayer.getStatus().toString()); //Status = READY
+            	
                 volume = mediaView.getMediaPlayer().getVolume();
+                //questo è quello che fa stoppare la canzone quando ne premo un'altra nella lista
                 mediaView.getMediaPlayer().stop();
                 mediaView = null;
                 mediaPlayer = null;
@@ -780,7 +788,8 @@ public class Controller {
             pauseButton.setDisable(true);
             playButton.setVisible(true);
             playButton.setDisable(false);
-        } else {
+        } 
+        else {
             mediaView.getMediaPlayer().play();
             playButton.setVisible(false);
             playButton.setDisable(true);
