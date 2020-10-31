@@ -175,7 +175,7 @@
                                              <image> <Image url="@/images/speaker.png" /> </image>
                                           </ImageView>
 
-                                          <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="100" textAlignment="CENTER">
+                                          <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="50" textAlignment="CENTER">
                                              <font> <Font name="Berlin Sans FB" size="17.0" /> </font>
                                           </Label>
 
@@ -211,17 +211,29 @@
                         <menus>
                            <Menu mnemonicParsing="false" text="%file">
                               <items>
+<<<<<<< HEAD
                                  <MenuItem fx:id="openfile_menu" mnemonicParsing="false" text="%openfile" />
                                  <MenuItem fx:id="openfolder_menu" mnemonicParsing="false" text="%openfolder" />
                                  <MenuItem fx:id="close_menu" mnemonicParsing="false" text="%close" />
+=======
+                                 <MenuItem mnemonicParsing="false" text="%openfile" />
+                                 <MenuItem onAction="#chooseFolder" mnemonicParsing="false" text="%openfolder" />
+                                 <MenuItem onAction="#closeFolder" mnemonicParsing="false" text="%close" />
+>>>>>>> branch 'master' of https://github.com/riccardorinaldi7/MusicPlayerMDM
                               </items>
                            </Menu>
 
                            <Menu fx:id="audio_menu" mnemonicParsing="false" text="%audio">
                               <items>
+<<<<<<< HEAD
                                  <MenuItem fx:id="playpause_menu" mnemonicParsing="false" text="%playpause" />
                                  <MenuItem fx:id="next_menu" mnemonicParsing="false" text="%next" />
                                  <MenuItem fx:id="previous_menu" mnemonicParsing="false" text="%previous" />
+=======
+                                 <MenuItem onAction="#playPauseSong" mnemonicParsing="false" text="%playpause" />
+                                 <MenuItem mnemonicParsing="false" text="%next" />
+                                 <MenuItem mnemonicParsing="false" text="%previous" />
+>>>>>>> branch 'master' of https://github.com/riccardorinaldi7/MusicPlayerMDM
                               </items>
                            </Menu>
 
