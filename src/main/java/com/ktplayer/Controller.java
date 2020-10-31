@@ -284,7 +284,17 @@ public class Controller {
         exit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                System.exit(0);
+                
+            	//aggiunta alert di conferma prima di chiudere l'applicazione
+            	Alert alert = new Alert(AlertType.CONFIRMATION);
+            	alert.setContentText(resources.getString("sureToClose"));
+            	alert.setHeaderText(null);
+            	alert.setTitle(resources.getString("confirmExit"));
+            	
+            	Optional<ButtonType> result = alert.showAndWait();
+            	if (result.get() == ButtonType.OK){
+            		System.exit(0);
+            	} else { }
             }
         });
 
