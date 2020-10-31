@@ -6,7 +6,7 @@ A very simple music player
 - [ ] Fare interfaccia base per utenti non esperti, anziani, bambini e interfaccia avanzata
 - [ ] Fare partire la canzone con un doppio click 
 - [ ] Finestra di "Playlist" --> implementare?
-- [ ] Aggiungere il pausa/play se premi la barra spaziatrice/Invio/tasto P
+- [X] Aggiungere il pausa/play se premi la barra spaziatrice/Invio/tasto P
 - [ ] Modificare ampiezza programma: full screen e personalizzato
 - [ ] Aggiungere 4/5 shortcut
 - [ ] Visualizzazione copertina album

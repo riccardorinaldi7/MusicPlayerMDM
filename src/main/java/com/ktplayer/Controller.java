@@ -39,11 +39,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class Controller {
@@ -162,8 +158,6 @@ public class Controller {
     @FXML
     private void initialize() throws Exception {
 
-        if(stage.getScene() == null) System.out.println("scene null");
-
         insertSubMenus_menuBar();
         insertToolTips();
         volumeIconChanger();
@@ -175,7 +169,7 @@ public class Controller {
             public void handle(KeyEvent event) {
                 if(event.getCode().getName() == "Space"){
                     try {
-                        System.out.println("do something");
+                        playPauseSong();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -261,33 +255,39 @@ public class Controller {
         folderChooser.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                DirectoryChooser chooser = new DirectoryChooser();
-                File selectedDirectory = chooser.showDialog(stage);
-                if(selectedDirectory == null) {
-                    System.out.println("No directory selected!");
-                }
-                else {
-
-                    try {
-                        if(!(players.isEmpty())) {
-                            players.clear();
-                            System.out.println("new array list");
-                        }
-                        songTable.setItems(songsUrls(selectedDirectory));
-
-                        songTable.setOnMouseClicked((MouseEvent e) -> {
-                            if((e.getClickCount() > 0) && (e.getClickCount() < 2)) {
-                                try {
-                                    takeCare();
-                                }
-                                catch (Exception ex) {};
-                            }
-                        });
-                    }
-                    catch(Exception e) {}
-                }
+                System.out.println("folderChooser: icon clicked");
+                chooseFolder();
             }
         });
+    }
+
+    @FXML
+    private void chooseFolder() {
+        DirectoryChooser chooser = new DirectoryChooser();
+        File selectedDirectory = chooser.showDialog(stage);
+        if(selectedDirectory == null) {
+            System.out.println("No directory selected!");
+        }
+        else {
+
+            try {
+                if(!(players.isEmpty())) {
+                    players.clear();
+                    System.out.println("new array list");
+                }
+                songTable.setItems(songsUrls(selectedDirectory));
+
+                songTable.setOnMouseClicked((MouseEvent e) -> {
+                    if((e.getClickCount() > 0) && (e.getClickCount() < 2)) {
+                        try {
+                            takeCare();
+                        }
+                        catch (Exception ex) {};
+                    }
+                });
+            }
+            catch(Exception e) {}
+        }
     }
 
     public void showSongInfo(Song song) {
@@ -359,7 +359,7 @@ public class Controller {
             pauseIcon();
             mediaView = new MediaView(players.get(Integer.parseInt(song.getId()) - 1));
 
-            //volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
+            volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
             volumeSlider.setValue(volume*100);
             mediaView.getMediaPlayer().setVolume(volume);
             mediaView.getMediaPlayer().seek(Duration.ZERO);
@@ -593,7 +593,7 @@ public class Controller {
             @Override
             public void invalidated(Observable observable) {
                 mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() /100);
-                //volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
+                volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
                 volume = mediaView.getMediaPlayer().getVolume();
                 volumeIconChanger();
             }
@@ -677,6 +677,33 @@ public class Controller {
     // NOSTRE MODIFICHE
     //----------------------------------------------------------------------------------------------------------------
 
+    // play from menu bar
+    @FXML
+    private void playPauseSong() {
+        MediaPlayer mp = mediaView.getMediaPlayer();
+        if(mp.getStatus() == Status.PLAYING){
+            mediaView.getMediaPlayer().pause();
+            pauseButton.setVisible(false);
+            pauseButton.setDisable(true);
+            playButton.setVisible(true);
+            playButton.setDisable(false);
+        } else {
+            mediaView.getMediaPlayer().play();
+            playButton.setVisible(false);
+            playButton.setDisable(true);
+            pauseButton.setVisible(true);
+            pauseButton.setDisable(false);
+        }
+    }
+
+    @FXML
+    private void closeFolder(){
+        System.out.println("I'm closing the music folder");
+        players.clear();
+        songTable.getItems().clear();
+        mediaView = null;
+    }
+
     //ATTENZIONE --> ECCEZIONE SE FACCIAMO ANNULLA!!!!!! DA GESTIRE!!!!!!
     @FXML
     private void languageSelection(ActionEvent event){
@@ -730,6 +757,8 @@ public class Controller {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (NoSuchElementException e){
+            System.out.println("User has changed his/her mind");
         }
 
 

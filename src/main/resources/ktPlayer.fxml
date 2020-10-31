@@ -175,7 +175,7 @@
                                              <image> <Image url="@/images/speaker.png" /> </image>
                                           </ImageView>
 
-                                          <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="100" textAlignment="CENTER">
+                                          <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="50" textAlignment="CENTER">
                                              <font> <Font name="Berlin Sans FB" size="17.0" /> </font>
                                           </Label>
 
@@ -212,14 +212,14 @@
                            <Menu mnemonicParsing="false" text="%file">
                               <items>
                                  <MenuItem mnemonicParsing="false" text="%openfile" />
-                                 <MenuItem mnemonicParsing="false" text="%openfolder" />
-                                 <MenuItem mnemonicParsing="false" text="%close" />
+                                 <MenuItem onAction="#chooseFolder" mnemonicParsing="false" text="%openfolder" />
+                                 <MenuItem onAction="#closeFolder" mnemonicParsing="false" text="%close" />
                               </items>
                            </Menu>
 
                            <Menu fx:id="audio_menu" mnemonicParsing="false" text="%audio">
                               <items>
-                                 <MenuItem mnemonicParsing="false" text="%playpause" />
+                                 <MenuItem onAction="#playPauseSong" mnemonicParsing="false" text="%playpause" />
                                  <MenuItem mnemonicParsing="false" text="%next" />
                                  <MenuItem mnemonicParsing="false" text="%previous" />
                               </items>
