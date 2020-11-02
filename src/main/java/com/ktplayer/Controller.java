@@ -922,10 +922,20 @@ public class Controller {
     	previous_menu.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
     	next_menu.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN));
     	playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
+    	
     	language_menu.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
     	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
     	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
+    	
+    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.UP, KeyCombination.CONTROL_DOWN));
+    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.DOWN, KeyCombination.CONTROL_DOWN));
+    	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0, KeyCombination.CONTROL_DOWN));
+    	
     	//ho scoperto che con CTRL+W, se hai una cartella aperta nella lista delle canzoni, ti cancella la lista
+    	
+    	//aggiungere per full screen 
+    	//aggiungere per minimize windows
+    	//aggiungere per help --> show tutorial ?
     }
 	
     private void insertToolTips() {
