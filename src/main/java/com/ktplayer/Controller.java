@@ -931,11 +931,13 @@ public class Controller {
     	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.DOWN, KeyCombination.CONTROL_DOWN));
     	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0, KeyCombination.CONTROL_DOWN));
     	
-    	//ho scoperto che con CTRL+W, se hai una cartella aperta nella lista delle canzoni, ti cancella la lista
+    	//per close ci vorrebbe CTRL+W ma ho scoperto che 
+    	//se hai una cartella aperta nella lista delle canzoni, ti cancella la lista
+    	//è tipo un "close folder", non un "close program"
     	
-    	//aggiungere per full screen 
-    	//aggiungere per minimize windows
-    	//aggiungere per help --> show tutorial ?
+    	fullscreen_menu.setAccelerator(new KeyCodeCombination(KeyCode.F11, KeyCombination.ALT_DOWN));
+    	minimize_menu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
+    	//aggiungere per help --> show tutorial ?		preview_menu
     }
 	
     private void insertToolTips() {
