@@ -10,6 +10,20 @@ A very simple music player
 - [ ] Visualizzazione copertina album
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
 
+### Bottoni menubar da implementare:
+- [ ] Open file
+- [ ] Next song
+- [ ] Previous song
+- [ ] Volume +
+- [ ] Volume -
+- [ ] Volume muto
+- [ ] Full screen mode
+- [ ] Minimize windows
+- [ ] Interface Simple
+- [ ] Interface Advanced
+- [ ] How to use
+- [ ] Hotkeys
+
 ## Done List
 - [X] Correggere errore riproduzione automatica
 - [X] Fare menu in alto con File, Help, etc
