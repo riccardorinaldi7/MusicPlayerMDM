@@ -825,6 +825,7 @@ public class Controller {
     }
 
     @FXML
+    //se spingi ctrl+w ti esce questo
     private void closeFolder(){
         System.out.println("I'm closing the music folder");
         players.clear();
@@ -937,7 +938,7 @@ public class Controller {
     	
     	fullscreen_menu.setAccelerator(new KeyCodeCombination(KeyCode.F11, KeyCombination.ALT_DOWN));
     	minimize_menu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
-    	//aggiungere per help --> show tutorial ?		preview_menu
+    	//aggiungere per help --> show tutorial ?		preview_menu F1
     }
 	
     private void insertToolTips() {
