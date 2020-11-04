@@ -24,6 +24,49 @@ A very simple music player
 - [ ] How to use
 - [ ] Hotkeys
 
+_________________________________________
+
+## AFTER MEETING 04/11
+
+Modificare menu FILE come segue:
+
+1) "Open file..." 			
+	- diventa "Add file..."
+	- implementare come append
+
+2) "Import files from folder..."
+	- diventa "Add files from folder..."
+	- modificare in modo che faccia append e non sostituisci
+
+3) "Close" 
+	- diventa "Exit"
+	- già implementato, basta cambiare solo nome del menuitem
+
+4) Aggiungere voce "Clear the playlist" (Chiudi la scaletta) + implementare
+5) Aggiungere voce "Remove selected file" (Rimuovi il file selezionato) + implementare
+
+---
+
+Modificare menu RIPRODUZIONE come segue:
+
+6) "Mute" 
+	- diventa "Mute/Unmute"
+	- implementarlo per fare in modo che se volume=0, lo mette a metà. Se volume!=0, lo muta
+
+7) "Increase Volume" e "Decrease Volume "
+	- Modificare le frecce degli shortcut
+	- Implementare aumentando/diminuendo il volume di +/-10
+
+--- 
+
+8) Valutare se fare FullScreen o meno
+
+9) Se non esistono metadati del file, mettere nome file nella colonna "titolo"
+
+10) Realizzare interfaccia base seguendo design visto insieme con Paint
+
+______________________________________________________
+
 ## Done List
 - [X] Correggere errore riproduzione automatica
 - [X] Fare menu in alto con File, Help, etc
