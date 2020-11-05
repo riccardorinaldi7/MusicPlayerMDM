@@ -221,6 +221,7 @@ public class Controller {
         insertToolTips();			//attach tooltip to the main buttons
         volumeIconChanger(); 		//update volume icon if volume == 0
         addShortcutsMenubar();
+        attachMenuActions();
         
         // Shortcuts handler
         // Add any shortcut you want here
@@ -875,6 +876,12 @@ public class Controller {
         mediaView = null;
     }
 
+    private void changeVolume(Integer amount){
+        volumeSlider.setValue(volumeSlider.getValue() + amount);
+        volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
+        if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
+    }
+
     //ATTENZIONE --> ECCEZIONE SE FACCIAMO ANNULLA!!!!!! DA GESTIRE!!!!!!
     @FXML
     private void languageSelection(ActionEvent event){
@@ -960,6 +967,21 @@ public class Controller {
     	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
     	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tips.png"));
    }
+
+   private void attachMenuActions(){
+        incrVol.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                changeVolume(10);
+            }
+        });
+        decrVol.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                changeVolume(-10);
+            }
+        });
+   }
     
     private void addShortcutsMenubar() {
     	previous_menu.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
@@ -970,8 +992,8 @@ public class Controller {
     	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
     	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
     	
-    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.UP, KeyCombination.CONTROL_DOWN));
-    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.DOWN, KeyCombination.CONTROL_DOWN));
+    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.DOWN, KeyCombination.CONTROL_DOWN));
+    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.UP, KeyCombination.CONTROL_DOWN));
     	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0, KeyCombination.CONTROL_DOWN));
     	
     	//per close ci vorrebbe CTRL+W ma ho scoperto che 
