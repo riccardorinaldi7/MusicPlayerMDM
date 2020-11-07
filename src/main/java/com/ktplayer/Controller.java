@@ -992,6 +992,13 @@ public class Controller {
 			}
 		});
 
+		minimize_menu.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+	        public void handle(ActionEvent e) {
+	            stage.setIconified(true);
+	        }
+		});
+		
 		//Click sul MenuItem "About"
 		about_menu.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
