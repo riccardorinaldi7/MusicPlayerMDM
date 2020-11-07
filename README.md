@@ -6,22 +6,22 @@ A very simple music player
 - [ ] Fare finestre di conferma per ogni azione (alcune le ho già fatte by Lau)
 - [ ] Visualizzazione copertina album
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
-
+---
 - [ ] "Open file..." diventa "Add file..."
-- [ ] "Open file..." &rarr implementare come append
+- [ ] "Open file..." &rarr; implementare come append
 - [ ] "Import files from folder..." diventa "Add files from folder..."
-- [ ] "Import files from folder..." &rarr modificare in modo che faccia append e non sostituisci
+- [ ] "Import files from folder..." &rarr; modificare in modo che faccia append e non sostituisci
 - [ ] "Close" diventa "Exit"
-
+---
 - [ ] Aggiungere voce "Clear the playlist" (Chiudi la scaletta)
 - [ ] Implementare "Clear the playlist"
 - [ ] Aggiungere voce "Remove selected file" (Rimuovi il file selezionato)
 - [ ] Implementare "Remove selected file"
-
+---
 - [ ] "Mute" diventa "Mute/Unmute"
 - [ ] Implementare "Mute/Unmute" per fare in modo che se volume=0, lo mette a metà. Se volume!=0, lo muta
-- [ ] "Increase Volume" e "Decrease Volume" &rarr modificare le frecce degli shortcut
-
+- [ ] "Increase Volume" e "Decrease Volume" &rarr; modificare le frecce degli shortcut
+---
 - [ ] Realizzare interfaccia base seguendo design visto insieme con Paint
 
 ### Bottoni menubar da implementare:
