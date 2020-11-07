@@ -167,17 +167,26 @@ public class Controller {
     private MenuItem preview_menu;
     @FXML
     private MenuItem shortcuts_menu;
-        
+    @FXML
+    private MenuItem theme_menu;
+    @FXML
     private Menu menuVolume;
+    @FXML
     private MenuItem decrVol;
+    @FXML
     private MenuItem incrVol;
+    @FXML
     private MenuItem muteVol;
-    
+    @FXML
     private Menu menuInterface;
+    @FXML
     private MenuItem simpleInterface;
+    @FXML
     private MenuItem advancedInterface;
     
+    
     // --------------------------------------------------------------------------
+    
     
     private Main main;
 
@@ -850,6 +859,63 @@ public class Controller {
         if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
     }
 
+    @FXML
+    private void themeSelection (ActionEvent event){
+    	 String rootPath = "src\\main\\resources\\";
+         String appConfigPath = rootPath + "application.properties";
+
+         Properties appProps = new Properties();
+         try {
+             appProps.load(new FileInputStream(appConfigPath));
+         }
+         catch (FileNotFoundException e) {
+             e.printStackTrace();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+
+         // Trying to get the language setting
+         String theme = appProps.getProperty("theme");
+
+         //Creating a choice box asking for the language
+         ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
+         choiceDialog.setHeaderText(resources.getString("selecttheme"));
+         choiceDialog.setTitle(resources.getString("theme"));
+         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+         Image img = new Image("file:src/main/resources/images/theme.png");
+         choiceDialog.setGraphic(new ImageView(img));
+
+         //Retrieving the observable list
+         ObservableList<String> list = choiceDialog.getItems();
+         //Adding items to the language list
+         list.add(resources.getString("dark"));
+         list.add(resources.getString("light"));
+         list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
+         
+         // Show the dialog box and wait for a selection
+         Optional<String> selectedTheme = choiceDialog.showAndWait();
+
+         try {
+        	 theme = selectedTheme.get();
+             appProps.setProperty("theme", theme);
+             appProps.store(new FileWriter(appConfigPath), null);
+
+             //alert per dire che bisogna riavviare il programma
+             Alert alert = new Alert(AlertType.WARNING);
+             alert.setTitle(resources.getString("attention"));
+             alert.setHeaderText(null);
+             alert.setContentText(resources.getString("restart"));
+             ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+             alert.showAndWait();
+         } 
+         catch (IOException e) {
+             e.printStackTrace();
+         } 
+         catch (NoSuchElementException e){
+             System.out.println("User has changed his/her mind");
+         }
+    }
+    
     @FXML
     private void languageSelection(ActionEvent event){
         String rootPath = "src\\main\\resources\\";

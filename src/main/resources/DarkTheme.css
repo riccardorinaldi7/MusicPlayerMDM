@@ -1,4 +1,4 @@
-/* light theme */
+/* dark theme */
 
 .table-view {
     -fx-base: #f8f8f8;
@@ -70,17 +70,17 @@
 /* --------------------------------------------------------------------------------------------------------- */
 
 .menu:hover, .menu:showing{
-  -fx-background-color: e0e0e0;
+  -fx-background-color: #333333;
 }
 
 .menu-item:focused {
-   -fx-background-color : e0e0e0;
+   -fx-background-color : #333333;
 }
 
 .menu .label{
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 }
 
 .menu-item .label{
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 }
