@@ -3,12 +3,11 @@ A very simple music player
 
 ## ToDo List
 - [ ] Fare interfaccia base per utenti non esperti, anziani, bambini e interfaccia avanzata
-- [ ] Eliminare colonna "Width" dalla tabella ?
+- [ ] Eliminare colonna "Width" dalla tabella (?)
 - [ ] Fare finestre di conferma per ogni azione
 - [ ] Visualizzazione copertina album
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
 - [ ] Realizzare interfaccia base seguendo design visto insieme con Paint
-- [ ] Implementare Dark Theme
 - [ ] "Add file..." &rarr; implementare come append
 - [ ] "Add files from folder..." &rarr; modificare in modo che faccia append e non sostituisci
 - [ ] Implementare "Remove selected files"
@@ -21,7 +20,7 @@ A very simple music player
 - [ ] Interface Advanced
 - [ ] How to use
 - [ ] Hotkeys
-- [ ] Hide menu bar
+- [ ] Hide menu bar (?)
 ---
 
 ## Done List
@@ -46,3 +45,4 @@ A very simple music player
 - [X] Implementare "Mute/Unmute" per fare in modo che se volume=0, lo mette a metà. Se volume!=0, lo muta
 - [X] Aggiungere voce di scelta Theme nel menubar
 - [X] Aggiungere voce di Hide menu bar
+- [X] Implementare Dark Theme
