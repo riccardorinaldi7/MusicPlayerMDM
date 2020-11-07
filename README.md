@@ -8,7 +8,7 @@ A very simple music player
 - [ ] Visualizzazione copertina album
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
 - [ ] Realizzare interfaccia base seguendo design visto insieme con Paint
-
+- [ ] Implementare Dark Theme
 - [ ] "Add file..." &rarr; implementare come append
 - [ ] "Add files from folder..." &rarr; modificare in modo che faccia append e non sostituisci
 - [ ] Implementare "Remove selected files"
@@ -21,7 +21,7 @@ A very simple music player
 - [ ] Interface Advanced
 - [ ] How to use
 - [ ] Hotkeys
-
+- [ ] Hide menu bar
 ---
 
 ## Done List
@@ -44,4 +44,5 @@ A very simple music player
 - [X] "Mute" diventa "Mute/Unmute"
 - [X] "Increase Volume" e "Decrease Volume" &rarr; modificare le frecce degli shortcut &rarr; usati tasti +/- del numpad
 - [X] Implementare "Mute/Unmute" per fare in modo che se volume=0, lo mette a metà. Se volume!=0, lo muta
-
+- [X] Aggiungere voce di scelta Theme nel menubar
+- [X] Aggiungere voce di Hide menu bar
