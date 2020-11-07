@@ -46,6 +46,8 @@ public class Main extends Application {
 
 		//language selection
 		ResourceBundle bundle = handleLanguageSelection();
+		//theme selection
+		String nameCssToLoad = handleThemeSelection();
 		
 		// Load FXML file
 		FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName), bundle);
@@ -55,8 +57,6 @@ public class Main extends Application {
 		controller.setMain(this);
 
 		Scene scene = new Scene(root, 820, 740);
-		//theme selection
-		String nameCssToLoad = handleThemeSelection();
 		//scene.getStylesheets().add(ClassLoader.getSystemResource("LightTheme.css").toExternalForm());
 		scene.getStylesheets().add(ClassLoader.getSystemResource(nameCssToLoad).toExternalForm());
 		scene.setFill(Color.TRANSPARENT);
@@ -159,7 +159,6 @@ public class Main extends Application {
 			}
 		}
 		System.out.println("Selected theme: " + theme);
-
 		// Set the theme according to the selected theme
 		if (theme.equals("Dark"))
 			return "DarkTheme.css";

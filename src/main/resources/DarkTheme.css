@@ -1,14 +1,20 @@
-/* dark theme */
+/* light theme */
+
+/*
+#name --> element with id=name
+.name --> element with class=name
+*/
 
 .table-view {
-    -fx-base: #f8f8f8;
-    -fx-control-inner-background: #f8f8f8;
-    -fx-background-color: #f8f8f8;
+    -fx-base: #4d4d4d;
+    -fx-control-inner-background: #4d4d4d;
+    -fx-background-color: #4d4d4d;
     -fx-table-cell-border-color: transparent;
     -fx-table-header-border-color: transparent;
     -fx-padding: 0;
 }
-.table-view .column-header-background{
+
+.table-view .column-header-background {
     -fx-background-color: transparent;
 }
 
@@ -16,39 +22,47 @@
     -fx-font-size: 12pt;
     -fx-font-family: "Berlin Sans FB";
     -fx-font-weight: normal;
-    -fx-text-fill: black;
+    -fx-text-fill: white;
     -fx-alignment: center;
     -fx-opacity: 1;
 }
+
+/* cambia colore sfondo quando seleziono canzone dalla lista */
 .table-view:focused .table-row-cell:filled:focused:selected {
-    -fx-background-color: #e0e0e0;
-}
-.table-row-cell{
-    -fx-background-color: -fx-table-cell-border-color, #f8f8f8;
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em; /* 0 */
+    -fx-background-color: #282828;
 }
 
-.table-row-cell .label{
-    -fx-background-color: -fx-table-cell-border-color, #f8f8f8;
+/* pannello di sfondo nella tabella */
+.table-row-cell {
+    -fx-background-color: -fx-table-cell-border-color, #4d4d4d;
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-padding: 0.0em; /* 0 */
+    -fx-table-cell-border-color: transparent;
+}
+
+/* titoli colonne tabella */
+.table-row-cell .label {
+    -fx-background-color: -fx-table-cell-border-color, #4d4d4d;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
     -fx-alignment: center;
+    -fx-text-fill: white;
 }
 
-.table-row-cell:odd{
-    -fx-background-color: -fx-table-cell-border-color, #F5F5F5;
+/* righe dispari hanno diverso colore */
+.table-row-cell:odd {
+    -fx-background-color: -fx-table-cell-border-color, #5a5a5a;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
     -fx-text-fill: #000;
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: #282828;
 }
 
 .pane-background:hover {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: #282828;
 }
 
 .border-pane {
@@ -69,18 +83,92 @@
 /* Aggiunti da noi */
 /* --------------------------------------------------------------------------------------------------------- */
 
-.menu:hover, .menu:showing{
-  -fx-background-color: #333333;
+.menu:hover, .menu:showing {
+  -fx-background-color: #282828;
 }
 
 .menu-item:focused {
-   -fx-background-color : #333333;
+   -fx-background-color : #282828;
 }
 
-.menu .label{
+.menu .label {
     -fx-text-fill: white;
 }
 
-.menu-item .label{
-    -fx-text-fill: white;
+.menu-item {
+	-fx-background-color : #4d4d4d;
+}
+
+.menu-item .label {
+	-fx-text-fill: white;
+}
+
+/* pane on the right for the old "playlist" function */
+#window {
+	-fx-background-color: transparent;
+}
+
+/* pane where "Music player" is written */
+#anchorPaneTop {
+	-fx-background-color: #0d0d0d;
+}
+
+#anchorPaneTop .label {
+	-fx-text-fill: white;
+}
+
+#playlistNode {
+	-fx-background-color: #d8d8d8;
+}
+
+#menubar {
+	-fx-background-color: #4d4d4d;
+}
+
+.context-menu {
+    -fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";
+    -fx-background-color: #4d4d4d;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0 6 6 6, 0 5 5 5, 0 4 4 4;
+    -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em; /* 4 1 8 1 */
+}
+
+/* cambio il colore della freccia per i submenu */
+.context-menu .arrow {
+	-fx-mark-color: white;
+}
+
+#paneUnderTable {
+	/*-fx-background-color: #4d4d4d;*/
+	-fx-background-color: #414141;
+}
+
+#anchorPaneExit {
+	-fx-background-color: #4d4d4d;
+}
+
+#playlistPane1 {
+	-fx-border-color: #eee; 
+	-fx-background-color: #d2d2d2;
+}
+
+#programName {
+	-fx-text-fill: white;
+}
+
+.table-cell {
+	-fx-text-fill: white;
+}
+
+.split-pane *.split-pane-divider {
+    -fx-padding: 0 1 0 1;
+    -fx-background-color: black;
+}
+
+#songTable {
+	-fx-border-color: none; 
+}
+
+#songName, #artistName, #albumName, #currentDuration, #totalDuration, #volumeValue, #labelLoop {
+	-fx-text-fill: white;
 }

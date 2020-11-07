@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -127,6 +128,8 @@ public class Controller {
     private Double volumeBeforeMute = 0.00;
     
     @FXML
+    private SplitPane splitpane;
+    @FXML
     private Menu settings_menu;
     @FXML
     private Menu audio_menu;
@@ -183,7 +186,10 @@ public class Controller {
     private MenuItem simpleInterface;
     @FXML
     private MenuItem advancedInterface;
-    
+    @FXML
+    private ImageView exit_icon;
+    @FXML
+    private ImageView minimize_icon;
     
     // --------------------------------------------------------------------------
     
@@ -236,11 +242,12 @@ public class Controller {
         // AGGIUNTI DA NOI
         
         insertSubMenus_menuBar();	//enrich the menubar with submenus
-        iconsMenubar();				//enrich the manubar with icons 
+        setIcons();					//set icons depending on the theme
         insertToolTips();			//attach tooltip to the main buttons
         volumeIconChanger(); 		//update volume icon if volume == 0
         addShortcutsMenubar();	
         attachMenuActions();		//add setOnAction to menuItems
+        
         
         // Shortcuts handler
         // Add any shortcut you want here
@@ -857,6 +864,7 @@ public class Controller {
         volumeSlider.setValue(volumeSlider.getValue() + amount);
         volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
         if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
+        volumeIconChanger(); 
     }
 
     @FXML
@@ -976,8 +984,67 @@ public class Controller {
         }
     }
 
-    private void iconsMenubar() {
-    	openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
+    private void setIcons() {
+    	if (getCurrentTheme().equals("Light")) {
+    		setIconsForLightTheme();
+    	}
+    	else if (getCurrentTheme().equals("Dark")) {
+    		setIconsForDarkTheme();	
+    	}
+   }
+
+    private void setIconsForDarkTheme() {
+    	exit_icon.setImage(new Image(new File("src/main/resources/images/cancelw.png").toURI().toString()));
+        minimize_icon.setImage(new Image(new File("src/main/resources/images/minimizew.png").toURI().toString()));
+        folderChooser.setImage(new Image(new File("src/main/resources/images/music-folderw.png").toURI().toString()));
+        
+        muteIcon.setImage(new Image(new File("src/main/resources/images/speakermutew.png").toURI().toString()));
+        volumeIcon.setImage(new Image(new File("src/main/resources/images/speakerw.png").toURI().toString()));
+        previousSongButton.setImage(new Image(new File("src/main/resources/images/back-arrowsw.png").toURI().toString()));
+        nextSongButton.setImage(new Image(new File("src/main/resources/images/forward-arrowsw.png").toURI().toString()));
+        pauseButton.setImage(new Image(new File("src/main/resources/images/pausew.png").toURI().toString()));
+        playButton.setImage(new Image(new File("src/main/resources/images/playw.png").toURI().toString()));
+        
+    	openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/openw.png"));
+    	openfolder_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/openw.png"));
+    	exit_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closew.png"));
+    	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closefolderw.png"));
+    	removefiles_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/removew.png"));
+    	
+    	playpause_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/playpausew.png"));
+    	next_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/forwardw.png"));
+    	previous_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/rewindw.png"));
+    	menuVolume.setGraphic(new ImageView("file:src/main/resources/images/menubar/volumew.png"));
+    	
+    	decrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/minusw.png"));
+    	incrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/plusw.png"));
+    	muteVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/speakermutew.png"));
+    	
+    	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
+    	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimizew.png"));
+    	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languagesw.png"));
+    	
+    	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interfacew.png"));
+    	
+    	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logow.png"));
+    	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorialw.png"));
+    	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tipsw.png"));
+		
+	}
+
+	private void setIconsForLightTheme() {
+    	exit_icon.setImage(new Image(new File("src/main/resources/images/cancel.png").toURI().toString()));
+		minimize_icon.setImage(new Image(new File("src/main/resources/images/minimize.png").toURI().toString()));
+		folderChooser.setImage(new Image(new File("src/main/resources/images/music-folder.png").toURI().toString()));
+		
+		muteIcon.setImage(new Image(new File("src/main/resources/images/speakermute.png").toURI().toString()));
+        volumeIcon.setImage(new Image(new File("src/main/resources/images/speaker.png").toURI().toString()));
+        previousSongButton.setImage(new Image(new File("src/main/resources/images/back-arrows.png").toURI().toString()));
+        nextSongButton.setImage(new Image(new File("src/main/resources/images/forward-arrows.png").toURI().toString()));
+        pauseButton.setImage(new Image(new File("src/main/resources/images/pause.png").toURI().toString()));
+        playButton.setImage(new Image(new File("src/main/resources/images/play.png").toURI().toString()));
+		
+		openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
     	openfolder_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
     	exit_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/close.png"));
     	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closefolder.png"));
@@ -1001,9 +1068,10 @@ public class Controller {
     	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logo.png"));
     	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
     	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tips.png"));
-   }
+		
+	}
 
-    private void muteUnmuteVolume(){
+	private void muteUnmuteVolume(){
     	if (currentlyMuted == false ) {
     		currentlyMuted = true;
     		volumeBeforeMute = volumeSlider.getValue();
@@ -1018,8 +1086,8 @@ public class Controller {
     		volumeBeforeMute = 0.00;
     		volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
     		if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
-    	    
     	}
+    	volumeIconChanger(); 
     }
     
     private void attachMenuActions(){
@@ -1156,5 +1224,24 @@ public class Controller {
         menuVolume.getItems().addAll(decrVol, incrVol, muteVol);
     }
 
+    private String getCurrentTheme() {
+	   	 String rootPath = "src\\main\\resources\\";
+	     String appConfigPath = rootPath + "application.properties";
+	
+	     Properties appProps = new Properties();
+	     try {
+	         appProps.load(new FileInputStream(appConfigPath));
+	     }
+	     catch (FileNotFoundException e) {
+	         e.printStackTrace();
+	     } catch (IOException e) {
+	         e.printStackTrace();
+	     }
+	
+	     // Trying to get the language setting
+	     return appProps.getProperty("theme");
+
+    }
+    
 }
 
