@@ -2,7 +2,7 @@
 A very simple music player
 
 ## ToDo List
-- [ ] Evitare che cliccando nella lista canzoni il player si sinterrompa
+- [X] Evitare che cliccando nella lista canzoni il player si sinterrompa
 - [ ] Fare interfaccia base per utenti non esperti, anziani, bambini e interfaccia avanzata
 - [ ] Finestra di "Playlist" --> implementare?
 - [ ] Fare finestre di conferma per ogni azione (alcune le ho già fatte by Lau)

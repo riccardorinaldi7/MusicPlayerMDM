@@ -2,7 +2,6 @@ package com.ktplayer;
 
 import com.jfoenix.controls.JFXSlider;
 import com.mpatric.mp3agic.*;
-import javafx.fxml.FXMLLoader;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -16,13 +15,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -40,12 +37,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
 
 
 public class Controller {
+
+    private void print(String str) { System.out.println(str);}
 
     @FXML
     private AnchorPane window;
@@ -186,6 +184,8 @@ public class Controller {
 
     private FadeTransition fadeIn = new FadeTransition();
     private FadeTransition fadeOut = new FadeTransition();
+    private Song currentSelection;
+    private Song currentPlaying;
 
     public Controller() {
         players = new ArrayList<>();
@@ -196,10 +196,22 @@ public class Controller {
         stage.getIcons().add(new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
     }
 
+    private void closeProgram(){
+        //aggiunta alert di conferma prima di chiudere l'applicazione
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setContentText(resources.getString("sureToClose"));
+        alert.setHeaderText(null);
+        alert.setTitle(resources.getString("confirmExit"));
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            System.exit(0);
+        } else { }
+    }
+
     @FXML
     private void initialize() throws Exception {
-
-        if(stage.getScene() == null) System.out.println("scene null");
 
         //--------------------------------------------------------------------------------------
         // AGGIUNTI DA NOI
@@ -209,6 +221,7 @@ public class Controller {
         insertToolTips();			//attach tooltip to the main buttons
         volumeIconChanger(); 		//update volume icon if volume == 0
         addShortcutsMenubar();
+        attachMenuActions();
         
         // Shortcuts handler
         // Add any shortcut you want here
@@ -285,7 +298,12 @@ public class Controller {
             }
         });
 
-        exit.addEventHandler(MouseEvent.MOUSE_CLICKED, handleExit); //creato handler da riutilizzare               	
+        exit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                closeProgram(); //creato "handler" da riutilizzare
+            }
+        });
 
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
         artistNameColumn.setCellValueFactory(cellData -> cellData.getValue().artistNameProperty());
@@ -296,12 +314,16 @@ public class Controller {
 
         showSongInfo(null);
 
-        songTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showSongInfo(newValue));
+        //this runs everytime an item in tableview is single-clicked/selected
+        songTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("SongTable: selection detected - " + newValue.getSongName());
+            currentSelection = newValue;
+        });
 
         folderChooser.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                System.out.println("folderChooser: icon clicked");
+                System.out.println("folderChooser: choose a music folder");
                 chooseFolder();
             }
         });
@@ -309,22 +331,10 @@ public class Controller {
         // ----------------------------------------------------------------------------------------------------------
         // HANDLER AGGIUNTI DA NOI
         // ----------------------------------------------------------------------------------------------------------
-        
-        //ripeto stesso codice di close perché non ho capito come poterlo riutilizzare eheh
+
         close_menu.setOnAction( new EventHandler<ActionEvent>() {
     	    public void handle(ActionEvent t) {
-    	    	//aggiunta alert di conferma prima di chiudere l'applicazione
-            	Alert alert = new Alert(AlertType.CONFIRMATION);
-            	alert.setContentText(resources.getString("sureToClose"));
-            	alert.setHeaderText(null);
-            	alert.setTitle(resources.getString("confirmExit"));
-            	((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
-            	
-            	Optional<ButtonType> result = alert.showAndWait();
-            	if (result.get() == ButtonType.OK){
-            		System.exit(0);
-            	} else { }
-
+    	    	closeProgram();
     	    }
     	});          
         
@@ -362,23 +372,6 @@ public class Controller {
         });
     }
     
-    EventHandler<MouseEvent> handleExit = new EventHandler<MouseEvent>() {
-    	@Override 
-    	public void handle(javafx.scene.input.MouseEvent e) { 
-    		//aggiunta alert di conferma prima di chiudere l'applicazione
-        	Alert alert = new Alert(AlertType.CONFIRMATION);
-        	alert.setContentText(resources.getString("sureToClose"));
-        	alert.setHeaderText(null);
-        	alert.setTitle(resources.getString("confirmExit"));
-        	((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
-        	
-        	Optional<ButtonType> result = alert.showAndWait();
-        	if (result.get() == ButtonType.OK){
-        		System.exit(0);
-        	} else { }
-    	}
-    };
-    
     @FXML
     private void chooseFolder() {
         DirectoryChooser chooser = new DirectoryChooser();
@@ -393,20 +386,28 @@ public class Controller {
                     players.clear();
                     System.out.println("new array list");
                 }
-                songTable.setItems(songsUrls(selectedDirectory));
+                songTable.setItems(loadSongs(selectedDirectory));
 
                 songTable.setOnMouseClicked((MouseEvent e) -> {
                                     	
-                     if(e.getClickCount() == 1) {
-                    	     try {
-		                    	 takeCare();
-		                     }		                        
-		                     catch (Exception ex) {}
-                    	 } 
+//                     if(e.getClickCount() == 1) {
+//                    	     try {
+//		                    	 print("SongTable: prendo in carico...");
+//                    	         takeCare();
+//		                     }
+//		                     catch (Exception ex) {}
+//                    	 }
                 	
                     //con doppio click, parte la canzone!
                     if (e.getClickCount() == 2) {
-                    	playPauseSong();
+                        try {
+                            takeCare();
+                            if(currentPlaying != null) showSongInfo(currentPlaying);
+                            print("SongTable: play - " + currentPlaying.getSongName());
+                            //playPauseSong(); it is better to play inside takeCare() -> playPauseSong(song)
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                        }
                     }
                 });
             }
@@ -415,20 +416,21 @@ public class Controller {
     }
 
     public void showSongInfo(Song song) {
+        String artistLabel = "-";
+        String songLabel = "-";
+        String albumLabel = "-";
         if(song != null) {
-            artistName.setText(song.getArtistName());
-            songName.setText(song.getSongName());
-            albumName.setText(song.getFormat());
+            if(song.getArtistName() != null) artistLabel = song.getArtistName();
+            if(song.getSongName() != null) songLabel = song.getSongName();
+            if(song.getFormat() != null) albumLabel = song.getFormat();
         }
-        else {
-            artistName.setText("-");
-            songName.setText("-");
-            albumName.setText("-");
-        }
-
+        artistName.setText(artistLabel);
+        songName.setText(songLabel);
+        albumName.setText(albumLabel);
     }
 
-    public ObservableList<Song> songsUrls(File dir)   throws Exception{
+    // Loads all files in a directory and creates Song and MediaPlayer for each file
+    public ObservableList<Song> loadSongs(File dir)   throws Exception{
         ObservableList<Song> songData = FXCollections.observableArrayList();
         File[] files = dir.listFiles();
         String name;
@@ -436,16 +438,14 @@ public class Controller {
         for(File file : files) {
             if(file.isFile()) {
                 name = file.getName();
-                /*if(name.endsWith("jpg")) {
-                    path = file.getAbsolutePath();
-                }*/
                 if(name.endsWith("mp3") || name.endsWith("wav")) {
                     try {
-                        i++;
+                        i++; //song id from 1 to n
                         Mp3File mp3 = new Mp3File(file.getPath());
                         ID3v2 tag = mp3.getId3v2Tag();
-                        Song song = new Song(String.valueOf(i), tag.getArtist(), tag.getTitle(), kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath());
-                        players.add(createPlayer(file.getAbsolutePath()));
+                        String title = tag.getTitle() == null ? name : tag.getTitle(); //use filename if no song title exists
+                        Song song = new Song(String.valueOf(i), tag.getArtist(), title, kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath());
+                        players.add(createMediaPlayer(file.getAbsolutePath()));
                         songData.add(song);
                     }
                     catch(IOException e) {e.printStackTrace();}
@@ -466,12 +466,13 @@ public class Controller {
             File file = new File(song.getUrl());
             String path = file.getAbsolutePath();
             path.replace("\\", "/");
-            
+
+            // If there's another media setted, we remove its mediaview and mediaplayer before setting the new ones
             if((mediaView != null) && (mediaPlayer != null)) {
             	
-            	System.out.println(mediaPlayer.getStatus().toString()); //Status = READY
+            	print("playPauseSong(Song): deleting old mediaview and mediaplayer...");
             	
-                volume = mediaView.getMediaPlayer().getVolume();
+                volume = mediaView.getMediaPlayer().getVolume(); //?? why ??
                 //questo è quello che fa stoppare la canzone quando ne premo un'altra nella lista
                 mediaView.getMediaPlayer().stop();
                 mediaView = null;
@@ -481,20 +482,25 @@ public class Controller {
             Media media = new Media(new File(path).toURI().toString());
 
             mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.stop();
+            mediaPlayer.stop(); // why?? ha paura che parta? ahah
             mediaPlayer.setAutoPlay(false);
 
             mediaView = new MediaView(mediaPlayer);
-            pauseIcon();
+            //viewPlayIcon();
             mediaView = new MediaView(players.get(Integer.parseInt(song.getId()) - 1));
 
+            // Put some value before playing
             volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
             volumeSlider.setValue(volume*100);
             mediaView.getMediaPlayer().setVolume(volume);
             mediaView.getMediaPlayer().seek(Duration.ZERO);
             updateSliderPosition(Duration.ZERO);
+            double duration = mediaView.getMediaPlayer().getTotalDuration().toSeconds();
+            totalDuration.setText(secToMin((long) duration));
 
+            // create a Thread that runs throughout the song and update values of slider, timing and volume
             updateValues();
+
             mediaView.mediaPlayerProperty().addListener(new ChangeListener<MediaPlayer>() {
                 @Override
                 public void changed(ObservableValue<? extends MediaPlayer> observable, MediaPlayer oldValue, MediaPlayer newValue) {
@@ -508,11 +514,11 @@ public class Controller {
                 }
             });
 
-            playButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            /*playButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
                     mediaView.getMediaPlayer().play();
-                    playIcon();
+                    viewPauseIcon();
                     updateValues();
                     for (int i = ((players.indexOf(mediaView.getMediaPlayer())) % players.size()); i < players.size(); i++) {
                         final MediaPlayer player = players.get(i);
@@ -536,11 +542,21 @@ public class Controller {
                                 updateValues();
                                 mediaPlayer.setVolume(volume);
                                 mediaPlayer.play();
-                                playIcon();
+                                viewPauseIcon();
                             }
                         });
-                        pauseSong();
+                        setPlayButtonHandler();
                     }
+                }
+            });*/
+
+            pauseButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    mediaView.getMediaPlayer().pause();
+                    viewPlayIcon();
+                    setPlayButtonHandler();
+                    updateValues();
                 }
             });
 
@@ -575,8 +591,41 @@ public class Controller {
                 }
             });
 
+            // TODO: reset all players everytime we takeCare of a Song?? Too expensive...should be fixed
+            for (int i = ((players.indexOf(mediaView.getMediaPlayer())) % players.size()); i < players.size(); i++) {
+                final MediaPlayer player = players.get(i);
+                mediaPlayer = player;
+                final MediaPlayer nextPlayer = players.get((i + 1) % players.size());
+                mediaPlayer.setOnEndOfMedia(new Runnable() {
+                    @Override
+                    public void run() {
+                        mediaView.getMediaPlayer().stop();
+                        mediaView.getMediaPlayer().seek(Duration.ZERO);
+                        if(isAutoplay) {
+                            mediaView.getMediaPlayer().seek(Duration.ZERO);
+                            repeatSongs();
+                            return;
+                        }
+                        mediaPlayer = nextPlayer;
+                        mediaView.setMediaPlayer(mediaPlayer);
+                        mediaView.getMediaPlayer().seek(Duration.ZERO);
+                        updateSliderPosition(Duration.ZERO);
+                        songSlider.setValue(0);
+                        double duration = mediaView.getMediaPlayer().getTotalDuration().toSeconds();
+                        totalDuration.setText(secToMin((long) duration));
+                        updateValues();
+                        mediaPlayer.setVolume(volume);
+                        mediaPlayer.play();
+                        viewPauseIcon();
+                    }
+                });
+            }
+
+            playPauseSong();
+
         }
         else {
+            print("Come posso essere qui? PARADOSSOOOOO");
             if(pauseButton.isVisible()) {
                 if ((mediaPlayer != null) && (mediaView != null)) {
                     mediaPlayer = mediaView.getMediaPlayer();
@@ -584,7 +633,7 @@ public class Controller {
                     mediaView = null;
                     mediaPlayer = null;
                 }
-                pauseIcon();
+                viewPlayIcon();
             }
             System.out.println("Song does not exist!");
         }
@@ -615,11 +664,11 @@ public class Controller {
         return time;
     }
 
-    public MediaPlayer createPlayer(String url) {
+    public MediaPlayer createMediaPlayer(String url) {
         url.replace("\\", "/");
         final Media media = new Media(new File(url).toURI().toString());
         final MediaPlayer player = new MediaPlayer(media);
-        System.out.println("+++++ " + url);
+        System.out.println("created MediaPlayer for: " + url);
         return player;
     }
 
@@ -629,14 +678,14 @@ public class Controller {
         return media;
     }
 
-    public void playIcon() {
+    public void viewPauseIcon() {
         playButton.setVisible(false);
         playButton.setDisable(true);
         pauseButton.setVisible(true);
         pauseButton.setDisable(false);
     }
 
-    public void pauseIcon() {
+    public void viewPlayIcon() {
         pauseButton.setVisible(false);
         pauseButton.setDisable(true);
         playButton.setVisible(true);
@@ -660,8 +709,8 @@ public class Controller {
 
     public void takeCare() throws Exception {
         if(songTable.getSelectionModel().getSelectedItem() != null) {
-            Song song = songTable.getSelectionModel().getSelectedItem();
-            playPauseSong(song);
+            currentPlaying = songTable.getSelectionModel().getSelectedItem();
+            playPauseSong(currentPlaying);
         }
         else {
             System.out.println("null");
@@ -684,8 +733,6 @@ public class Controller {
                         public void run() {
                             final MediaPlayer player = mediaView.getMediaPlayer();
                             if((player.getStatus() != Status.PAUSED) && (player.getStatus() != Status.STOPPED) && (player.getStatus() != Status.READY)) {
-                                double tduration = player.getTotalDuration().toSeconds();
-                                totalDuration.setText(secToMin((long) tduration));
                                 currentDuration.setText(secToMin((long) player.getCurrentTime().toSeconds()));
                                 updateSliderPosition(player.getCurrentTime());
                                 volumeHandler();
@@ -779,22 +826,19 @@ public class Controller {
         });
         if(isAutoplay) {
             mediaView.getMediaPlayer().play();
-            playIcon();
+            viewPauseIcon();
         }
         else return;
     }
 
-    private void pauseSong() {
-        mediaView.getMediaPlayer().setAutoPlay(true);
-        pauseButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+    private void setPlayButtonHandler() {
+        //mediaView.getMediaPlayer().setAutoPlay(true);
+        playButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (mediaView.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
-                    mediaView.getMediaPlayer().pause();
-                    pauseButton.setVisible(false);
-                    pauseButton.setDisable(true);
-                    playButton.setVisible(true);
-                    playButton.setDisable(false);
+                if (mediaView.getMediaPlayer().getStatus() != MediaPlayer.Status.PLAYING) {
+                    mediaView.getMediaPlayer().play();
+                    viewPauseIcon();
                 }
             }
         });
@@ -831,6 +875,12 @@ public class Controller {
         players.clear();
         songTable.getItems().clear();
         mediaView = null;
+    }
+
+    private void changeVolume(Integer amount){
+        volumeSlider.setValue(volumeSlider.getValue() + amount);
+        volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
+        if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
     }
 
     //ATTENZIONE --> ECCEZIONE SE FACCIAMO ANNULLA!!!!!! DA GESTIRE!!!!!!
@@ -918,6 +968,21 @@ public class Controller {
     	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
     	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tips.png"));
    }
+
+   private void attachMenuActions(){
+        incrVol.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                changeVolume(10);
+            }
+        });
+        decrVol.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                changeVolume(-10);
+            }
+        });
+   }
     
     private void addShortcutsMenubar() {
     	previous_menu.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
@@ -928,8 +993,8 @@ public class Controller {
     	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
     	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
     	
-    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.UP, KeyCombination.CONTROL_DOWN));
-    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.DOWN, KeyCombination.CONTROL_DOWN));
+    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.DOWN, KeyCombination.CONTROL_DOWN));
+    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.UP, KeyCombination.CONTROL_DOWN));
     	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0, KeyCombination.CONTROL_DOWN));
     	
     	//per close ci vorrebbe CTRL+W ma ho scoperto che 
