@@ -4,28 +4,24 @@ A very simple music player
 ## ToDo List
 - [ ] Fare interfaccia base per utenti non esperti, anziani, bambini e interfaccia avanzata
 - [ ] Eliminare colonna "Width" dalla tabella ?
-- [ ] Fare finestre di conferma per ogni azione (alcune le ho già fatte by Lau)
+- [ ] Fare finestre di conferma per ogni azione
 - [ ] Visualizzazione copertina album
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
 - [ ] Realizzare interfaccia base seguendo design visto insieme con Paint
-.
+
 - [ ] "Add file..." &rarr; implementare come append
 - [ ] "Add files from folder..." &rarr; modificare in modo che faccia append e non sostituisci
 - [ ] Implementare "Remove selected files"
-- [ ] Implementare "Mute/Unmute" per fare in modo che se volume=0, lo mette a metà. Se volume!=0, lo muta
 
 ### Bottoni menubar da implementare:
 - [ ] Open file
 - [ ] Next song
 - [ ] Previous song
-- [ ] Volume muto
-- [ ] Minimize windows
 - [ ] Interface Simple
 - [ ] Interface Advanced
 - [ ] How to use
 - [ ] Hotkeys
 
----
 ---
 
 ## Done List
@@ -47,4 +43,5 @@ A very simple music player
 - [X] Aggiungere voce "Remove selected files" (Rimuovi i file selezionati)
 - [X] "Mute" diventa "Mute/Unmute"
 - [X] "Increase Volume" e "Decrease Volume" &rarr; modificare le frecce degli shortcut &rarr; usati tasti +/- del numpad
+- [X] Implementare "Mute/Unmute" per fare in modo che se volume=0, lo mette a metà. Se volume!=0, lo muta
 
