@@ -211,9 +211,11 @@
                         <menus>
                            <Menu mnemonicParsing="false" text="%file">
                               <items>
-                                 <MenuItem fx:id="openfile_menu" mnemonicParsing="false" text="%openfile" />
-                                 <MenuItem fx:id="openfolder_menu" onAction="#chooseFolder" mnemonicParsing="false" text="%openfolder" />
+                                 <MenuItem fx:id="openfile_menu" mnemonicParsing="false" text="%addfile" />
+                                 <MenuItem fx:id="openfolder_menu" onAction="#chooseFolder" mnemonicParsing="false" text="%addfolder" />
+                                 <MenuItem fx:id="removefiles_menu" mnemonicParsing="false" text="%removefiles" />
                                  <MenuItem fx:id="close_menu" onAction="#closeFolder" mnemonicParsing="false" text="%close" />
+                                 <MenuItem fx:id="exit_menu" mnemonicParsing="false" text="%exit" />
                               </items>
                            </Menu>
 
@@ -227,7 +229,7 @@
 
                            <Menu mnemonicParsing="false" text="%view">
                               <items>
-                                 <MenuItem fx:id="fullscreen_menu" mnemonicParsing="false" text="%fullscreen" />
+                                 <!-- <MenuItem fx:id="fullscreen_menu" mnemonicParsing="false" text="%fullscreen" /> -->
                                  <MenuItem fx:id="minimize_menu" mnemonicParsing="false" text="%minimize" />
                               </items>
                            </Menu>
@@ -324,6 +326,29 @@
 
       <AnchorPane layoutY="7.0" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: #f0f0f0;" AnchorPane.bottomAnchor="700.0" AnchorPane.topAnchor="0.0">
          <children>
+            
+            <Pane fx:id="minimize" layoutX="500.0" layoutY="1.0" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.rightAnchor="50.0">
+               <cursor> <Cursor fx:constant="HAND" /> </cursor>
+               <children>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="17.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                     <image> <Image url="@/images/minimize.png" /> </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            
+            <Pane fx:id="exit" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="17.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                     <image> <Image url="@/images/cancel.png" /> </image>
+                     <cursor> <Cursor fx:constant="HAND" /> </cursor>
+                  </ImageView>
+               </children>
+               <cursor> <Cursor fx:constant="HAND" /> </cursor>
+            </Pane>
+            
+            <!-- PANNELLO GIA' IMPOSTATO PER 3 BOTTONI: MINIMIZZA, FULLSCREEN, EXIT -->
+            
+            <!--
             <Pane fx:id="minimize" layoutX="500.0" layoutY="1.0" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.rightAnchor="100.0">
                <cursor> <Cursor fx:constant="HAND" /> </cursor>
                <children>
@@ -352,7 +377,8 @@
                </children>
                <cursor> <Cursor fx:constant="HAND" /> </cursor>
             </Pane>
-
+			-->
+			
             <Label layoutX="39.0" layoutY="9.0" text="  WG Player" AnchorPane.leftAnchor="39.0">
                <font> <Font name="Berlin Sans FB" size="20.0" /> </font>
             </Label>

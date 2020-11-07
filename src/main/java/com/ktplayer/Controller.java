@@ -123,6 +123,9 @@ public class Controller {
     // AGGIUNTI DA NOI
     // --------------------------------------------------------------------------
 
+    private Boolean currentlyMuted = false;
+    private Double volumeBeforeMute = 0.00;
+    
     @FXML
     private Menu settings_menu;
     @FXML
@@ -135,7 +138,10 @@ public class Controller {
     private MenuItem openfolder_menu; 
     @FXML
     private MenuItem close_menu; 
-    
+    @FXML
+    private MenuItem exit_menu; 
+    @FXML
+    private MenuItem removefiles_menu;
     @FXML
     private Pane maximize;
     
@@ -145,8 +151,12 @@ public class Controller {
     private MenuItem next_menu;
     @FXML
     private MenuItem previous_menu;
+
+    /* 
     @FXML
     private MenuItem fullscreen_menu;
+    */ 
+    
     @FXML
     private MenuItem minimize_menu;
     @FXML
@@ -220,8 +230,8 @@ public class Controller {
         iconsMenubar();				//enrich the manubar with icons 
         insertToolTips();			//attach tooltip to the main buttons
         volumeIconChanger(); 		//update volume icon if volume == 0
-        addShortcutsMenubar();
-        attachMenuActions();
+        addShortcutsMenubar();	
+        attachMenuActions();		//add setOnAction to menuItems
         
         // Shortcuts handler
         // Add any shortcut you want here
@@ -239,7 +249,6 @@ public class Controller {
         });
         */
        
-
         //--------------------------------------------------------------------------------------
         
         window.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
@@ -325,49 +334,6 @@ public class Controller {
             public void handle(MouseEvent event) {
                 System.out.println("folderChooser: choose a music folder");
                 chooseFolder();
-            }
-        });
-        
-        // ----------------------------------------------------------------------------------------------------------
-        // HANDLER AGGIUNTI DA NOI
-        // ----------------------------------------------------------------------------------------------------------
-
-        close_menu.setOnAction( new EventHandler<ActionEvent>() {
-    	    public void handle(ActionEvent t) {
-    	    	closeProgram();
-    	    }
-    	});          
-        
-        //Play/Pausa
-        playpause_menu.setOnAction(new EventHandler<ActionEvent>() {
-    	    public void handle(ActionEvent t) {
-    	        playPauseSong();
-    	    }
-    	});
-        
-        //Click sul MenuItem "About"
-        about_menu.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-            	
-            	String toShow = "WG Player has been developed for the Work Project on Multimedia Data Management M,"
-            			+ " a course of Computer Science Engineering at the University of Bologna held by Prof. Ilaria Bartolini.\n"
-            			+ "\nThe students Riccardo Rinaldi and Laura Gruppioni started using a very simple Music Player software created by Alexey Ktualhu" 
-            			+ " with the aim of improving the User Interface by applying some of the most famous Design Principles written by Ben Shneiderman and his research partners.\n\n"
-            			+ " _________________________________________________ \n\n"
-            			+ "Here you can find the original software:\nhttps://github.com/ktualhu/ktPlayer-Music-Player\n"
-            			+ "\nIf you want to join our team, here you can take a look at our highly evolved project:\nhttps://github.com/riccardorinaldi7/MusicPlayerMDM";
-            	            	
-            	Alert alert = new Alert(AlertType.INFORMATION);
-			    alert.setTitle(resources.getString("about"));
-			    alert.setHeaderText(null);
-			    alert.setResizable(false);
-			    alert.getDialogPane().setMinWidth(850);
-			    alert.getDialogPane().setMinHeight(400);
-			    alert.setContentText(toShow);
-			    ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
-			    alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/almamater.png")));
-			    
-			    alert.showAndWait();
             }
         });
     }
@@ -467,7 +433,7 @@ public class Controller {
             String path = file.getAbsolutePath();
             path.replace("\\", "/");
 
-            // If there's another media setted, we remove its mediaview and mediaplayer before setting the new ones
+            // If there's another media set, we remove its mediaview and mediaplayer before setting the new ones
             if((mediaView != null) && (mediaPlayer != null)) {
             	
             	print("playPauseSong(Song): deleting old mediaview and mediaplayer...");
@@ -848,9 +814,10 @@ public class Controller {
     // NOSTRE MODIFICHE
     //----------------------------------------------------------------------------------------------------------------
 
-    // play from menu bar
+    //Quando premo play dal menubar --> implementare con le nuove modifiche
     @FXML
     private void playPauseSong() {
+    	
         MediaPlayer mp = mediaView.getMediaPlayer();
         if(mp.getStatus() == Status.PLAYING){
             mediaView.getMediaPlayer().pause();
@@ -883,7 +850,6 @@ public class Controller {
         if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
     }
 
-    //ATTENZIONE --> ECCEZIONE SE FACCIAMO ANNULLA!!!!!! DA GESTIRE!!!!!!
     @FXML
     private void languageSelection(ActionEvent event){
         String rootPath = "src\\main\\resources\\";
@@ -947,7 +913,9 @@ public class Controller {
     private void iconsMenubar() {
     	openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
     	openfolder_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
-    	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/close.png"));
+    	exit_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/close.png"));
+    	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closefolder.png"));
+    	removefiles_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/remove.png"));
     	
     	playpause_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/playpause.png"));
     	next_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/forward.png"));
@@ -958,7 +926,7 @@ public class Controller {
     	incrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/plus.png"));
     	muteVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/speakermute.png"));
     	
-    	fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
+    	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
     	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimize.png"));
     	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languages.png"));
     	
@@ -969,19 +937,86 @@ public class Controller {
     	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tips.png"));
    }
 
-   private void attachMenuActions(){
-        incrVol.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                changeVolume(10);
-            }
-        });
-        decrVol.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                changeVolume(-10);
-            }
-        });
+    private void muteUnmuteVolume(){
+    	if (currentlyMuted == false ) {
+    		currentlyMuted = true;
+    		volumeBeforeMute = volumeSlider.getValue();
+    		volumeSlider.setValue(0);
+    		volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
+    		if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
+    	}
+    	else {
+    		//restore the volume of the slider before the mute action
+    		currentlyMuted = false;
+    		volumeSlider.setValue(volumeBeforeMute);
+    		volumeBeforeMute = 0.00;
+    		volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
+    		if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
+    	    
+    	}
+    }
+    
+    private void attachMenuActions(){
+    	
+    	incrVol.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				changeVolume(10);
+			}
+		});
+   
+		decrVol.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				changeVolume(-10);
+			}
+		});
+   
+		muteVol.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				muteUnmuteVolume();
+			}
+		});
+		
+		exit_menu.setOnAction( new EventHandler<ActionEvent>() {
+    	    public void handle(ActionEvent t) {
+    	    	closeProgram();
+    	    }
+    	});          
+        
+        //Play/Pausa
+		playpause_menu.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				playPauseSong();
+			}
+		});
+
+		//Click sul MenuItem "About"
+		about_menu.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+    	
+		    	String toShow = "WG Player has been developed for the Work Project on Multimedia Data Management M,"
+		    			+ " a course of Computer Science Engineering at the University of Bologna held by Prof. Ilaria Bartolini.\n"
+		    			+ "\nThe students Riccardo Rinaldi and Laura Gruppioni started using a very simple Music Player software created by Alexey Ktualhu" 
+		    			+ " with the aim of improving the User Interface by applying some of the most famous Design Principles written by Ben Shneiderman and his research partners.\n\n"
+		    			+ " _________________________________________________ \n\n"
+		    			+ "Here you can find the original software:\nhttps://github.com/ktualhu/ktPlayer-Music-Player\n"
+		    			+ "\nIf you want to join our team, here you can take a look at our highly evolved project:\nhttps://github.com/riccardorinaldi7/MusicPlayerMDM";
+            	
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle(resources.getString("about"));
+				alert.setHeaderText(null);
+				alert.setResizable(false);
+				alert.getDialogPane().setMinWidth(850);
+				alert.getDialogPane().setMinHeight(400);
+				alert.setContentText(toShow);
+				((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+				alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/almamater.png")));
+					    
+				alert.showAndWait();
+			}
+		});
    }
     
     private void addShortcutsMenubar() {
@@ -991,19 +1026,19 @@ public class Controller {
     	
     	language_menu.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
     	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
-    	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
+    	exit_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));			//quit
+    	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN));
+    	removefiles_menu.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));	//cut selected
     	
-    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.DOWN, KeyCombination.CONTROL_DOWN));
-    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.UP, KeyCombination.CONTROL_DOWN));
+    	//decrVol.setAccelerator(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.CONTROL_DOWN));		//- not in numpad
+    	//incrVol.setAccelerator(new KeyCodeCombination(KeyCode.PLUS, KeyCombination.CONTROL_DOWN));		//+ not in numpad
+    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.SUBTRACT, KeyCombination.CONTROL_DOWN)); 		//- in numpad
+    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.ADD, KeyCombination.CONTROL_DOWN));			//+ in numpad
     	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0, KeyCombination.CONTROL_DOWN));
     	
-    	//per close ci vorrebbe CTRL+W ma ho scoperto che 
-    	//se hai una cartella aperta nella lista delle canzoni, ti cancella la lista
-    	//è tipo un "close folder", non un "close program"
-    	
-    	fullscreen_menu.setAccelerator(new KeyCodeCombination(KeyCode.F11, KeyCombination.ALT_DOWN));
+    	//fullscreen_menu.setAccelerator(new KeyCodeCombination(KeyCode.F11, KeyCombination.ALT_DOWN));
     	minimize_menu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
-    	//aggiungere per help --> show tutorial ?		preview_menu F1
+    	preview_menu.setAccelerator(new KeyCodeCombination(KeyCode.F1, KeyCombination.CONTROL_DOWN));	//help
     }
 	
     private void insertToolTips() {
