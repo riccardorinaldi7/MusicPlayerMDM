@@ -3,6 +3,7 @@ A very simple music player
 
 ## ToDo List
 - [ ] Fare interfaccia base per utenti non esperti, anziani, bambini e interfaccia avanzata
+- [ ] Eliminare colonna "Width" dalla tabella ?
 - [ ] Fare finestre di conferma per ogni azione (alcune le ho già fatte by Lau)
 - [ ] Visualizzazione copertina album
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
