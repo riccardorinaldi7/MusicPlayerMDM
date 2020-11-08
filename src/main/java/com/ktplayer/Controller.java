@@ -129,6 +129,7 @@ public class Controller {
 
     private Boolean currentlyMuted = false;
     private Double volumeBeforeMute = 0.00;
+    private Utilities util;
     
     @FXML
     private SplitPane splitpane;
@@ -190,6 +191,8 @@ public class Controller {
     @FXML
     private MenuItem advancedInterface;
     @FXML
+    private MenuItem hidebar_menu;
+    @FXML
     private ImageView exit_icon;
     @FXML
     private ImageView minimize_icon;
@@ -222,7 +225,8 @@ public class Controller {
         volume = 0.5; // between 0 and 1
         stage = Main.getStage();
         stage.getIcons().add(new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
-        currentTheme = getCurrentTheme();
+        util = new Utilities();
+        currentTheme = util.getCurrentTheme();
     }
 
     private void closeProgram(){
@@ -234,7 +238,7 @@ public class Controller {
         alert.setTitle(resources.getString("confirmExit"));
         ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
         
-        applyThemeToDialog(alert);
+        util.applyThemeToDialog(alert);
         
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
@@ -833,10 +837,10 @@ public class Controller {
         });
     }
 
-    //----------------------------------------------------------------------------------------------------------------
+    // ***************************************************************************************************************
     // NOSTRE MODIFICHE
-    //----------------------------------------------------------------------------------------------------------------
-
+    // ***************************************************************************************************************
+    
     //Quando premo play dal menubar --> implementare con le nuove modifiche
     @FXML
     private void playPauseSong() {
@@ -874,6 +878,10 @@ public class Controller {
         volumeIconChanger(); 
     }
 
+    // ----------------------------------------------------------------------------------------------------------------------
+    // THEME SELECTION
+    // ----------------------------------------------------------------------------------------------------------------------
+    
     @FXML
     private void themeSelection (ActionEvent event){
     	 String rootPath = "src\\main\\resources\\";
@@ -896,7 +904,8 @@ public class Controller {
          ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
          choiceDialog.setHeaderText(resources.getString("selecttheme"));
          choiceDialog.setTitle(resources.getString("theme"));
-         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
+        		 new Image("file:src/main/resources/images/logo.png"));
          Image img = new Image("file:src/main/resources/images/theme.png");
          choiceDialog.setGraphic(new ImageView(img));
 
@@ -909,7 +918,7 @@ public class Controller {
          
          choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
          
-         applyThemeToDialog(choiceDialog);
+         util.applyThemeToDialog(choiceDialog);
          
          
          // Show the dialog box and wait for a selection
@@ -925,10 +934,11 @@ public class Controller {
              alert.setTitle(resources.getString("attention"));
              alert.setHeaderText(null);
              alert.setContentText(resources.getString("restart"));
-             ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+             ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
+            		 new Image("file:src/main/resources/images/logo.png"));
              
              alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-             applyThemeToDialog(alert);
+             util.applyThemeToDialog(alert);
              
              alert.showAndWait();
          } 
@@ -939,6 +949,10 @@ public class Controller {
              System.out.println("User has changed his/her mind");
          }
     }
+    
+    // ----------------------------------------------------------------------------------------------------------------------
+    // LANGUAGE SELECTION
+    // ----------------------------------------------------------------------------------------------------------------------
     
     @FXML
     private void languageSelection(ActionEvent event){
@@ -962,7 +976,8 @@ public class Controller {
         ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
         choiceDialog.setHeaderText(resources.getString("selectlanguage"));
         choiceDialog.setTitle(resources.getString("language"));
-        ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+        ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
+        		new Image("file:src/main/resources/images/logo.png"));
         Image img = new Image("file:src/main/resources/images/languages.png");
         choiceDialog.setGraphic(new ImageView(img));
 
@@ -976,8 +991,7 @@ public class Controller {
         list.remove(language); //rimuovo lingua corrente affinché non sia selezionabile
         
         choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-        applyThemeToDialog(choiceDialog);
-        
+        util.applyThemeToDialog(choiceDialog);
         
         // Show the dialog box and wait for a selection
         Optional<String> selectedLanguage = choiceDialog.showAndWait();
@@ -993,126 +1007,24 @@ public class Controller {
             alert.setTitle(resources.getString("attention"));
             alert.setHeaderText(null);
             alert.setContentText(resources.getString("restart"));
-            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
+            		new Image("file:src/main/resources/images/logo.png"));
             
             alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-            applyThemeToDialog(alert);
+            util.applyThemeToDialog(alert);
             alert.showAndWait();
-            
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NoSuchElementException e){
             System.out.println("User has changed his/her mind");
         }
-    }
-
-    private void setIcons() {
-    	if (getCurrentTheme().equals("Light")) {
-    		setIconsForLightTheme();
-    	}
-    	else if (getCurrentTheme().equals("Dark")) {
-    		setIconsForDarkTheme();	
-    	}
-   }
-
-    private void setIconsForDarkTheme() {
-    	exit_icon.setImage(new Image(new File("src/main/resources/images/cancelw.png").toURI().toString()));
-        minimize_icon.setImage(new Image(new File("src/main/resources/images/minimizew.png").toURI().toString()));
-        folderChooser.setImage(new Image(new File("src/main/resources/images/music-folderw.png").toURI().toString()));
-        
-        muteIcon.setImage(new Image(new File("src/main/resources/images/speakermutew.png").toURI().toString()));
-        volumeIcon.setImage(new Image(new File("src/main/resources/images/speakerw.png").toURI().toString()));
-        previousSongButton.setImage(new Image(new File("src/main/resources/images/back-arrowsw.png").toURI().toString()));
-        nextSongButton.setImage(new Image(new File("src/main/resources/images/forward-arrowsw.png").toURI().toString()));
-        pauseButton.setImage(new Image(new File("src/main/resources/images/pausew.png").toURI().toString()));
-        playButton.setImage(new Image(new File("src/main/resources/images/playw.png").toURI().toString()));
-        
-    	openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/openw.png"));
-    	openfolder_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/openw.png"));
-    	exit_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closew.png"));
-    	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closefolderw.png"));
-    	removefiles_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/removew.png"));
-    	
-    	playpause_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/playpausew.png"));
-    	next_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/forwardw.png"));
-    	previous_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/rewindw.png"));
-    	menuVolume.setGraphic(new ImageView("file:src/main/resources/images/menubar/volumew.png"));
-    	
-    	decrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/minusw.png"));
-    	incrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/plusw.png"));
-    	muteVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/speakermutew.png"));
-    	
-    	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
-    	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimizew.png"));
-    	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languagesw.png"));
-    	
-    	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interfacew.png"));
-    	
-    	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logow.png"));
-    	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorialw.png"));
-    	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tipsw.png"));
-		
-	}
-
-	private void setIconsForLightTheme() {
-    	exit_icon.setImage(new Image(new File("src/main/resources/images/cancel.png").toURI().toString()));
-		minimize_icon.setImage(new Image(new File("src/main/resources/images/minimize.png").toURI().toString()));
-		folderChooser.setImage(new Image(new File("src/main/resources/images/music-folder.png").toURI().toString()));
-		
-		muteIcon.setImage(new Image(new File("src/main/resources/images/speakermute.png").toURI().toString()));
-        volumeIcon.setImage(new Image(new File("src/main/resources/images/speaker.png").toURI().toString()));
-        previousSongButton.setImage(new Image(new File("src/main/resources/images/back-arrows.png").toURI().toString()));
-        nextSongButton.setImage(new Image(new File("src/main/resources/images/forward-arrows.png").toURI().toString()));
-        pauseButton.setImage(new Image(new File("src/main/resources/images/pause.png").toURI().toString()));
-        playButton.setImage(new Image(new File("src/main/resources/images/play.png").toURI().toString()));
-		
-		openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
-    	openfolder_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
-    	exit_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/close.png"));
-    	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closefolder.png"));
-    	removefiles_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/remove.png"));
-    	
-    	playpause_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/playpause.png"));
-    	next_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/forward.png"));
-    	previous_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/rewind.png"));
-    	menuVolume.setGraphic(new ImageView("file:src/main/resources/images/menubar/volume.png"));
-    	
-    	decrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/minus.png"));
-    	incrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/plus.png"));
-    	muteVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/speakermute.png"));
-    	
-    	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
-    	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimize.png"));
-    	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languages.png"));
-    	
-    	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interface.png"));
-    	
-    	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logo.png"));
-    	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
-    	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tips.png"));
-		
-	}
-
-	private void muteUnmuteVolume(){
-    	if (currentlyMuted == false ) {
-    		currentlyMuted = true;
-    		volumeBeforeMute = volumeSlider.getValue();
-    		volumeSlider.setValue(0);
-    		volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
-    		if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
-    	}
-    	else {
-    		//restore the volume of the slider before the mute action
-    		currentlyMuted = false;
-    		volumeSlider.setValue(volumeBeforeMute);
-    		volumeBeforeMute = 0.00;
-    		volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
-    		if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
-    	}
-    	volumeIconChanger(); 
-    }
+    }	
     
+	// ----------------------------------------------------------------------------------------------------------------------
+	// HANDLERS FOR MENU ITEMS
+	// ----------------------------------------------------------------------------------------------------------------------
+	
     private void attachMenuActions(){
     	
     	incrVol.setOnAction(new EventHandler<ActionEvent>() {
@@ -1179,35 +1091,40 @@ public class Controller {
 				alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/almamater.png")));
 					
 				alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-				applyThemeToDialog(alert); 
+				util.applyThemeToDialog(alert); 
 				
 				alert.showAndWait();
 			}
 		});
-   }
-    
-    private void addShortcutsMenubar() {
-    	previous_menu.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
-    	next_menu.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN));
-    	playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
-    	
-    	language_menu.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
-    	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
-    	exit_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));			//quit
-    	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN));
-    	removefiles_menu.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));	//cut selected
-    	
-    	//decrVol.setAccelerator(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.CONTROL_DOWN));		//- not in numpad
-    	//incrVol.setAccelerator(new KeyCodeCombination(KeyCode.PLUS, KeyCombination.CONTROL_DOWN));		//+ not in numpad
-    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.SUBTRACT, KeyCombination.CONTROL_DOWN)); 		//- in numpad
-    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.ADD, KeyCombination.CONTROL_DOWN));			//+ in numpad
-    	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0, KeyCombination.CONTROL_DOWN));
-    	
-    	//fullscreen_menu.setAccelerator(new KeyCodeCombination(KeyCode.F11, KeyCombination.ALT_DOWN));
-    	minimize_menu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
-    	preview_menu.setAccelerator(new KeyCodeCombination(KeyCode.F1, KeyCombination.CONTROL_DOWN));	//help
     }
-	
+    
+    private void muteUnmuteVolume(){
+    	if (currentlyMuted == false ) {
+    		currentlyMuted = true;
+    		volumeBeforeMute = volumeSlider.getValue();
+    		volumeSlider.setValue(0);
+    		volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
+    		if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
+    	}
+    	else {
+    		//restore the volume of the slider before the mute action
+    		currentlyMuted = false;
+    		volumeSlider.setValue(volumeBeforeMute);
+    		volumeBeforeMute = 0.00;
+    		volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
+    		if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
+    	}
+    	volumeIconChanger(); 
+    }
+    
+    // ----------------------------------------------------------------------------------------------------------------------
+    // METHODS FOR GRAPHICS AND ICONS
+    // ----------------------------------------------------------------------------------------------------------------------
+    
+    //----------------------
+    // TOOL TIPS
+    //----------------------
+    
     private void insertToolTips() {
         //SIGNATURE: Tooltip.install(imageView, tooltip);
         Tooltip.install(playButton, 		new Tooltip(resources.getString("tt_playbutton")));
@@ -1224,9 +1141,9 @@ public class Controller {
         Tooltip.install(exit, 		new Tooltip(resources.getString("tt_exit")));
     }
 
-    //----------------------------------------------------------------------------------------------------
+    //----------------------
     // SUB MENU
-    //----------------------------------------------------------------------------------------------------
+    //----------------------
 
     private void insertSubMenus_menuBar() {
         menuInterface = new Menu();
@@ -1250,30 +1167,150 @@ public class Controller {
         menuVolume.getItems().addAll(decrVol, incrVol, muteVol);
     }
 
-    private String getCurrentTheme() {
-	   	 String rootPath = "src\\main\\resources\\";
-	     String appConfigPath = rootPath + "application.properties";
-	
-	     Properties appProps = new Properties();
-	     try {
-	         appProps.load(new FileInputStream(appConfigPath));
-	     }
-	     catch (FileNotFoundException e) {
-	         e.printStackTrace();
-	     } catch (IOException e) {
-	         e.printStackTrace();
-	     }
-	
-	     // Trying to get the language setting 
-	     return appProps.getProperty("theme");
+    //----------------------
+    // ICONS FOR THEMES
+    //----------------------
 
-    }
+    private void setIcons() {
+    	if (util.getCurrentTheme().equals("Light")) {
+    		setIconsForLightTheme();
+    	}
+    	else if (util.getCurrentTheme().equals("Dark")) {
+    		setIconsForDarkTheme();	
+    	}
+   }
     
-    public void applyThemeToDialog(Dialog dialog) {
-    	if (currentTheme.equals("Dark"))
-    		dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource("DarkDialogs.css").toExternalForm());
-    	else
-    		dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource("LightDialogs.css").toExternalForm());
+    private void setIconsForDarkTheme() {
+    	
+    	//Icons for the main window
+    	
+    	exit_icon.setImage(new Image(new File("src/main/resources/images/cancelw.png").toURI().toString()));
+        minimize_icon.setImage(new Image(new File("src/main/resources/images/minimizew.png").toURI().toString()));
+        folderChooser.setImage(new Image(new File("src/main/resources/images/music-folderw.png").toURI().toString()));
+        
+        muteIcon.setImage(new Image(new File("src/main/resources/images/speakermutew.png").toURI().toString()));
+        volumeIcon.setImage(new Image(new File("src/main/resources/images/speakerw.png").toURI().toString()));
+        previousSongButton.setImage(new Image(new File("src/main/resources/images/back-arrowsw.png").toURI().toString()));
+        nextSongButton.setImage(new Image(new File("src/main/resources/images/forward-arrowsw.png").toURI().toString()));
+        pauseButton.setImage(new Image(new File("src/main/resources/images/pausew.png").toURI().toString()));
+        playButton.setImage(new Image(new File("src/main/resources/images/playw.png").toURI().toString()));
+        
+        //Icons for the menu bar
+        
+        //File menu
+    	openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/openw.png"));
+    	openfolder_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/openw.png"));
+    	exit_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closew.png"));
+    	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closefolderw.png"));
+    	removefiles_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/removew.png"));
+    	
+    	//Playback menu
+    	playpause_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/playpausew.png"));
+    	next_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/forwardw.png"));
+    	previous_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/rewindw.png"));
+    	menuVolume.setGraphic(new ImageView("file:src/main/resources/images/menubar/volumew.png"));
+    	
+    	decrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/minusw.png"));
+    	incrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/plusw.png"));
+    	muteVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/speakermutew.png"));
+    	
+    	//View menu
+    	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
+    	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimizew.png"));
+    	theme_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/themew.png"));
+    	hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubar.png"));
+    	
+    	//Settings menu
+    	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interfacew.png"));
+    	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languagesw.png"));
+    	
+    	//Help menu
+    	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logow.png"));
+    	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorialw.png"));
+    	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tipsw.png"));
+		
+	}
+
+	private void setIconsForLightTheme() {
+    	
+		//Icons for the main window
+		
+		exit_icon.setImage(new Image(new File("src/main/resources/images/cancel.png").toURI().toString()));
+		minimize_icon.setImage(new Image(new File("src/main/resources/images/minimize.png").toURI().toString()));
+		folderChooser.setImage(new Image(new File("src/main/resources/images/music-folder.png").toURI().toString()));
+		
+		muteIcon.setImage(new Image(new File("src/main/resources/images/speakermute.png").toURI().toString()));
+        volumeIcon.setImage(new Image(new File("src/main/resources/images/speaker.png").toURI().toString()));
+        previousSongButton.setImage(new Image(new File("src/main/resources/images/back-arrows.png").toURI().toString()));
+        nextSongButton.setImage(new Image(new File("src/main/resources/images/forward-arrows.png").toURI().toString()));
+        pauseButton.setImage(new Image(new File("src/main/resources/images/pause.png").toURI().toString()));
+        playButton.setImage(new Image(new File("src/main/resources/images/play.png").toURI().toString()));
+		
+        //Icons for the menu bar
+        
+        //File menu
+		openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
+    	openfolder_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
+    	exit_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/close.png"));
+    	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closefolder.png"));
+    	removefiles_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/remove.png"));
+    	
+    	//Playback menu
+    	playpause_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/playpause.png"));
+    	next_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/forward.png"));
+    	previous_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/rewind.png"));
+    	menuVolume.setGraphic(new ImageView("file:src/main/resources/images/menubar/volume.png"));
+    	
+    	decrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/minus.png"));
+    	incrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/plus.png"));
+    	muteVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/speakermute.png"));
+    	
+    	//View menu
+    	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
+    	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimize.png"));
+    	theme_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/theme.png"));
+    	hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubar.png"));
+    	
+    	//Settings menu
+    	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languages.png"));
+    	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interface.png"));
+    	
+    	//Help menu
+    	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logo.png"));
+    	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
+    	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tips.png"));
+		
+	}
+    
+    // ----------------------------------------------------------------------------------------------------------------------
+    // METHOD FOR SHORTCUTS
+    // ----------------------------------------------------------------------------------------------------------------------
+    
+    private void addShortcutsMenubar() {
+    	previous_menu.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
+    	next_menu.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN));
+    	playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
+    	
+    	language_menu.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
+    	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
+    	exit_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));			//quit
+    	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN));
+    	removefiles_menu.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));	//cut selected
+    	
+    	//decrVol.setAccelerator(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.CONTROL_DOWN));		//- not in numpad
+    	//incrVol.setAccelerator(new KeyCodeCombination(KeyCode.PLUS, KeyCombination.CONTROL_DOWN));		//+ not in numpad
+    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.SUBTRACT, KeyCombination.CONTROL_DOWN)); 		//- in numpad
+    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.ADD, KeyCombination.CONTROL_DOWN));			//+ in numpad
+    	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0, KeyCombination.CONTROL_DOWN));
+    	
+    	//fullscreen_menu.setAccelerator(new KeyCodeCombination(KeyCode.F11, KeyCombination.ALT_DOWN));
+    	minimize_menu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
+    	preview_menu.setAccelerator(new KeyCodeCombination(KeyCode.F1, KeyCombination.CONTROL_DOWN));	//help
     }
+	
+    
+
+    
+    
 }
 

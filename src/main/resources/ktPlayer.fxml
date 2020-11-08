@@ -235,8 +235,8 @@
                            <Menu mnemonicParsing="false" text="%view">
                               <items>
                                  <!-- <MenuItem fx:id="fullscreen_menu" mnemonicParsing="false" text="%fullscreen" /> -->
-                                 <MenuItem fx:id="minimize_menu" mnemonicParsing="false" text="%minimize" />
                                  <MenuItem fx:id="hidebar_menu" mnemonicParsing="false" text="%hidebar" />
+                                 <MenuItem fx:id="minimize_menu" mnemonicParsing="false" text="%minimize" />
                                  <MenuItem fx:id="theme_menu" onAction="#themeSelection" mnemonicParsing="false" text="%theme" />
                               </items>
                            </Menu>
