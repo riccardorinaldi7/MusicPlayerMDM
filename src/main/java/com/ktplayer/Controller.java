@@ -27,6 +27,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.control.Alert.AlertType;
@@ -38,6 +39,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -45,7 +47,8 @@ import java.util.*;
 public class Controller {
 
     private void print(String str) { System.out.println(str);}
-
+    private String currentTheme;
+    
     @FXML
     private AnchorPane window;
 
@@ -219,6 +222,7 @@ public class Controller {
         volume = 0.5; // between 0 and 1
         stage = Main.getStage();
         stage.getIcons().add(new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
+        currentTheme = getCurrentTheme();
     }
 
     private void closeProgram(){
@@ -226,9 +230,12 @@ public class Controller {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setContentText(resources.getString("sureToClose"));
         alert.setHeaderText(null);
+        alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
         alert.setTitle(resources.getString("confirmExit"));
         ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
-
+        
+        applyThemeToDialog(alert);
+        
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
             System.exit(0);
@@ -900,6 +907,11 @@ public class Controller {
          list.add(resources.getString("light"));
          list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
          
+         choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+         
+         applyThemeToDialog(choiceDialog);
+         
+         
          // Show the dialog box and wait for a selection
          Optional<String> selectedTheme = choiceDialog.showAndWait();
 
@@ -914,6 +926,10 @@ public class Controller {
              alert.setHeaderText(null);
              alert.setContentText(resources.getString("restart"));
              ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+             
+             alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+             applyThemeToDialog(alert);
+             
              alert.showAndWait();
          } 
          catch (IOException e) {
@@ -959,6 +975,10 @@ public class Controller {
         list.add("Español");
         list.remove(language); //rimuovo lingua corrente affinchÃ© non sia selezionabile
         
+        choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+        applyThemeToDialog(choiceDialog);
+        
+        
         // Show the dialog box and wait for a selection
         Optional<String> selectedLanguage = choiceDialog.showAndWait();
 
@@ -974,6 +994,9 @@ public class Controller {
             alert.setHeaderText(null);
             alert.setContentText(resources.getString("restart"));
             ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+            
+            alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+            applyThemeToDialog(alert);
             alert.showAndWait();
             
 
@@ -1154,7 +1177,10 @@ public class Controller {
 				alert.setContentText(toShow);
 				((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
 				alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/almamater.png")));
-					    
+					
+				alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+				applyThemeToDialog(alert); 
+				
 				alert.showAndWait();
 			}
 		});
@@ -1238,10 +1264,16 @@ public class Controller {
 	         e.printStackTrace();
 	     }
 	
-	     // Trying to get the language setting
+	     // Trying to get the language setting 
 	     return appProps.getProperty("theme");
 
     }
     
+    public void applyThemeToDialog(Dialog dialog) {
+    	if (currentTheme.equals("Dark"))
+    		dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource("DarkDialogs.css").toExternalForm());
+    	else
+    		dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource("LightDialogs.css").toExternalForm());
+    }
 }
 

@@ -32,6 +32,8 @@ public class Main extends Application {
 	private String fxmlName = "ktPlayer.fxml"; //default
 	private Properties appProps;
 	private String appConfigPath;
+	private String defaultLanguage = "English";
+	private String defaultTheme = "Light";
 	
 	public Main() {}
 
@@ -86,7 +88,8 @@ public class Main extends Application {
 			Image img = new Image("file:src/main/resources/images/languages.png");
 			System.out.println(img.toString());
 			choiceDialog.setGraphic(new ImageView(img));
-
+			choiceDialog.initStyle(StageStyle.UNDECORATED);
+			
 			//Retrieving the observable list
 			ObservableList<String> list = choiceDialog.getItems();
 			//Adding items to the language list
@@ -97,15 +100,29 @@ public class Main extends Application {
 
 			// Show the dialog box and wait for a selection
 			Optional<String> selectedLanguage = choiceDialog.showAndWait();
-			language = selectedLanguage.get();
 
-			appProps.setProperty("language", language);
-			try {
-				appProps.store(new FileWriter(appConfigPath), null);
-			} 
-			catch (IOException e) {
-				e.printStackTrace();
+			if (selectedLanguage.isPresent()) {
+			    // ok was pressed
+				language = selectedLanguage.get();
+				appProps.setProperty("language", language);
+				try {
+					appProps.store(new FileWriter(appConfigPath), null);
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+			    // cancel might have been pressed --> default language = English
+				language = defaultLanguage;
+				appProps.setProperty("language", defaultLanguage);
+				try {
+					appProps.store(new FileWriter(appConfigPath), null);
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+			
 		}
 		System.out.println("Selected language: " + language);
 
@@ -133,13 +150,14 @@ public class Main extends Application {
 			//----------------------------------------------------------------------------------------------------
 
 			//Creating a choice box asking for the theme
-			ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
+			ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>("Light");
 			choiceDialog.setHeaderText("Select the theme you prefer");
 			choiceDialog.setTitle("Theme");
 			Image img = new Image("file:src/main/resources/images/theme.png");
 			System.out.println(img.toString());
 			choiceDialog.setGraphic(new ImageView(img));
-
+			choiceDialog.initStyle(StageStyle.UNDECORATED);
+			
 			//Retrieving the observable list
 			ObservableList<String> list = choiceDialog.getItems();
 			//Adding items to the language list
@@ -148,14 +166,28 @@ public class Main extends Application {
 
 			// Show the dialog box and wait for a selection
 			Optional<String> selectedTheme = choiceDialog.showAndWait();
-			theme = selectedTheme.get();
+			
+			if (selectedTheme.isPresent()) {
+			    // ok was pressed
+				theme = selectedTheme.get();
 
-			appProps.setProperty("theme", theme);
-			try {
-				appProps.store(new FileWriter(appConfigPath), null);
-			} 
-			catch (IOException e) {
-				e.printStackTrace();
+				appProps.setProperty("theme", theme);
+				try {
+					appProps.store(new FileWriter(appConfigPath), null);
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+			    // cancel might have been pressed --> default theme = Light
+				theme = defaultTheme;
+				appProps.setProperty("theme", theme);
+				try {
+					appProps.store(new FileWriter(appConfigPath), null);
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		System.out.println("Selected theme: " + theme);

@@ -1,0 +1,29 @@
+/* dark dialogs for dark theme */
+
+/*
+#name --> element with id=name
+.name --> element with class=name
+*/
+
+.dialog-pane {
+    -fx-border-color: #b3b3b3;
+	-fx-border-width:1.0px;
+}
+
+/*
+.dialog-pane .label {
+    -fx-text-fill: white;
+}
+
+.dialog-pane:header .header-panel {
+    -fx-background-color: #737373;
+}
+*/
+
+/*
+.dialog-pane:header .header-panel .label {
+    -fx-font-style: italic;
+    -fx-font-size: 2em;
+}
+*/
+
