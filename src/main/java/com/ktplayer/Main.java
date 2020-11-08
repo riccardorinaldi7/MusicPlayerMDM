@@ -1,5 +1,5 @@
 //Riccardo Rinaldi e Laura Gruppioni
-//Attivit√† progettuale MDM
+//Attivit√  progettuale MDM
 
 package com.ktplayer;
 
