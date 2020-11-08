@@ -30,6 +30,7 @@ public class Main extends Application {
 	private ObservableList<Song> songData = FXCollections.observableArrayList();
 	static Stage primaryStage;
 	private String fxmlName = "ktPlayer.fxml"; //default
+	private String fxmlName_simpleInterface = "ktPlayerSimple.fxml";
 	private Properties appProps;
 	private String appConfigPath;
 	private String defaultLanguage = "English";
@@ -51,13 +52,22 @@ public class Main extends Application {
 		//theme selection
 		String nameCssToLoad = handleThemeSelection();
 		
-		// Load FXML file
+		//LOAD XML FILE per INTERFACCIA AVANZATA
 		FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName), bundle);
-
 		Parent root =(Parent) fxmlLoader.load();
-		Controller controller = fxmlLoader.getController();
+		Controller controller = fxmlLoader.getController(); 
+		System.out.println("Advanced Interface");
+		//--------------------------------------
+		
+		//LOAD XML FILE per INTERFACCIA SEMPLICE
+		//FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName_simpleInterface), bundle);
+		//Parent root =(Parent) fxmlLoader.load();
+		//ControllerSimple controller = fxmlLoader.getController();
+		//System.out.println("Simple Interface");
+		//--------------------------------------
+		
 		controller.setMain(this);
-
+		
 		Scene scene = new Scene(root, 820, 740);
 		//scene.getStylesheets().add(ClassLoader.getSystemResource("LightTheme.css").toExternalForm());
 		scene.getStylesheets().add(ClassLoader.getSystemResource(nameCssToLoad).toExternalForm());
