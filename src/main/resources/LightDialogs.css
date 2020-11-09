@@ -7,7 +7,7 @@
 
 .dialog-pane {
     -fx-border-color: #b3b3b3;
-	-fx-border-width:1.0px;
+	-fx-border-width: 1.0px;
 }
 
 .dialog-pane .label {

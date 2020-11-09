@@ -10,6 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -52,21 +55,28 @@ public class Main extends Application {
 		//theme selection
 		String nameCssToLoad = handleThemeSelection();
 		
-		//LOAD XML FILE per INTERFACCIA AVANZATA
-		//FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName), bundle);
-		//Parent root =(Parent) fxmlLoader.load();
-		//Controller controller = fxmlLoader.getController(); 
-		//System.out.println("Advanced Interface");
-		//--------------------------------------
+		String interfaceType = handleInterfaceSelection(); //interfaceType = Simple|Advanced
+		Parent root = null;
 		
 		//LOAD XML FILE per INTERFACCIA SEMPLICE
-		FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName_simpleInterface), bundle);
-		Parent root =(Parent) fxmlLoader.load();
-		ControllerSimple controller = fxmlLoader.getController();
-		System.out.println("Simple Interface");
-		//--------------------------------------
-		
-		controller.setMain(this);
+		if(interfaceType.equals("Simple")) {
+			
+			FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName_simpleInterface), bundle);
+			root =(Parent) fxmlLoader.load();
+			ControllerSimple controller = fxmlLoader.getController();
+			System.out.println("Simple Interface");
+			controller.setMain(this);
+			
+		}
+		//LOAD XML FILE per INTERFACCIA AVANZATA
+		else if (interfaceType.equals("Advanced" )) {
+			
+			FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName), bundle);
+			root =(Parent) fxmlLoader.load();
+			Controller controller = fxmlLoader.getController(); 
+			System.out.println("Advanced Interface");
+			controller.setMain(this);
+		}
 		
 		Scene scene = new Scene(root, 820, 740);
 		//scene.getStylesheets().add(ClassLoader.getSystemResource("LightTheme.css").toExternalForm());
@@ -80,17 +90,62 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+	//----------------------------------------------------------------------------------------------------
+	// SCELTA INTERFACCIA SEMPLICE O AVANZATA
+	//----------------------------------------------------------------------------------------------------
+	
+	private String handleInterfaceSelection() {
+		// Trying to get the theme setting
+		String interfaceType = appProps.getProperty("interface");
+
+		// If no theme setting exists a dialog box is shown to the user to ask for it
+		if(interfaceType == null) {
+
+			//----------------------------------------------------------------------------------------------------
+			//CHOICE DIALOG PER SCELTA TEMA
+			//----------------------------------------------------------------------------------------------------
+
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setHeaderText(null);
+			alert.setContentText("If you prefer a Simplified Interface, press OK");
+			alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+	        alert.setTitle("Interface");
+	        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+	        
+	        
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				// user chose OK
+			    interfaceType = "Simple";
+			} 
+			else {
+			    // user chose CANCEL
+				interfaceType = "Advanced";
+			}
+			
+			appProps.setProperty("interface", interfaceType);
+			try {
+				appProps.store(new FileWriter(appConfigPath), null);
+			} 
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Selected interface: " + interfaceType);
+		return interfaceType;
+	}
+
+	//----------------------------------------------------------------------------------------------------
+	// SCELTA LINGUA
+	//----------------------------------------------------------------------------------------------------
+	
 	private ResourceBundle handleLanguageSelection() {
 		// Trying to get the language setting
 		String language = appProps.getProperty("language");
 
 		// If no language setting exists a dialog box is shown to the user to ask for it
 		if(language == null) {
-
-			//----------------------------------------------------------------------------------------------------
-			//CHOICE DIALOG PER SCELTA LINGUA
-			//----------------------------------------------------------------------------------------------------
-
+			
 			//Creating a choice box asking for the language
 			ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>("English");
 			choiceDialog.setHeaderText("Select the language you prefer");
@@ -148,6 +203,10 @@ public class Main extends Application {
 		return bundle;
 	}
 
+	//----------------------------------------------------------------------------------------------------
+	// SCELTA THEMA
+	//----------------------------------------------------------------------------------------------------
+	
 	private String handleThemeSelection() {
 		// Trying to get the theme setting
 		String theme = appProps.getProperty("theme");
