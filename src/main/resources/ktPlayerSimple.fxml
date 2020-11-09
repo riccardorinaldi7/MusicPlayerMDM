@@ -33,185 +33,16 @@
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.media.MediaView?>
 
-<AnchorPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="820.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ktplayer.ControllerSimple">
+<AnchorPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ktplayer.ControllerSimple">
 
    <children>
-      <BorderPane layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" AnchorPane.topAnchor="40.0">
+      <BorderPane fx:id="borderpane" layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" AnchorPane.topAnchor="40.0">
 
-         <center>
-            <AnchorPane accessibleRole="LIST_ITEM" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-
-               <children>
-               		<!-- for SplitPane to disable column resize use mouseTransparent="true"-->
-                  <SplitPane fx:id="splitpane" dividerPositions="0.6582466567607727" layoutX="207.0" layoutY="188.0" orientation="VERTICAL" prefHeight="400.0" prefWidth="160.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <items>
-                        <AnchorPane fx:id="paneTable" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-
-                           <children>
-                              <TableView fx:id="songTable" layoutX="199.0" layoutY="85.0" prefHeight="200.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columns>
-                                    <TableColumn fx:id="idColumn" prefWidth="45.0" text="ID">
-                                       <styleClass>
-                                          <String fx:value="column-header-background" />
-                                          <String fx:value="column-header" />
-                                          <String fx:value="filler" />
-                                       </styleClass>
-                                    </TableColumn>
-
-                                    <TableColumn fx:id="artistNameColumn" prefWidth="128.0" text="%artist">
-                                       <styleClass>
-                                          <String fx:value="column-header-background" />
-                                          <String fx:value="column-header" />
-                                          <String fx:value="filler" />
-                                       </styleClass>
-                                    </TableColumn>
-
-                                    <TableColumn fx:id="songNameColumn" prefWidth="133.0" text="%song">
-                                       <styleClass>
-                                          <String fx:value="column-header-background" />
-                                          <String fx:value="column-header" />
-                                          <String fx:value="filler" />
-                                       </styleClass>
-                                    </TableColumn>
-									
-									<!-- Column with the size of the file --> 
-                                    <TableColumn fx:id="durationColumn" prefWidth="73.0" text="%width">
-                                       <styleClass>
-                                          <String fx:value="column-header-background" />
-                                          <String fx:value="column-header" />
-                                          <String fx:value="filler" />
-                                       </styleClass>
-                                    </TableColumn>
-									
-                                    <TableColumn fx:id="rateColumn" prefWidth="76.0" text="%length">
-                                       <styleClass>
-                                          <String fx:value="column-header-background" />
-                                          <String fx:value="column-header" />
-                                          <String fx:value="filler" />
-                                       </styleClass>
-                                    </TableColumn>
-
-                                    <TableColumn fx:id="formatColumn" prefWidth="142.0" text="Album">
-                                       <styleClass>
-                                          <String fx:value="column-header-background" />
-                                          <String fx:value="column-header" />
-                                          <String fx:value="filler" />
-                                       </styleClass>
-                                    </TableColumn>
-                                 </columns>
-                                 <styleClass>
-                                    <String fx:value="table-row-cell" />
-                                    <String fx:value="table-view" />
-                                 </styleClass>
-                                 <placeholder>
-                                    <Label text="%no-content"></Label>
-                                 </placeholder>
-                              </TableView>
-                           </children>
-                        </AnchorPane>
-
-					</items>
-                  </SplitPane>
-                  
-                  <AnchorPane fx:id="paneUnderTable" minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="400.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="118.0" prefWidth="598.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                                 <children>
-                                    <Label  fx:id="songName" alignment="CENTER" contentDisplay="BOTTOM" prefHeight="21.0" prefWidth="306.0" text="LabelLabelLabelLabel" textAlignment="CENTER">
-                                       <font> <Font name="Berlin Sans FB" size="18.0" /> </font>
-                                    </Label>
-
-                                    <Label   fx:id="artistName" alignment="CENTER" contentDisplay="BOTTOM" prefHeight="20.0" prefWidth="306.0" text="Label" textAlignment="CENTER">
-                                       <font> <Font name="Berlin Sans FB" size="17.0" /> </font>
-                                    </Label>
-
-                                    <Label fx:id="albumName" alignment="CENTER" contentDisplay="BOTTOM" prefHeight="20.0" prefWidth="306.0" text="Label">
-                                       <font> <Font name="Berlin Sans FB" size="14.0" /> </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
-
-                              <VBox alignment="CENTER" layoutY="126.0" prefHeight="55.0" prefWidth="100.0" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                                 <children>
-                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
-
-                                       <children>
-                                          <Label fx:id="currentDuration" layoutX="14.0" layoutY="16.0" text="00:00" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="0.0">
-                                             <font> <Font name="Berlin Sans FB" size="17.0" /> </font>
-                                          </Label>
-
-                                          <ImageView fx:id="playButton" accessibleRole="BUTTON" fitHeight="40.0" fitWidth="40.0" layoutX="285.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="285.0" AnchorPane.rightAnchor="284.0" AnchorPane.topAnchor="10.0">
-                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                                             <!--<image> <Image url="@/images/play.png" /> </image>-->
-                                          </ImageView>
-
-                                          <ImageView fx:id="pauseButton" fitHeight="40.0" fitWidth="40.0" layoutX="285.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="285.0" AnchorPane.rightAnchor="284.0" AnchorPane.topAnchor="10.0">
-                                             <!--<image> <Image url="@/images/pause.png" /> </image>-->
-                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                                          </ImageView>
-
-                                          <ImageView fx:id="nextSongButton" fitHeight="30.0" fitWidth="30.0" layoutX="360.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="10.0">
-                                             <!--<image> <Image url="@/images/forward-arrows.png" /> </image>-->
-                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                                          </ImageView>
-
-                                          <ImageView fx:id="previousSongButton" fitHeight="30.0" fitWidth="30.0" layoutX="179.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="10.0">
-                                             <!--<image> <Image url="@/images/back-arrows.png" /> </image>-->
-                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                                          </ImageView>
-
-                                          <Label fx:id="totalDuration" alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="505.0" layoutY="16.0" prefHeight="37.0" prefWidth="79.0" text="00:00" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="505.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="0.0">
-                                             <font> <Font name="Berlin Sans FB" size="17.0" /> </font>
-                                          </Label>
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
-                              </VBox>
-
-                              <HBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="168.0" prefHeight="56.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="168.0">
-                                 <children>
-                                    <AnchorPane fx:id="volumePane" prefHeight="59.0" prefWidth="600.0">
-                                       <children>
-                                          <ImageView fx:id="muteIcon" fitHeight="30.0" fitWidth="30.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
-                                             <!--<image> <Image url="@/images/speakermute.png" /> </image>-->
-                                          </ImageView>
-
-                                          <ImageView fx:id="volumeIcon" fitHeight="30.0" fitWidth="30.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                                             <!--<image> <Image url="@/images/speaker.png" /> </image>-->
-                                          </ImageView>
-
-                                          <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="50" textAlignment="CENTER">
-                                             <font> <Font name="Berlin Sans FB" size="17.0" /> </font>
-                                          </Label>
-											
-										  <!-- value is the volume when the program starts -->
-                                          <JFXSlider fx:id="volumeSlider" layoutX="44.0" layoutY="24.0" value="50.0" /> 
-
-                                          <!-- ToggleButton per "Ripeti traccia". toggleColor = green -->
-                                          <JFXToggleButton fx:id="autoPlayIcon" layoutX="411.0" layoutY="2.0" prefHeight="58.0" prefWidth="77.0" text=" " toggleColor="#00944f" />
-
-                                          <Label fx:id="labelLoop" layoutX="488.0" layoutY="20.0" text="%loop">
-                                             <font> <Font name="Berlin Sans FB" size="17.0" /> </font>
-                                          </Label>
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
-                              </HBox>
-
-                              <JFXSlider fx:id="songSlider" layoutX="14.0" layoutY="119.0" value="1.0E-4" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="100.0" />
-                              <Pane fx:id="imagePane" layoutY="8.0" prefHeight="105.0" prefWidth="105.0" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="8.0" />
-                           </children>
-                        </AnchorPane>
-                     
-               </children>
-            </AnchorPane>
-         </center>
-
-         <top>
-            <AnchorPane fx:id="anchorPaneTop" prefHeight="80.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" BorderPane.alignment="CENTER">
+		<top>
+            <AnchorPane fx:id="anchorPaneTop" prefHeight="100.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" BorderPane.alignment="CENTER">
 
                <children>
-                  <VBox  layoutY="126.0" prefHeight="55.0" prefWidth="100.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <VBox  layoutY="126.0" prefHeight="55.0" prefWidth="600.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <MenuBar fx:id="menubar">
                         <menus>
                            <Menu mnemonicParsing="false" text="%file">
@@ -234,8 +65,6 @@
 
                            <Menu mnemonicParsing="false" text="%view">
                               <items>
-                                 <!-- <MenuItem fx:id="fullscreen_menu" mnemonicParsing="false" text="%fullscreen" /> -->
-                                 <MenuItem fx:id="hidebar_menu" mnemonicParsing="false" text="%hidebar" />
                                  <MenuItem fx:id="minimize_menu" mnemonicParsing="false" text="%minimize" />
                                  <MenuItem fx:id="theme_menu" onAction="#themeSelection" mnemonicParsing="false" text="%theme" />
                               </items>
@@ -258,80 +87,188 @@
                      </MenuBar>
                   </VBox>
 
-                  <Label alignment="CENTER" layoutY="50.0" text="%app-header-title" prefWidth="600.0" AnchorPane.topAnchor="55.0">
-                     <font> <Font name="Berlin Sans FB" size="20.0" /> </font>
+                  <Label fx:id="labelHeaderTitle" alignment="CENTER" layoutY="50.0" text="%app-header-title" prefWidth="600.0" AnchorPane.topAnchor="47.0">
+                     <font> <Font name="Berlin Sans FB" size="40.0" /> </font>
                   </Label>
+                  
+                
+                  <VBox prefHeight="100.0" prefWidth="600.0" AnchorPane.topAnchor="110.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                 <children>
+                                    <AnchorPane prefHeight="100.0" prefWidth="600.0">
 
-                  <Pane layoutX="0.0" layoutY="32.0" prefHeight="55.0" prefWidth="50.0" styleClass="pane-background">
+                                       <children>
 
-                     <children>
-                        <ImageView fx:id="folderChooser" fitHeight="35.0" fitWidth="35.0" layoutX="9.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
-                           <!--<image> <Image url="@/images/music-folder.png" /> </image>-->
-                           <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                        </ImageView>
-                     </children>
+                                          <ImageView fx:id="addButton" fitHeight="80.0" fitWidth="80.0"  pickOnBounds="true" preserveRatio="true"  AnchorPane.leftAnchor="150.0" >
+                                             
+                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
+                                          </ImageView>
 
-                     <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                  </Pane>
+											<ImageView fx:id="removeButton" accessibleRole="BUTTON" fitHeight="80.0" fitWidth="80.0"  pickOnBounds="true" preserveRatio="true"  AnchorPane.leftAnchor="260.0" >
+                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
+                                             
+                                          </ImageView>
 
-					<!-- Ho messo visible FALSE perché per ora abbiamo detto che non ci interessa -->
-                  <Pane fx:id="showPlaylist" visible="false" layoutX="550.0" layoutY="30.0" prefHeight="50.0" prefWidth="50.0" styleClass="pane-background">
-
-                     <children>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="9.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
-                           <image> <Image url="@/images/playlist.png" /> </image>
-                           <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                        </ImageView>
-                     </children>
-
-                     <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                  </Pane>
-					
-					<!-- label seguente è la scritta "Tracks" sopra al titolo "Music player" -->
-                  <Label fx:id="songsCounter" alignment="CENTER" contentDisplay="BOTTOM" layoutX="227.0" layoutY="30.0" prefHeight="16.0" prefWidth="147.0" text="%tracks" AnchorPane.topAnchor="40.0">
-                     <font> <Font name="Berlin Sans FB" size="14.0" /> </font>
-                  </Label>
+										<ImageView fx:id="exitProgramButton" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true"  AnchorPane.rightAnchor="150.0" >
+                                          
+                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
+                                          </ImageView>
+                                          
+                                          
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </VBox>
+                  
                </children>
 
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
             </AnchorPane>
          </top>
 
-      </BorderPane>
+         <center>
+            <AnchorPane fx:id="anchorpaneCenter" accessibleRole="LIST_ITEM" prefHeight="200.0" prefWidth="600.0">
 
-      <AnchorPane fx:id="playlistNode" layoutX="620.0" layoutY="40.0" prefHeight="700.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="40.0">
-         <children>
-
-            <Pane fx:id="playlistPane1" prefHeight="700.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label contentDisplay="BOTTOM" layoutX="67.0" layoutY="14.0" text="Playlists" textAlignment="CENTER">
-                     <font> <Font name="Berlin Sans FB" size="20.0" /> </font>
-                  </Label>
-               </children>
-            </Pane>
+               		<!-- for SplitPane to disable column resize use mouseTransparent="true"-->
+                  <SplitPane fx:id="splitpane" dividerPositions="0.6582466567607727" layoutX="207.0" layoutY="188.0" orientation="VERTICAL" prefHeight="285.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <items>
+                        <AnchorPane fx:id="paneTable" minHeight="0.0" minWidth="0.0" prefHeight="80.0" prefWidth="600.0">
 
-            <Pane layoutY="50.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="50.0">
-               <children>
-                  <ListView prefHeight="426.0" prefWidth="200.0" />
-                  <AnchorPane layoutY="426.0" prefHeight="225.0" prefWidth="200.0">
-
-                     <children>
-                        <VBox layoutX="50.0" prefHeight="225.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="224.0" prefWidth="205.0" text="Create New Playlist">
-                                 <font> <Font name="Berlin Sans FB" size="20.0" /> </font>
-                              </Label>
-                           </children>
-                        </VBox>
-                     </children>
+                              <TableView fx:id="songTable" layoutX="199.0" layoutY="85.0" prefHeight="200.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <columns>
+                                    <TableColumn fx:id="idColumn" prefWidth="45.0" text="ID">
+                                       <styleClass>
+                                          <String fx:value="column-header-background" />
+                                          <String fx:value="column-header" />
+                                          <String fx:value="filler" />
+                                       </styleClass>
+                                    </TableColumn>
 
-                  </AnchorPane>
+                                    <TableColumn fx:id="artistNameColumn" prefWidth="180.0" text="%artist">
+                                       <styleClass>
+                                          <String fx:value="column-header-background" />
+                                          <String fx:value="column-header" />
+                                          <String fx:value="filler" />
+                                       </styleClass>
+                                    </TableColumn>
+
+                                    <TableColumn fx:id="songNameColumn" prefWidth="373.0" text="%song">
+                                       <styleClass>
+                                          <String fx:value="column-header-background" />
+                                          <String fx:value="column-header" />
+                                          <String fx:value="filler" />
+                                       </styleClass>
+                                    </TableColumn>
+						
+                                 </columns>
+                                 <styleClass>
+                                    <String fx:value="table-row-cell" />
+                                    <String fx:value="table-view" />
+                                 </styleClass>
+                                 <placeholder>
+                                    <Label text="%no-content">
+                                    	<font> <Font size="38.0" /> </font>
+                                    </Label>
+                                 </placeholder>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+
+					</items>
+                  </SplitPane>
+                  
+                  <AnchorPane fx:id="paneUnderTable" minHeight="0.0" minWidth="0.0" prefHeight="220.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="285.0">
+                           <children>
+                              <VBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="128.0" prefWidth="600.0" AnchorPane.topAnchor="-10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                 <children>
+                                    <Label  fx:id="songName" alignment="CENTER" contentDisplay="BOTTOM" prefHeight="21.0" prefWidth="600.0" text="LabelLabelLabelLabel" textAlignment="CENTER">
+                                       <font> <Font name="Berlin Sans FB" size="35.0" /> </font>
+                                    </Label>
+
+                                    <Label   fx:id="artistName" alignment="CENTER" contentDisplay="BOTTOM" prefHeight="20.0" prefWidth="600.0" text="Label" textAlignment="CENTER">
+                                       <font> <Font name="Berlin Sans FB" size="34.0" /> </font>
+                                    </Label>
+
+                                    
+                                 </children>
+                              </VBox>
+
+                              <VBox alignment="CENTER_LEFT" layoutY="126.0" prefHeight="55.0" prefWidth="600.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" >
+                                 <children>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+
+                                       <children>
+                                          
+
+                                          <ImageView fx:id="playButton" accessibleRole="BUTTON" fitHeight="60.0" fitWidth="60.0" layoutX="285.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="10.0">
+                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
+                                             <!--<image> <Image url="@/images/play.png" /> </image>-->
+                                          </ImageView>
+
+                                          <ImageView fx:id="pauseButton" fitHeight="60.0" fitWidth="60.0" layoutX="285.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="10.0">
+                                             <!--<image> <Image url="@/images/pause.png" /> </image>-->
+                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
+                                          </ImageView>
+
+                                          <ImageView fx:id="nextSongButton" fitHeight="60.0" fitWidth="60.0" layoutX="360.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="210.0" AnchorPane.topAnchor="10.0">
+                                             <!--<image> <Image url="@/images/forward-arrows.png" /> </image>-->
+                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
+                                          </ImageView>
+
+                                          <ImageView fx:id="previousSongButton" fitHeight="60.0" fitWidth="60.0" layoutX="179.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="10.0">
+                                             <!--<image> <Image url="@/images/back-arrows.png" /> </image>-->
+                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
+                                          </ImageView>
+
+                                          
+                                          
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </VBox>
+
+
+                              <HBox alignment="CENTER_LEFT" layoutX="100.0" layoutY="168.0" prefHeight="56.0" prefWidth="600.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="0.0">
+                                 <children>
+                                    <AnchorPane fx:id="volumePane" prefHeight="59.0" prefWidth="600.0">
+                                       <children>
+                                          <ImageView fx:id="muteIcon" fitHeight="60.0" fitWidth="60.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="10.0">
+                                             <!--<image> <Image url="@/images/speakermute.png" /> </image>-->
+                                          </ImageView>
+
+                                          <ImageView fx:id="volumeIcon" fitHeight="60.0" fitWidth="60.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="10.0">
+                                             <!--<image> <Image url="@/images/speaker.png" /> </image>-->
+                                          </ImageView>
+
+										  <ImageView fx:id="plusVol" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="130.0" >
+                                             <!--<image> <Image url="@/images/speaker.png" /> </image>-->
+                                          </ImageView>
+                                          
+                                          <ImageView fx:id="minusVol" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="45.0" AnchorPane.rightAnchor="130.0" >
+                                             <!--<image> <Image url="@/images/speaker.png" /> </image>-->
+                                          </ImageView>
+
+                                          <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="50" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="10.0">
+                                             <font> <Font name="Berlin Sans FB" size="37.0" /> </font>
+                                          </Label>
+											
+										  
+
+                                          </children>
+                                    </AnchorPane>
+                                 </children>
+                              </HBox>
+
+                           </children>
+                        </AnchorPane>
+                     
                </children>
-            </Pane>
-         </children>
-      </AnchorPane>
+            </AnchorPane>
+         </center>
+
+         
+
+      </BorderPane>
 
       <AnchorPane fx:id="anchorPaneExit" layoutY="7.0" prefHeight="40.0" prefWidth="600.0" AnchorPane.bottomAnchor="700.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -354,40 +291,8 @@
                </children>
                <cursor> <Cursor fx:constant="HAND" /> </cursor>
             </Pane>
-            
-            <!-- PANNELLO GIA' IMPOSTATO PER 3 BOTTONI: MINIMIZZA, FULLSCREEN, EXIT -->
-            
-            <!--
-            <Pane fx:id="minimize" layoutX="500.0" layoutY="1.0" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.rightAnchor="100.0">
-               <cursor> <Cursor fx:constant="HAND" /> </cursor>
-               <children>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="17.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
-                     <image> <Image url="@/images/minimize.png" /> </image>
-                  </ImageView>
-               </children>
-            </Pane>
-
-            <Pane fx:id="maximize" layoutX="500.0" layoutY="1.0" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.rightAnchor="50.0">
-               <children>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="17.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
-                     <image> <Image url="@/images/fullscreen.png" /> </image>
-                     <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                  </ImageView>
-               </children>
-               <cursor> <Cursor fx:constant="HAND" /> </cursor>
-            </Pane>
-            
-            <Pane fx:id="exit" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="50.0" styleClass="pane-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="17.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
-                     <image> <Image url="@/images/cancel.png" /> </image>
-                     <cursor> <Cursor fx:constant="HAND" /> </cursor>
-                  </ImageView>
-               </children>
-               <cursor> <Cursor fx:constant="HAND" /> </cursor>
-            </Pane>
-			-->
 			
+			<!-- barra in alto con il nome del programma -->
             <Label fx:id="programName" layoutX="39.0" layoutY="9.0" text="  WG Player" AnchorPane.leftAnchor="39.0">
                <font> <Font name="Berlin Sans FB" size="20.0" /> </font>
             </Label>

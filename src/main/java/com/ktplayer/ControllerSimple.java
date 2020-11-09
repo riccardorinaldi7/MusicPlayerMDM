@@ -53,16 +53,18 @@ public class ControllerSimple {
     private AnchorPane window;
 
     @FXML
-    private AnchorPane playlistNode;
-
+    private ImageView exitProgramButton;
     @FXML
-    private Pane showPlaylist;
+    private ImageView removeButton;
+    @FXML
+    private ImageView addButton;
+
+  
     @FXML
     private Pane exit;
     @FXML
     private Pane minimize;
-    @FXML
-    private Pane imagePane;
+
 
     @FXML
     private TableView<Song> songTable;
@@ -72,35 +74,26 @@ public class ControllerSimple {
     private TableColumn<Song, String> artistNameColumn;
     @FXML
     private TableColumn<Song, String> songNameColumn;
-    @FXML
-    private TableColumn<Song, String> durationColumn;
-    @FXML
-    private TableColumn<Song, String> rateColumn;
-    @FXML
-    private TableColumn<Song, String> formatColumn;
+
+
+ 
 
     @FXML
     private Label artistName;
-    @FXML
-    private Label albumName;
+ 
     @FXML
     private Label songName;
-    @FXML
-    private Label totalDuration;
-    @FXML
-    private Label currentDuration;
+
+
     @FXML
     private Label volumeValue;
-    @FXML
-    private Label songsCounter;
+
 
     @FXML
-    private JFXSlider songSlider;
+    private ImageView minusVol;
     @FXML
-    private Slider volumeSlider;
+    private ImageView plusVol;
 
-    @FXML
-    private ImageView folderChooser;
 
     @FXML
     private ImageView playButton;
@@ -114,8 +107,7 @@ public class ControllerSimple {
     private ImageView muteIcon;
     @FXML
     private ImageView volumeIcon;
-    @FXML
-    private ToggleButton autoPlayIcon;
+
 
     @FXML
     private ResourceBundle resources ;
@@ -190,8 +182,7 @@ public class ControllerSimple {
     private MenuItem simpleInterface;
     @FXML
     private MenuItem advancedInterface;
-    @FXML
-    private MenuItem hidebar_menu;
+   
     @FXML
     private ImageView exit_icon;
     @FXML
@@ -220,7 +211,7 @@ public class ControllerSimple {
 
     public ControllerSimple() {
         players = new ArrayList<>();
-        songSlider = new JFXSlider();
+        
         isAutoplay = false;
         volume = 0.5; // between 0 and 1
         stage = Main.getStage();
@@ -237,6 +228,8 @@ public class ControllerSimple {
         alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
         alert.setTitle(resources.getString("confirmExit"));
         ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+        
+        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/exit.png")));
         
         util.applyThemeToDialog(alert);
         
@@ -255,7 +248,7 @@ public class ControllerSimple {
         insertSubMenus_menuBar();	//enrich the menubar with submenus
         setIcons();					//set icons depending on the theme
         insertToolTips();			//attach tooltip to the main buttons
-        volumeIconChanger(); 		//update volume icon if volume == 0
+       
         addShortcutsMenubar();	
         attachMenuActions();		//add setOnAction to menuItems
         
@@ -294,38 +287,11 @@ public class ControllerSimple {
             }
         });
 
-        volumeSlider.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                volumeIconChanger();
-            }
-        });
+      
 
-        autoPlayIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if(isAutoplay) {
-                    autoPlayIcon.setSelected(false);
-                    isAutoplay = false;
-                }
-                else if(!isAutoplay) {
-                    autoPlayIcon.setSelected(true);
-                    isAutoplay = true;
-                }
-            }
-        });
+       
 
-        showPlaylist.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if(playlistNode.isVisible() == true) {
-                    hideTransation(playlistNode);
-                }
-                else {
-                    showTransation(playlistNode);
-                }
-            }
-        });
+        
 
         minimize.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -344,9 +310,8 @@ public class ControllerSimple {
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
         artistNameColumn.setCellValueFactory(cellData -> cellData.getValue().artistNameProperty());
         songNameColumn.setCellValueFactory(cellData -> cellData.getValue().songNameProperty());
-        durationColumn.setCellValueFactory(cellData -> cellData.getValue().durationProperty());
-        rateColumn.setCellValueFactory(cellData -> cellData.getValue().rateProperty());
-        formatColumn.setCellValueFactory(cellData -> cellData.getValue().formatProperty());
+
+     
 
         showSongInfo(null);
 
@@ -356,13 +321,7 @@ public class ControllerSimple {
             currentSelection = newValue;
         });
 
-        folderChooser.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println("folderChooser: choose a music folder");
-                chooseFolder();
-            }
-        });
+       
     }
     
     @FXML
@@ -419,7 +378,7 @@ public class ControllerSimple {
         }
         artistName.setText(artistLabel);
         songName.setText(songLabel);
-        albumName.setText(albumLabel);
+   
     }
 
     // Loads all files in a directory and creates Song and MediaPlayer for each file
@@ -448,8 +407,7 @@ public class ControllerSimple {
         setImage();
         i = 0;
         System.out.println(players.size());
-        songsCounter.setText("");
-        songsCounter.setText("Songs: " + players.size());
+        
         return  songData;
     }
 
@@ -483,13 +441,12 @@ public class ControllerSimple {
             mediaView = new MediaView(players.get(Integer.parseInt(song.getId()) - 1));
 
             // Put some value before playing
-            volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
-            volumeSlider.setValue(volume*100);
+           
             mediaView.getMediaPlayer().setVolume(volume);
             mediaView.getMediaPlayer().seek(Duration.ZERO);
-            updateSliderPosition(Duration.ZERO);
+            
             double duration = mediaView.getMediaPlayer().getTotalDuration().toSeconds();
-            totalDuration.setText(secToMin((long) duration));
+            
 
             // create a Thread that runs throughout the song and update values of slider, timing and volume
             updateValues();
@@ -567,22 +524,7 @@ public class ControllerSimple {
                 }
             });
 
-            songSlider.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    Bounds b1 = songSlider.getLayoutBounds();
-                    double mouseX = event.getX();
-                    double percent = (((b1.getMinX() + mouseX) * 100) / (b1.getMaxX() - b1.getMinX()));
-                    songSlider.setValue((percent) / 100);
-                    seekAndUpdate(new Duration(mediaView.getMediaPlayer().getTotalDuration().toMillis() * percent / 100));
-                    songSlider.setValueFactory(slider ->
-                            Bindings.createStringBinding(
-                                    () -> (secToMin((long) mediaView.getMediaPlayer().getCurrentTime().toSeconds())),
-                                    songSlider.valueProperty()
-                            )
-                    );
-                }
-            });
+            
 
             // TODO: reset all players everytime we takeCare of a Song?? Too expensive...should be fixed
             for (int i = ((players.indexOf(mediaView.getMediaPlayer())) % players.size()); i < players.size(); i++) {
@@ -602,10 +544,10 @@ public class ControllerSimple {
                         mediaPlayer = nextPlayer;
                         mediaView.setMediaPlayer(mediaPlayer);
                         mediaView.getMediaPlayer().seek(Duration.ZERO);
-                        updateSliderPosition(Duration.ZERO);
-                        songSlider.setValue(0);
+                        
+                       
                         double duration = mediaView.getMediaPlayer().getTotalDuration().toSeconds();
-                        totalDuration.setText(secToMin((long) duration));
+                        
                         updateValues();
                         mediaPlayer.setVolume(volume);
                         mediaPlayer.play();
@@ -697,7 +639,7 @@ public class ControllerSimple {
         ID3v2 tag = mp3.getId3v2Tag();
         artistName.setText(tag.getArtist());
         songName.setText(tag.getTitle());
-        albumName.setText(tag.getAlbum());
+
     }
 
     public void takeCare() throws Exception {
@@ -726,9 +668,9 @@ public class ControllerSimple {
                         public void run() {
                             final MediaPlayer player = mediaView.getMediaPlayer();
                             if((player.getStatus() != Status.PAUSED) && (player.getStatus() != Status.STOPPED) && (player.getStatus() != Status.READY)) {
-                                currentDuration.setText(secToMin((long) player.getCurrentTime().toSeconds()));
-                                updateSliderPosition(player.getCurrentTime());
-                                volumeHandler();
+                                
+                               
+                                
                             }
                         }
                     });
@@ -744,39 +686,11 @@ public class ControllerSimple {
         thread.start();
     }
 
-    private void updateSliderPosition(Duration currentTime) {
-        final MediaPlayer player = mediaView.getMediaPlayer();
-        final Duration totalDuration = player.getTotalDuration();
-        if((totalDuration == null) || (currentTime == null)) {
-            songSlider.setValue(0);
-        }
-        else {
-            songSlider.setValue((currentTime.toMillis() / totalDuration.toMillis()) * 100);
-        }
-    }
+    
 
-    private void volumeHandler() {
-        volumeSlider.valueProperty().addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() /100);
-                volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
-                volume = mediaView.getMediaPlayer().getVolume();
-                volumeIconChanger();
-            }
-        });
-    }
+   
 
-    private void volumeIconChanger() {
-        if(volumeSlider.getValue() == 0) {
-            muteIcon.setVisible(true);
-            volumeIcon.setVisible(false);
-        }
-        else {
-            muteIcon.setVisible(false);
-            volumeIcon.setVisible(true);
-        }
-    }
+   
 
     private void showTransation(AnchorPane anchorPane) {
         fadeIn.setNode(anchorPane);
@@ -804,9 +718,7 @@ public class ControllerSimple {
         path = ClassLoader.getSystemResource("images/Question.PNG").toExternalForm();
         System.out.println(path);
 
-        /*imagePane.setStyle("-fx-background-image: url(\"" + path + "\"); " +
-                "-fx-background-position: center center; " +
-                "-fx-background-repeat: stretch;");*/
+  
 
     }
 
@@ -871,12 +783,7 @@ public class ControllerSimple {
         mediaView = null;
     }
 
-    private void changeVolume(Integer amount){
-        volumeSlider.setValue(volumeSlider.getValue() + amount);
-        volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
-        if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
-        volumeIconChanger(); 
-    }
+    
 
     // ----------------------------------------------------------------------------------------------------------------------
     // THEME SELECTION
@@ -936,7 +843,7 @@ public class ControllerSimple {
              alert.setContentText(resources.getString("restart"));
              ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
             		 new Image("file:src/main/resources/images/logo.png"));
-             
+             alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/refresh.png")));
              alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
              util.applyThemeToDialog(alert);
              
@@ -1009,7 +916,7 @@ public class ControllerSimple {
             alert.setContentText(resources.getString("restart"));
             ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
             		new Image("file:src/main/resources/images/logo.png"));
-            
+            alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/refresh.png")));
             alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
             util.applyThemeToDialog(alert);
             alert.showAndWait();
@@ -1027,26 +934,7 @@ public class ControllerSimple {
 	
     private void attachMenuActions(){
     	
-    	incrVol.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				changeVolume(10);
-			}
-		});
-   
-		decrVol.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				changeVolume(-10);
-			}
-		});
-   
-		muteVol.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				muteUnmuteVolume();
-			}
-		});
+    	
 		
 		exit_menu.setOnAction( new EventHandler<ActionEvent>() {
     	    public void handle(ActionEvent t) {
@@ -1098,24 +986,7 @@ public class ControllerSimple {
 		});
     }
     
-    private void muteUnmuteVolume(){
-    	if (currentlyMuted == false ) {
-    		currentlyMuted = true;
-    		volumeBeforeMute = volumeSlider.getValue();
-    		volumeSlider.setValue(0);
-    		volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
-    		if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
-    	}
-    	else {
-    		//restore the volume of the slider before the mute action
-    		currentlyMuted = false;
-    		volumeSlider.setValue(volumeBeforeMute);
-    		volumeBeforeMute = 0.00;
-    		volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
-    		if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() / 100);
-    	}
-    	volumeIconChanger(); 
-    }
+   
     
     // ----------------------------------------------------------------------------------------------------------------------
     // METHODS FOR GRAPHICS AND ICONS
@@ -1132,8 +1003,7 @@ public class ControllerSimple {
         Tooltip.install(nextSongButton, 	new Tooltip(resources.getString("tt_nextsong")));
         Tooltip.install(previousSongButton, new Tooltip(resources.getString("tt_previoussong")));
         Tooltip.install(volumePane, 		new Tooltip(resources.getString("tt_volumepane")));
-        Tooltip.install(showPlaylist, 		new Tooltip(resources.getString("tt_playlist")));
-        Tooltip.install(folderChooser, 		new Tooltip(resources.getString("tt_folder")));
+        
         
         //in alto a dx
         Tooltip.install(minimize, 		new Tooltip(resources.getString("tt_minimize")));
@@ -1186,14 +1056,20 @@ public class ControllerSimple {
     	
     	exit_icon.setImage(new Image(new File("src/main/resources/images/cancelw.png").toURI().toString()));
         minimize_icon.setImage(new Image(new File("src/main/resources/images/minimizew.png").toURI().toString()));
-        folderChooser.setImage(new Image(new File("src/main/resources/images/music-folderw.png").toURI().toString()));
+   
+        exitProgramButton.setImage(new Image(new File("src/main/resources/images/simple/offw.png").toURI().toString()));
+        removeButton.setImage(new Image(new File("src/main/resources/images/simple/removeSongw.png").toURI().toString()));
+		addButton.setImage(new Image(new File("src/main/resources/images/simple/addSongw.png").toURI().toString()));
         
         muteIcon.setImage(new Image(new File("src/main/resources/images/speakermutew.png").toURI().toString()));
-        volumeIcon.setImage(new Image(new File("src/main/resources/images/speakerw.png").toURI().toString()));
-        previousSongButton.setImage(new Image(new File("src/main/resources/images/back-arrowsw.png").toURI().toString()));
-        nextSongButton.setImage(new Image(new File("src/main/resources/images/forward-arrowsw.png").toURI().toString()));
-        pauseButton.setImage(new Image(new File("src/main/resources/images/pausew.png").toURI().toString()));
-        playButton.setImage(new Image(new File("src/main/resources/images/playw.png").toURI().toString()));
+        volumeIcon.setImage(new Image(new File("src/main/resources/images/simple/speakerw.png").toURI().toString()));
+        previousSongButton.setImage(new Image(new File("src/main/resources/images/simple/back-arrowsw.png").toURI().toString()));
+        nextSongButton.setImage(new Image(new File("src/main/resources/images/simple/forward-arrowsw.png").toURI().toString()));
+        pauseButton.setImage(new Image(new File("src/main/resources/images/simple/pausew.png").toURI().toString()));
+        playButton.setImage(new Image(new File("src/main/resources/images/simple/playw.png").toURI().toString()));
+        
+        plusVol.setImage(new Image(new File("src/main/resources/images/simple/minusw.png").toURI().toString()));
+        minusVol.setImage(new Image(new File("src/main/resources/images/simple/plusw.png").toURI().toString()));
         
         //Icons for the menu bar
         
@@ -1218,7 +1094,7 @@ public class ControllerSimple {
     	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
     	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimizew.png"));
     	theme_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/themew.png"));
-    	hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubar.png"));
+    	
     	
     	//Settings menu
     	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interfacew.png"));
@@ -1237,15 +1113,21 @@ public class ControllerSimple {
 		
 		exit_icon.setImage(new Image(new File("src/main/resources/images/cancel.png").toURI().toString()));
 		minimize_icon.setImage(new Image(new File("src/main/resources/images/minimize.png").toURI().toString()));
-		folderChooser.setImage(new Image(new File("src/main/resources/images/music-folder.png").toURI().toString()));
+
+		exitProgramButton.setImage(new Image(new File("src/main/resources/images/simple/off.png").toURI().toString()));
+		removeButton.setImage(new Image(new File("src/main/resources/images/simple/removeSong.png").toURI().toString()));
+		addButton.setImage(new Image(new File("src/main/resources/images/simple/addSong.png").toURI().toString()));
 		
 		muteIcon.setImage(new Image(new File("src/main/resources/images/speakermute.png").toURI().toString()));
-        volumeIcon.setImage(new Image(new File("src/main/resources/images/speaker.png").toURI().toString()));
-        previousSongButton.setImage(new Image(new File("src/main/resources/images/back-arrows.png").toURI().toString()));
-        nextSongButton.setImage(new Image(new File("src/main/resources/images/forward-arrows.png").toURI().toString()));
-        pauseButton.setImage(new Image(new File("src/main/resources/images/pause.png").toURI().toString()));
-        playButton.setImage(new Image(new File("src/main/resources/images/play.png").toURI().toString()));
+        volumeIcon.setImage(new Image(new File("src/main/resources/images/simple/speaker.png").toURI().toString()));
+        previousSongButton.setImage(new Image(new File("src/main/resources/images/simple/back-arrows.png").toURI().toString()));
+        nextSongButton.setImage(new Image(new File("src/main/resources/images/simple/forward-arrows.png").toURI().toString()));
+        pauseButton.setImage(new Image(new File("src/main/resources/images/simple/pause.png").toURI().toString()));
+        playButton.setImage(new Image(new File("src/main/resources/images/simple/play.png").toURI().toString()));
 		
+        plusVol.setImage(new Image(new File("src/main/resources/images/simple/minus.png").toURI().toString()));
+        minusVol.setImage(new Image(new File("src/main/resources/images/simple/plus.png").toURI().toString()));
+        
         //Icons for the menu bar
         
         //File menu
@@ -1269,7 +1151,7 @@ public class ControllerSimple {
     	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
     	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimize.png"));
     	theme_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/theme.png"));
-    	hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubar.png"));
+    	
     	
     	//Settings menu
     	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languages.png"));

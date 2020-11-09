@@ -9,3 +9,7 @@
     -fx-border-color: #b3b3b3;
 	-fx-border-width:1.0px;
 }
+
+.dialog-pane .label {
+    -fx-font-size: 15pt; /* For simple interface, otherwise no specific font size */
+}

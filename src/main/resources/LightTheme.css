@@ -12,13 +12,17 @@
     -fx-table-cell-border-color: transparent;
     -fx-table-header-border-color: transparent;
     -fx-padding: 0;
+    -fx-font-size: 15pt; 		/* For simple Interface */
+    /* -fx-font-size: 12pt; */ 	/* For advanced Interface */
 }
 .table-view .column-header-background{
     -fx-background-color: transparent;
 }
 
 .table-view .column-header .label {
-    -fx-font-size: 12pt;
+-fx-font-size: 18pt; 		/* For simple Interface */
+    /* -fx-font-size: 12pt; */ 	/* For advanced Interface */
+
     -fx-font-family: "Berlin Sans FB";
     -fx-font-weight: normal;
     -fx-text-fill: black;
@@ -26,7 +30,7 @@
     -fx-opacity: 1;
 }
 .table-view:focused .table-row-cell:filled:focused:selected {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: #d3d3d3;
     -fx-table-cell-border-color: transparent;
 }
 .table-row-cell{
@@ -44,7 +48,7 @@
 }
 
 .table-row-cell:odd{
-    -fx-background-color: -fx-table-cell-border-color, #F5F5F5;
+    -fx-background-color: -fx-table-cell-border-color, #e8e8e8;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
     -fx-text-fill: #000;

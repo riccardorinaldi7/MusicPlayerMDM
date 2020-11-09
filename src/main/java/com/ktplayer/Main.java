@@ -53,17 +53,17 @@ public class Main extends Application {
 		String nameCssToLoad = handleThemeSelection();
 		
 		//LOAD XML FILE per INTERFACCIA AVANZATA
-		FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName), bundle);
-		Parent root =(Parent) fxmlLoader.load();
-		Controller controller = fxmlLoader.getController(); 
-		System.out.println("Advanced Interface");
+		//FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName), bundle);
+		//Parent root =(Parent) fxmlLoader.load();
+		//Controller controller = fxmlLoader.getController(); 
+		//System.out.println("Advanced Interface");
 		//--------------------------------------
 		
 		//LOAD XML FILE per INTERFACCIA SEMPLICE
-		//FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName_simpleInterface), bundle);
-		//Parent root =(Parent) fxmlLoader.load();
-		//ControllerSimple controller = fxmlLoader.getController();
-		//System.out.println("Simple Interface");
+		FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName_simpleInterface), bundle);
+		Parent root =(Parent) fxmlLoader.load();
+		ControllerSimple controller = fxmlLoader.getController();
+		System.out.println("Simple Interface");
 		//--------------------------------------
 		
 		controller.setMain(this);
