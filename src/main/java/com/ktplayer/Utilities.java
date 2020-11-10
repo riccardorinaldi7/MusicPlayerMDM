@@ -10,9 +10,11 @@ import javafx.scene.control.Dialog;
 public class Utilities {
 
 	private String currentTheme;
+	private String currentInterface;
 
 	public Utilities() {
-		currentTheme = readCurrentThemeFromProperties();
+		currentTheme = readProperty("theme");
+		currentInterface = readProperty("interface");
 	}
 
 	// -------------------------------------------------------------------------
@@ -20,11 +22,15 @@ public class Utilities {
 	// -------------------------------------------------------------------------	
 	
 	public void applyThemeToDialog(Dialog dialog) {
+		String cssFilename;
     	if (currentTheme.equals("Dark"))
-    		dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource("DarkDialogs.css").toExternalForm());
+    		cssFilename = "DarkDialogs.css";
     	else
-    		dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource("LightDialogs.css").toExternalForm());
+    		cssFilename = "LightDialogs.css";
 
+    	dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource(cssFilename).toExternalForm());
+		if(currentInterface.equals("Simple"))
+			dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource("big-font.css").toExternalForm());
     }
 	
 	public String getCurrentTheme() {
@@ -35,7 +41,7 @@ public class Utilities {
 	//    PRIVATE METHODS
 	// -------------------------------------------------------------------------
 	
-    private String readCurrentThemeFromProperties() {
+    private String readProperty(String property) {
 	   	 String rootPath = "src\\main\\resources\\";
 	     String appConfigPath = rootPath + "application.properties";
 	
@@ -48,9 +54,8 @@ public class Utilities {
 	     } catch (IOException e) {
 	         e.printStackTrace();
 	     }
-	
-	     // Trying to get the language setting 
-	     return appProps.getProperty("theme");
+
+	     return appProps.getProperty(property);
    }
 	
 }
