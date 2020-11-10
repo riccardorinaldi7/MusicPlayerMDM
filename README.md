@@ -2,7 +2,6 @@
 A very simple music player
 
 ## ToDo List
-- [ ] Eliminare colonna "Width" dalla tabella (?)
 - [ ] Fare finestre di conferma per ogni azione
 - [ ] Visualizzazione copertina album
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
@@ -22,6 +21,7 @@ A very simple music player
 ---
 
 ## Done List
+- [X] Eliminare colonna "Width" dalla tabella
 - [X] Fare menu in alto con File, Help, etc
 - [X] Tradurre in un'altra lingua, che sia inglese o italiano o altro
 - [X] Aggiungere info quando con il mouse vai sopra ai bottoni

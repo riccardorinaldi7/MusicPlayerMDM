@@ -1,0 +1,3 @@
+.dialog-pane .label {
+    -fx-font-size: 15pt; /* For simple interface, otherwise no specific font size */
+}

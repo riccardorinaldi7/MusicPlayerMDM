@@ -1010,6 +1010,13 @@ public class Controller {
 	// ----------------------------------------------------------------------------------------------------------------------
 	
     private void attachMenuActions(){
+
+        close_menu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                closeFolder();
+            }
+        });
     	
     	incrVol.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

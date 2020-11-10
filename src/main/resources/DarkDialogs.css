@@ -13,7 +13,7 @@
 
 .dialog-pane .label {
     -fx-text-fill: white;
-    -fx-font-size: 15pt; /* For simple interface, otherwise no specific font size */
+    /*-fx-font-size: 15pt; !* For simple interface, otherwise no specific font size *!*/
 }
 
 .dialog-pane:header .header-panel {

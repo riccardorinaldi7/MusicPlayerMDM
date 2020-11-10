@@ -24,6 +24,7 @@ public class Utilities {
     		dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource("DarkDialogs.css").toExternalForm());
     	else
     		dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource("LightDialogs.css").toExternalForm());
+
     }
 	
 	public String getCurrentTheme() {
