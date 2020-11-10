@@ -67,7 +67,7 @@
                                        </styleClass>
                                     </TableColumn>
 
-                                    <TableColumn fx:id="songNameColumn" prefWidth="133.0" text="%song">
+                                    <TableColumn fx:id="songNameColumn" prefWidth="220.0" text="%song">
                                        <styleClass>
                                           <String fx:value="column-header-background" />
                                           <String fx:value="column-header" />

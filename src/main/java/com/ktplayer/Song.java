@@ -3,6 +3,8 @@ package com.ktplayer;
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
 
+import java.io.File;
+
 public class Song {
     private StringProperty id;
     private StringProperty artistName;
@@ -27,6 +29,10 @@ public class Song {
         this.duration = new SimpleStringProperty(duration);
         this.album = new SimpleStringProperty(album);
         this.url = new SimpleStringProperty(url);
+    }
+
+    public Song(File file) {
+
     }
 
     public String getId() {

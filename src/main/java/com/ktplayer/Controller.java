@@ -335,8 +335,10 @@ public class Controller {
 
         //this runs everytime an item in tableview is single-clicked/selected
         songTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("SongTable: selection detected - " + newValue.getSongName());
-            currentSelection = newValue;
+            if(newValue != null){
+                System.out.println("SongTable: selection detected - " + newValue.getSongName());
+                currentSelection = newValue;
+            }
         });
 
         folderChooser.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -482,6 +484,7 @@ public class Controller {
                 @Override
                 public void changed(ObservableValue<? extends MediaPlayer> observable, MediaPlayer oldValue, MediaPlayer newValue) {
                     try {
+                        //print("mediaView: mediaPlayer change detected...");
                         setCurrentlyPlayer(newValue);
                         updateValues();
                     }
@@ -530,41 +533,45 @@ public class Controller {
             pauseButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    mediaView.getMediaPlayer().pause();
-                    viewPlayIcon();
-                    setPlayButtonHandler();
-                    updateValues();
+                    if(mediaView.getMediaPlayer() != null) {
+                        mediaView.getMediaPlayer().pause();
+                        viewPlayIcon();
+                        setPlayButtonHandler();
+                        updateValues();
+                    }
                 }
             });
 
             nextSongButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    seekAndUpdate(players.get(players.indexOf(mediaView.getMediaPlayer())).getTotalDuration());
+                    if(mediaView.getMediaPlayer() != null && players != null) seekAndUpdate(players.get(players.indexOf(mediaView.getMediaPlayer())).getTotalDuration());
                 }
             });
 
             previousSongButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    seekAndUpdate(Duration.ZERO);
+                    if(mediaView.getMediaPlayer() != null) seekAndUpdate(Duration.ZERO);
                 }
             });
 
             songSlider.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    Bounds b1 = songSlider.getLayoutBounds();
-                    double mouseX = event.getX();
-                    double percent = (((b1.getMinX() + mouseX) * 100) / (b1.getMaxX() - b1.getMinX()));
-                    songSlider.setValue((percent) / 100);
-                    seekAndUpdate(new Duration(mediaView.getMediaPlayer().getTotalDuration().toMillis() * percent / 100));
-                    songSlider.setValueFactory(slider ->
-                            Bindings.createStringBinding(
-                                    () -> (secToMin((long) mediaView.getMediaPlayer().getCurrentTime().toSeconds())),
-                                    songSlider.valueProperty()
-                            )
-                    );
+                    if(mediaView.getMediaPlayer() != null) {
+                        Bounds b1 = songSlider.getLayoutBounds();
+                        double mouseX = event.getX();
+                        double percent = (((b1.getMinX() + mouseX) * 100) / (b1.getMaxX() - b1.getMinX()));
+                        songSlider.setValue((percent) / 100);
+                        seekAndUpdate(new Duration(mediaView.getMediaPlayer().getTotalDuration().toMillis() * percent / 100));
+                        songSlider.setValueFactory(slider ->
+                                Bindings.createStringBinding(
+                                        () -> (secToMin((long) mediaView.getMediaPlayer().getCurrentTime().toSeconds())),
+                                        songSlider.valueProperty()
+                                )
+                        );
+                    }
                 }
             });
 
@@ -645,7 +652,7 @@ public class Controller {
         url.replace("\\", "/");
         final Media media = new Media(new File(url).toURI().toString());
         final MediaPlayer player = new MediaPlayer(media);
-        System.out.println("created MediaPlayer for: " + url);
+        print("created MediaPlayer for: " + url);
         return player;
     }
 
@@ -670,18 +677,28 @@ public class Controller {
     }
 
     public void setCurrentlyPlayer(MediaPlayer player) throws InvalidDataException, IOException, UnsupportedTagException {
-        String source = player.getMedia().getSource();
-        source = source.replace("/","\\");
-        source = source.replaceAll("%20", " ");
-        source = source.replaceAll("%5B", "[");
-        source = source.replaceAll("%5D", "]");
-        source = source.substring(6,source.length());
-        System.out.println(source + " +++");
-        Mp3File mp3 = new Mp3File(source);
-        ID3v2 tag = mp3.getId3v2Tag();
-        artistName.setText(tag.getArtist());
-        songName.setText(tag.getTitle());
-        albumName.setText(tag.getAlbum());
+        String artist = "-";
+        String title = "-";
+        String album = "-";
+        if(player != null) {
+            String source = player.getMedia().getSource();
+            source = source.replace("/", "\\");
+            source = source.replaceAll("%20", " ");
+            source = source.replaceAll("%5B", "[");
+            source = source.replaceAll("%5D", "]");
+            source = source.substring(6, source.length());
+            //print("Playing a new song...");
+            Mp3File mp3 = new Mp3File(source);
+            ID3v2 tag = mp3.getId3v2Tag();
+            String splittedSource[] = source.split("\\\\");
+            String name = splittedSource[splittedSource.length - 1];
+            artist = tag.getArtist() == null ? "-" : tag.getArtist();
+            title = tag.getTitle() == null ? name : tag.getTitle();
+            album = tag.getAlbum() == null ? "-" : tag.getAlbum();
+        }
+        artistName.setText(artist);
+        songName.setText(title);
+        albumName.setText(album);
     }
 
     public void takeCare() throws Exception {
@@ -709,7 +726,7 @@ public class Controller {
                         @Override
                         public void run() {
                             final MediaPlayer player = mediaView.getMediaPlayer();
-                            if((player.getStatus() != Status.PAUSED) && (player.getStatus() != Status.STOPPED) && (player.getStatus() != Status.READY)) {
+                            if(player != null && (player.getStatus() != Status.PAUSED) && (player.getStatus() != Status.STOPPED) && (player.getStatus() != Status.READY)) {
                                 currentDuration.setText(secToMin((long) player.getCurrentTime().toSeconds()));
                                 updateSliderPosition(player.getCurrentTime());
                                 volumeHandler();
@@ -813,7 +830,7 @@ public class Controller {
         playButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (mediaView.getMediaPlayer().getStatus() != MediaPlayer.Status.PLAYING) {
+                if (mediaView.getMediaPlayer() != null && mediaView.getMediaPlayer().getStatus() != MediaPlayer.Status.PLAYING) {
                     mediaView.getMediaPlayer().play();
                     viewPauseIcon();
                 }
@@ -830,6 +847,8 @@ public class Controller {
     private void playPauseSong() {
     	
         MediaPlayer mp = mediaView.getMediaPlayer();
+        if(mp == null) return;
+
         if(mp.getStatus() == Status.PLAYING){
             mediaView.getMediaPlayer().pause();
             pauseButton.setVisible(false);
@@ -850,9 +869,16 @@ public class Controller {
     //se spingi ctrl+w ti esce questo
     private void closeFolder(){
         System.out.println("I'm closing the music folder");
+        if(mediaView != null && mediaView.getMediaPlayer() != null){
+            mediaView.getMediaPlayer().stop();
+            mediaView.setMediaPlayer(null);
+            mediaPlayer = null;
+            songSlider.setValue(0);
+            currentDuration.setText("00:00");
+            totalDuration.setText("00:00");
+        }
         players.clear();
         songTable.getItems().clear();
-        mediaView = null;
     }
 
     private void changeVolume(Integer amount){
