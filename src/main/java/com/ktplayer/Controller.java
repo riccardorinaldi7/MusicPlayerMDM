@@ -215,7 +215,7 @@ public class Controller {
 
     private FadeTransition fadeIn = new FadeTransition();
     private FadeTransition fadeOut = new FadeTransition();
-    private Song currentSelection;
+    private Song currentActive;
     private Song currentPlaying;
 
     public Controller() {
@@ -337,7 +337,7 @@ public class Controller {
         songTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null){
                 System.out.println("SongTable: selection detected - " + newValue.getSongName());
-                currentSelection = newValue;
+                currentActive = newValue;
             }
         });
 
@@ -580,29 +580,7 @@ public class Controller {
                 final MediaPlayer player = players.get(i);
                 mediaPlayer = player;
                 final MediaPlayer nextPlayer = players.get((i + 1) % players.size());
-                mediaPlayer.setOnEndOfMedia(new Runnable() {
-                    @Override
-                    public void run() {
-                        mediaView.getMediaPlayer().stop();
-                        mediaView.getMediaPlayer().seek(Duration.ZERO);
-                        if(isAutoplay) {
-                            mediaView.getMediaPlayer().seek(Duration.ZERO);
-                            repeatSongs();
-                            return;
-                        }
-                        mediaPlayer = nextPlayer;
-                        mediaView.setMediaPlayer(mediaPlayer);
-                        mediaView.getMediaPlayer().seek(Duration.ZERO);
-                        updateSliderPosition(Duration.ZERO);
-                        songSlider.setValue(0);
-                        double duration = mediaView.getMediaPlayer().getTotalDuration().toSeconds();
-                        totalDuration.setText(secToMin((long) duration));
-                        updateValues();
-                        mediaPlayer.setVolume(volume);
-                        mediaPlayer.play();
-                        viewPauseIcon();
-                    }
-                });
+                setEndOfMedia(mediaPlayer, nextPlayer);
             }
 
             playPauseSong();
@@ -1051,6 +1029,37 @@ public class Controller {
 	
     private void attachMenuActions(){
 
+        // Remove a SINGLE file!!
+        removefiles_menu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(currentActive == null) return;
+
+                //remove both from tableview and from players
+                int idRemovedSong = Integer.parseInt(currentActive.getId()) - 1;
+                String nameRemovedSong = currentActive.getSongName();
+
+                /************ WARNING ***********
+                 * when you remove a selected item from a tableview,
+                 * the item after the removed one will be automatically selected
+                 */
+                songTable.getItems().remove(currentActive);
+                updateSongIds(songTable.getItems(), idRemovedSong);
+                songTable.refresh();
+                print("removeFile: removed " + nameRemovedSong + " from table...");
+                players.remove(idRemovedSong);
+                //print("removeFile: removed player's song");
+                //print("Current player list: ");
+                //for(int i = 0; i < players.size(); i++) print(players.get(i).getMedia().getSource());
+
+                //reset the onEndOfMedia of previous Song
+                MediaPlayer prevPlayer = players.get(idRemovedSong - 1);
+                MediaPlayer nextPlayer = players.get(idRemovedSong % players.size());
+                //print("I'm setting " + nextPlayer.getMedia().getSource() + " as next song for " + prevPlayer.getMedia().getSource());
+                setEndOfMedia(prevPlayer, nextPlayer);
+            }
+        });
+
         close_menu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -1128,7 +1137,40 @@ public class Controller {
 			}
 		});
     }
-    
+
+    private void setEndOfMedia(MediaPlayer prevPlayer, MediaPlayer nextPlayer) {
+        prevPlayer.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                //print("New setOnEndOfMedia detected!");
+                mediaView.getMediaPlayer().stop();
+                mediaView.getMediaPlayer().seek(Duration.ZERO);
+                if(isAutoplay) {
+                    mediaView.getMediaPlayer().seek(Duration.ZERO);
+                    repeatSongs();
+                    return;
+                }
+                mediaPlayer = nextPlayer;
+                mediaView.setMediaPlayer(mediaPlayer);
+                mediaView.getMediaPlayer().seek(Duration.ZERO);
+                updateSliderPosition(Duration.ZERO);
+                songSlider.setValue(0);
+                double duration = mediaView.getMediaPlayer().getTotalDuration().toSeconds();
+                totalDuration.setText(secToMin((long) duration));
+                updateValues();
+                mediaPlayer.setVolume(volume);
+                mediaPlayer.play();
+                viewPauseIcon();
+            }
+        });
+    }
+
+    private void updateSongIds(ObservableList<Song> items, int start) {
+        for(int i=start; i<items.size(); i++)
+            items.get(i).setId(Integer.toString(i+1));
+
+    }
+
     private void muteUnmuteVolume(){
     	if (currentlyMuted == false ) {
     		currentlyMuted = true;
