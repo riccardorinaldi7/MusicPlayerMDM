@@ -15,7 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,6 +25,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -39,7 +39,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -356,20 +355,35 @@ public class Controller {
         File selectedDirectory = chooser.showDialog(stage);
         if(selectedDirectory == null) {
             System.out.println("No directory selected!");
+            return;
         }
-        else {
 
-            try {
+        importSongs(selectedDirectory.listFiles());
+    }
+
+    private void chooseFile() {
+        FileChooser chooser = new FileChooser();
+        List<File> selectedFilesList = chooser.showOpenMultipleDialog(stage);
+        if(selectedFilesList == null) {
+            System.out.println("No files selected!");
+            return;
+        }
+        File[] selectedFiles = selectedFilesList.toArray(new File[selectedFilesList.size()]);
+        importSongs(selectedFiles);
+    }
+
+    private void importSongs(File[] selectedFiles) {
+        try {
                 /*if(!(players.isEmpty())) {
                     players.clear();
                     System.out.println("new array list");
                 }*/
                 ObservableList<Song> currentList = songTable.getItems();
-                ObservableList<Song> newList = loadSongs(selectedDirectory);
+                ObservableList<Song> newList = createSongsAndMediaPlayers(selectedFiles);
                 //set endofmedia of new mediaPlayers
-                if(mediaView != null){
+                if(mediaView != null && !currentList.isEmpty()){
                     for(int i=currentList.size()-1; i<newList.size()+currentList.size(); i++){
-                        //print("reset of media " + (i+1) + ": next song #" + ((i+1)%players.size()+1));
+                        print("reset of media " + (i+1) + ": next song #" + ((i+1)%players.size()+1));
                         setEndOfMedia(players.get(i), players.get((i+1) % players.size()));
                     }
                 }
@@ -393,9 +407,7 @@ public class Controller {
                         }
                     }
                 });
-            }
-            catch(Exception e) {}
-        }
+        } catch(Exception e) {}
     }
 
     private ObservableList<Song> appendList(ObservableList<Song> currentList, ObservableList<Song> newList) {
@@ -419,9 +431,8 @@ public class Controller {
     }
 
     // Loads all files in a directory and creates Song and MediaPlayer for each file
-    public ObservableList<Song> loadSongs(File dir)   throws Exception{
+    public ObservableList<Song> createSongsAndMediaPlayers(File[] files)   throws Exception{
         ObservableList<Song> songData = FXCollections.observableArrayList();
-        File[] files = dir.listFiles();
         String name;
         int i = players.size();
         for(File file : files) {
@@ -873,9 +884,9 @@ public class Controller {
         System.out.println("I'm closing the music folder");
         if(mediaView != null && mediaView.getMediaPlayer() != null){
             mediaView.getMediaPlayer().stop();
+            //songSlider.setValue(0);
             mediaView.setMediaPlayer(null);
             mediaPlayer = null;
-            songSlider.setValue(0);
             currentDuration.setText("00:00");
             totalDuration.setText("00:00");
         }
@@ -1038,6 +1049,13 @@ public class Controller {
 	// ----------------------------------------------------------------------------------------------------------------------
 	
     private void attachMenuActions(){
+
+        openfile_menu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                chooseFile();
+            }
+        });
 
         // Remove a SINGLE file!!
         removefiles_menu.setOnAction(new EventHandler<ActionEvent>() {

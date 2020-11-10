@@ -3,9 +3,10 @@ A very simple music player
 
 ## ToDo List
 - [ ] Fare finestre di conferma per ogni azione
-- [ ] Visualizzazione copertina album
+- [ ] Visualizzazione copertina album (da fare??)
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
-- [ ] "Add file..." &rarr; implementare come append
+- [ ] Implementare azione "previous song" (attualmente fa solo ripartire la canzone suonata)
+- [X] "Add file..." &rarr; implementare come append
 - [X] "Add files from folder..." &rarr; modificare in modo che faccia append e non sostituisci
 - [X] Implementare "Remove selected files"
 
