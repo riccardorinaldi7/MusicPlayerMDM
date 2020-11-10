@@ -360,24 +360,29 @@ public class Controller {
         else {
 
             try {
-                if(!(players.isEmpty())) {
+                /*if(!(players.isEmpty())) {
                     players.clear();
                     System.out.println("new array list");
+                }*/
+                ObservableList<Song> currentList = songTable.getItems();
+                ObservableList<Song> newList = loadSongs(selectedDirectory);
+                //set endofmedia of new mediaPlayers
+                if(mediaView != null){
+                    for(int i=currentList.size()-1; i<newList.size()+currentList.size(); i++){
+                        //print("reset of media " + (i+1) + ": next song #" + ((i+1)%players.size()+1));
+                        setEndOfMedia(players.get(i), players.get((i+1) % players.size()));
+                    }
                 }
-                songTable.setItems(loadSongs(selectedDirectory));
-
+                songTable.setItems(appendList(currentList, newList));
                 songTable.setOnMouseClicked((MouseEvent e) -> {
-                                    	
-//                     if(e.getClickCount() == 1) {
-//                    	     try {
-//		                    	 print("SongTable: prendo in carico...");
-//                    	         takeCare();
-//		                     }
-//		                     catch (Exception ex) {}
-//                    	 }
-                	
-                    //con doppio click, parte la canzone!
-                    if (e.getClickCount() == 2) {
+                     /*if(e.getClickCount() == 1) {
+                    	     try {
+		                    	 print("SongTable: prendo in carico...");
+                    	         takeCare();
+		                     }
+		                     catch (Exception ex) {}
+                    	 }*/
+                    if (e.getClickCount() == 2) {    //double-clik to play a song
                         try {
                             takeCare();
                             if(currentPlaying != null) showSongInfo(currentPlaying);
@@ -391,6 +396,11 @@ public class Controller {
             }
             catch(Exception e) {}
         }
+    }
+
+    private ObservableList<Song> appendList(ObservableList<Song> currentList, ObservableList<Song> newList) {
+        for(int i=0; i<newList.size(); i++) currentList.add(newList.get(i));
+        return currentList;
     }
 
     // Shows information about the played song above the playback slider
@@ -413,7 +423,7 @@ public class Controller {
         ObservableList<Song> songData = FXCollections.observableArrayList();
         File[] files = dir.listFiles();
         String name;
-        int i = 0;
+        int i = players.size();
         for(File file : files) {
             if(file.isFile()) {
                 name = file.getName();
@@ -422,7 +432,7 @@ public class Controller {
                         i++; //song id from 1 to n
                         Mp3File mp3 = new Mp3File(file.getPath());
                         ID3v2 tag = mp3.getId3v2Tag();
-                        String title = tag.getTitle() == null ? name : tag.getTitle(); //use filename if no song title exists
+                        String title = tag.getTitle() == null ? name.split("[.]")[0] : tag.getTitle(); //use filename if no song title exists
                         Song song = new Song(String.valueOf(i), tag.getArtist(), title, kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath());
                         players.add(createMediaPlayer(file.getAbsolutePath()));
                         songData.add(song);

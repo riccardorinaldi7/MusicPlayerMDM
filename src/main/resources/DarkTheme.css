@@ -12,8 +12,11 @@
     -fx-table-cell-border-color: transparent;
     -fx-table-header-border-color: transparent;
     -fx-padding: 0;
+    -fx-font-size: 12pt; 	/* For advanced Interface */
+}
+
+.huge-font {
     -fx-font-size: 15pt; 		/* For simple Interface */
-    /* -fx-font-size: 12pt; */ 	/* For advanced Interface */
 }
 
 .table-view .column-header-background {
@@ -21,13 +24,16 @@
 }
 
 .table-view .column-header .label {
-    -fx-font-size: 18pt; 		/* For simple Interface */
-    /* -fx-font-size: 12pt; */ 	/* For advanced Interface */
+     -fx-font-size: 12pt;  	/* For advanced Interface */
     -fx-font-family: "Berlin Sans FB";
     -fx-font-weight: normal;
     -fx-text-fill: white;
     -fx-alignment: center;
     -fx-opacity: 1;
+}
+
+.huge-font .column-header .label{
+    -fx-font-size: 18pt; 		/* For simple Interface */
 }
 
 /* cambia colore sfondo quando seleziono canzone dalla lista */

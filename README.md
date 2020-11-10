@@ -6,8 +6,8 @@ A very simple music player
 - [ ] Visualizzazione copertina album
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
 - [ ] "Add file..." &rarr; implementare come append
-- [ ] "Add files from folder..." &rarr; modificare in modo che faccia append e non sostituisci
-- [ ] Implementare "Remove selected files"
+- [X] "Add files from folder..." &rarr; modificare in modo che faccia append e non sostituisci
+- [X] Implementare "Remove selected files"
 
 ### Bottoni menubar da implementare:
 - [ ] Open file
