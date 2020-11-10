@@ -131,3 +131,7 @@
 #paneUnderTable {
 	-fx-background-color: #f8f8f8;
 }
+
+.button {
+	-fx-focus-traversable: false;
+}

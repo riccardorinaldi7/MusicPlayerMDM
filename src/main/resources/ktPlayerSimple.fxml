@@ -42,52 +42,44 @@
             <AnchorPane fx:id="anchorPaneTop" prefHeight="100.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" BorderPane.alignment="CENTER">
 
                <children>
-                  <VBox  layoutY="126.0" prefHeight="55.0" prefWidth="600.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                     <MenuBar fx:id="menubar">
-                        <menus>
-                           <Menu mnemonicParsing="false" text="%file">
-                              <items>
-                                 <MenuItem fx:id="openfile_menu" mnemonicParsing="false" text="%addfile" />
-                                 <MenuItem fx:id="openfolder_menu" onAction="#chooseFolder" mnemonicParsing="false" text="%addfolder" />
-                                 <MenuItem fx:id="removefiles_menu" mnemonicParsing="false" text="%removefiles" />
-                                 <MenuItem fx:id="close_menu" onAction="#closeFolder" mnemonicParsing="false" text="%close" />
-                                 <MenuItem fx:id="exit_menu" mnemonicParsing="false" text="%exit" />
-                              </items>
-                           </Menu>
 
-                           <Menu fx:id="audio_menu" mnemonicParsing="false" text="%audio">
-                              <items>
-                                 <MenuItem fx:id="playpause_menu" onAction="#playPauseSong" mnemonicParsing="false" text="%playpause" />
-                                 <MenuItem fx:id="next_menu" mnemonicParsing="false" text="%next" />
-                                 <MenuItem fx:id="previous_menu" mnemonicParsing="false" text="%previous" />
-                              </items>
-                           </Menu>
+				<HBox alignment="CENTER" spacing="30.0" layoutY="126.0" prefHeight="55.0" prefWidth="600.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+					<Button fx:id="languageButton" text="%language" onAction="#languageClicked">
+					<cursor> <Cursor fx:constant="HAND" /> </cursor>
+						<font> <Font name="Verdana" size="16.0" /> </font>
+						<graphic>
+				        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true"/>
+				      </graphic>
+			      	</Button>
+			      	
+					<Button fx:id="themeButton" text="%theme" onAction="#themeClicked">
+					<font> <Font name="Verdana" size="16.0" /> </font>
+					<cursor> <Cursor fx:constant="HAND" /> </cursor>
+					<graphic>
+				        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true"/>
+				      </graphic>
+				      </Button>
+				      
+					<Button fx:id="interfaceButton" text="%interface" onAction="#interfaceClicked">
+					<font> <Font name="Verdana" size="16.0" /> </font>
+					<cursor> <Cursor fx:constant="HAND" /> </cursor>
+					<graphic>
+				        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true"/>
+				          
+				      </graphic>
+				      </Button>
+				      
+				      <Button fx:id="helpButton" text="%help" onAction="#helpClicked">
+					<font> <Font name="Verdana" size="16.0" /> </font>
+					<cursor> <Cursor fx:constant="HAND" /> </cursor>
+					<graphic>
+				        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true"/>
+				          
+				      </graphic>
+				      </Button>
+				</HBox>
 
-                           <Menu mnemonicParsing="false" text="%view">
-                              <items>
-                                 <MenuItem fx:id="minimize_menu" mnemonicParsing="false" text="%minimize" />
-                                 <MenuItem fx:id="theme_menu" onAction="#themeSelection" mnemonicParsing="false" text="%theme" />
-                              </items>
-                           </Menu>
-
-                           <Menu fx:id="settings_menu" mnemonicParsing="false" text="%settings">
-                              <items>
-                                 <MenuItem fx:id="language_menu" onAction="#languageSelection" mnemonicParsing="false" text="%language"/>
-                              </items>
-                           </Menu>
-
-                           <Menu mnemonicParsing="false" text="%help">
-                              <items>
-                                 <MenuItem fx:id="about_menu" mnemonicParsing="false" text="%about" />
-                                 <MenuItem fx:id="preview_menu" mnemonicParsing="false" text="%preview" />
-                                 <MenuItem fx:id="shortcuts_menu" mnemonicParsing="false" text="%shortcuts" />
-                              </items>
-                           </Menu>
-                        </menus>
-                     </MenuBar>
-                  </VBox>
-
-                  <Label fx:id="labelHeaderTitle" alignment="CENTER" layoutY="50.0" text="%app-header-title" prefWidth="600.0" AnchorPane.topAnchor="47.0">
+                  <Label fx:id="labelHeaderTitle" alignment="CENTER" layoutY="50.0" text="%app-header-title" prefWidth="600.0" AnchorPane.topAnchor="55.0">
                      <font> <Font name="Berlin Sans FB" size="40.0" /> </font>
                   </Label>
                   
@@ -193,7 +185,7 @@
                                  </children>
                               </VBox>
 
-                              <VBox alignment="CENTER_LEFT" layoutY="126.0" prefHeight="55.0" prefWidth="600.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" >
+                              <VBox alignment="CENTER_LEFT" layoutY="126.0" prefHeight="55.0" prefWidth="300.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" >
                                  <children>
                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
 
@@ -228,9 +220,9 @@
                               </VBox>
 
 
-                              <HBox alignment="CENTER_LEFT" layoutX="100.0" layoutY="168.0" prefHeight="56.0" prefWidth="600.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="0.0">
+                              <HBox alignment="CENTER_LEFT" layoutX="100.0" layoutY="168.0" prefHeight="56.0" prefWidth="300.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="0.0">
                                  <children>
-                                    <AnchorPane fx:id="volumePane" prefHeight="59.0" prefWidth="600.0">
+                                    <AnchorPane fx:id="volumePane" prefHeight="59.0" prefWidth="300.0">
                                        <children>
                                           <ImageView fx:id="muteIcon" fitHeight="60.0" fitWidth="60.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="10.0">
                                              <!--<image> <Image url="@/images/speakermute.png" /> </image>-->
@@ -242,10 +234,12 @@
 
 										  <ImageView fx:id="plusVol" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="130.0" >
                                              <!--<image> <Image url="@/images/speaker.png" /> </image>-->
+                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
                                           
                                           <ImageView fx:id="minusVol" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="45.0" AnchorPane.rightAnchor="130.0" >
                                              <!--<image> <Image url="@/images/speaker.png" /> </image>-->
+                                             <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
 
                                           <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="50" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="10.0">

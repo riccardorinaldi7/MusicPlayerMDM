@@ -175,3 +175,9 @@
 #songName, #artistName, #albumName, #currentDuration, #totalDuration, #volumeValue, #labelLoop {
 	-fx-text-fill: white;
 }
+
+.button {
+	-fx-background-color: #4d4d4d;
+	-fx-text-fill: white;
+	-fx-focus-traversable: false;
+}

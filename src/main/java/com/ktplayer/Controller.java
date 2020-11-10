@@ -1218,7 +1218,7 @@ public class Controller {
     	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
     	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimizew.png"));
     	theme_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/themew.png"));
-    	hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubar.png"));
+    	hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubarw.png"));
     	
     	//Settings menu
     	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interfacew.png"));

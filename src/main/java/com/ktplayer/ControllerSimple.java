@@ -43,15 +43,46 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
 
-
 public class ControllerSimple {
-
-    private void print(String str) { System.out.println(str);}
-    private String currentTheme;
     
     @FXML
     private AnchorPane window;
-
+    @FXML
+    private ResourceBundle resources ;
+    @FXML
+    private Stage stage;
+    
+    //---------------------------------------------------------------------------------------------------------
+    // 2 buttons on the title bar: minimize windows, quit the program
+    //---------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private Pane exit;
+    @FXML
+    private Pane minimize;
+    
+    @FXML
+    private ImageView exit_icon;
+    @FXML
+    private ImageView minimize_icon;
+    
+    //---------------------------------------------------------------------------------------------------------
+    // 4 buttons on top: Language, Theme, Interface, Help
+    //---------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private Button languageButton;
+    @FXML
+    private Button themeButton;
+    @FXML
+    private Button helpButton;
+    @FXML
+    private Button interfaceButton;
+    
+    //---------------------------------------------------------------------------------------------------------
+    // 3 buttons under label "Music Player": Add song, Remove song, Quit the program
+    //---------------------------------------------------------------------------------------------------------
+    
     @FXML
     private ImageView exitProgramButton;
     @FXML
@@ -59,13 +90,10 @@ public class ControllerSimple {
     @FXML
     private ImageView addButton;
 
-  
-    @FXML
-    private Pane exit;
-    @FXML
-    private Pane minimize;
-
-
+    //---------------------------------------------------------------------------------------------------------
+    // Pane with songTable
+    //---------------------------------------------------------------------------------------------------------
+    
     @FXML
     private TableView<Song> songTable;
     @FXML
@@ -75,121 +103,50 @@ public class ControllerSimple {
     @FXML
     private TableColumn<Song, String> songNameColumn;
 
-
- 
-
+    //---------------------------------------------------------------------------------------------------------
+    // Pane with song name and artist playing
+    //---------------------------------------------------------------------------------------------------------
+    
     @FXML
     private Label artistName;
- 
     @FXML
     private Label songName;
 
-
+    //---------------------------------------------------------------------------------------------------------
+    // Right panel for volume
+    //---------------------------------------------------------------------------------------------------------
     @FXML
     private Label volumeValue;
-
-
     @FXML
     private ImageView minusVol;
     @FXML
     private ImageView plusVol;
-
-
+    @FXML
+    private ImageView muteIcon;
+    @FXML
+    private ImageView volumeIcon;
+    
+    //---------------------------------------------------------------------------------------------------------
+    // Left panel with 3 buttons: previous song, play/pause, next song
+    //---------------------------------------------------------------------------------------------------------
+    
     @FXML
     private ImageView playButton;
     @FXML
     private ImageView pauseButton;
     @FXML
     private ImageView nextSongButton;
-    @FXML
+	@FXML
     private ImageView previousSongButton;
-    @FXML
-    private ImageView muteIcon;
-    @FXML
-    private ImageView volumeIcon;
-
-
-    @FXML
-    private ResourceBundle resources ;
-
-    @FXML
-    private Stage stage;
-
-    // -------------------------------------------------------------------------
-    // AGGIUNTI DA NOI
-    // --------------------------------------------------------------------------
-
+    
+	//---------------------------------------------------------------------------------------------------------
+    
+    private String currentTheme;
     private Boolean currentlyMuted = false;
     private Double volumeBeforeMute = 0.00;
     private Utilities util;
     
-    @FXML
-    private SplitPane splitpane;
-    @FXML
-    private Menu settings_menu;
-    @FXML
-    private Menu audio_menu;
-    @FXML
-    private Pane volumePane;
-    @FXML
-    private MenuItem openfile_menu; 
-    @FXML
-    private MenuItem openfolder_menu; 
-    @FXML
-    private MenuItem close_menu; 
-    @FXML
-    private MenuItem exit_menu; 
-    @FXML
-    private MenuItem removefiles_menu;
-    @FXML
-    private Pane maximize;
-    
-    @FXML
-    private MenuItem playpause_menu;
-    @FXML
-    private MenuItem next_menu;
-    @FXML
-    private MenuItem previous_menu;
-
-    /* 
-    @FXML
-    private MenuItem fullscreen_menu;
-    */ 
-    
-    @FXML
-    private MenuItem minimize_menu;
-    @FXML
-    private MenuItem language_menu;
-    @FXML
-    private MenuItem about_menu;
-    @FXML
-    private MenuItem preview_menu;
-    @FXML
-    private MenuItem shortcuts_menu;
-    @FXML
-    private MenuItem theme_menu;
-    @FXML
-    private Menu menuVolume;
-    @FXML
-    private MenuItem decrVol;
-    @FXML
-    private MenuItem incrVol;
-    @FXML
-    private MenuItem muteVol;
-    @FXML
-    private Menu menuInterface;
-    @FXML
-    private MenuItem simpleInterface;
-    @FXML
-    private MenuItem advancedInterface;
-   
-    @FXML
-    private ImageView exit_icon;
-    @FXML
-    private ImageView minimize_icon;
-    
-    // --------------------------------------------------------------------------
-    
+    //---------------------------------------------------------------------------------------------------------
     
     private Main main;
 
@@ -209,6 +166,10 @@ public class ControllerSimple {
     private Song currentSelection;
     private Song currentPlaying;
 
+    //---------------------------------------------------------------------------------------------------------
+    // Builder
+    //---------------------------------------------------------------------------------------------------------
+   
     public ControllerSimple() {
         players = new ArrayList<>();
         
@@ -220,8 +181,74 @@ public class ControllerSimple {
         currentTheme = util.getCurrentTheme();
     }
 
-    private void closeProgram(){
-        //aggiunta alert di conferma prima di chiudere l'applicazione
+    //---------------------------------------------------------------------------------------------------------
+    // HANDLERS
+    //---------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private void initialize() throws Exception {
+
+        setIcons();					//set icons depending on the theme
+        insertToolTips();			//attach tooltip to the main buttons
+        
+        window.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = stage.getX() - event.getScreenX();
+                yOffset = stage.getY() - event.getScreenY();
+            }
+        });
+
+        window.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setX(event.getScreenX() + xOffset);
+                stage.setY(event.getScreenY() + yOffset);
+            }
+        });
+
+        minimize.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setIconified(true);
+            }
+        });
+
+        exit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                closeProgram(); //creato handler da riutilizzare
+            }
+        });
+
+        idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+        artistNameColumn.setCellValueFactory(cellData -> cellData.getValue().artistNameProperty());
+        songNameColumn.setCellValueFactory(cellData -> cellData.getValue().songNameProperty());
+        showSongInfo(null);
+
+        //this runs everytime an item in tableview is single-clicked/selected
+        songTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("SongTable: selection detected - " + newValue.getSongName());
+            currentSelection = newValue;
+        });
+        
+        addButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            	chooseFolder();
+            }
+        });
+        
+        exitProgramButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            	closeProgram();
+            }
+        });
+    }
+    
+    private void closeProgram() {
+        //confirmation alert before quit
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setContentText(resources.getString("sureToClose"));
         alert.setHeaderText(null);
@@ -240,91 +267,6 @@ public class ControllerSimple {
     }
 
     @FXML
-    private void initialize() throws Exception {
-
-        //--------------------------------------------------------------------------------------
-        // AGGIUNTI DA NOI
-        
-        insertSubMenus_menuBar();	//enrich the menubar with submenus
-        setIcons();					//set icons depending on the theme
-        insertToolTips();			//attach tooltip to the main buttons
-       
-        addShortcutsMenubar();	
-        attachMenuActions();		//add setOnAction to menuItems
-        
-        
-        // Shortcuts handler
-        // Add any shortcut you want here
-        /*window.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if(event.getCode().getName() == "Space"){
-                    try {
-                        playPauseSong();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        */
-       
-        //--------------------------------------------------------------------------------------
-        
-        window.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = stage.getX() - event.getScreenX();
-                yOffset = stage.getY() - event.getScreenY();
-            }
-        });
-
-        window.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
-            }
-        });
-
-      
-
-       
-
-        
-
-        minimize.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                stage.setIconified(true);
-            }
-        });
-
-        exit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                closeProgram(); //creato "handler" da riutilizzare
-            }
-        });
-
-        idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
-        artistNameColumn.setCellValueFactory(cellData -> cellData.getValue().artistNameProperty());
-        songNameColumn.setCellValueFactory(cellData -> cellData.getValue().songNameProperty());
-
-     
-
-        showSongInfo(null);
-
-        //this runs everytime an item in tableview is single-clicked/selected
-        songTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("SongTable: selection detected - " + newValue.getSongName());
-            currentSelection = newValue;
-        });
-
-       
-    }
-    
-    @FXML
     private void chooseFolder() {
         DirectoryChooser chooser = new DirectoryChooser();
         File selectedDirectory = chooser.showDialog(stage);
@@ -341,21 +283,13 @@ public class ControllerSimple {
                 songTable.setItems(loadSongs(selectedDirectory));
 
                 songTable.setOnMouseClicked((MouseEvent e) -> {
-                                    	
-//                     if(e.getClickCount() == 1) {
-//                    	     try {
-//		                    	 print("SongTable: prendo in carico...");
-//                    	         takeCare();
-//		                     }
-//		                     catch (Exception ex) {}
-//                    	 }
                 	
                     //con doppio click, parte la canzone!
                     if (e.getClickCount() == 2) {
                         try {
                             takeCare();
                             if(currentPlaying != null) showSongInfo(currentPlaying);
-                            print("SongTable: play - " + currentPlaying.getSongName());
+                            System.out.println("SongTable: play - " + currentPlaying.getSongName());
                             //playPauseSong(); it is better to play inside takeCare() -> playPauseSong(song)
                         } catch (Exception exception) {
                             exception.printStackTrace();
@@ -367,6 +301,157 @@ public class ControllerSimple {
         }
     }
 
+    @FXML
+    private void languageClicked() {
+    	System.out.println("Change the language...");
+    	
+    	String rootPath = "src\\main\\resources\\";
+        String appConfigPath = rootPath + "application.properties";
+
+        Properties appProps = new Properties();
+        try {
+            appProps.load(new FileInputStream(appConfigPath));
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Trying to get the language setting
+        String language = appProps.getProperty("language");
+
+        //Creating a choice box asking for the language
+        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
+        choiceDialog.setHeaderText(resources.getString("selectlanguage"));
+        choiceDialog.setTitle(resources.getString("language"));
+        ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
+        		new Image("file:src/main/resources/images/logo.png"));
+        Image img = new Image("file:src/main/resources/images/languages.png");
+        choiceDialog.setGraphic(new ImageView(img));
+
+        //Retrieving the observable list
+        ObservableList<String> list = choiceDialog.getItems();
+        //Adding items to the language list
+        list.add("English");
+        list.add("Italiano");
+        list.add("Français");
+        list.add("Español");
+        list.remove(language); //rimuovo lingua corrente affinchÃ© non sia selezionabile
+        
+        choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+        util.applyThemeToDialog(choiceDialog);
+        
+        // Show the dialog box and wait for a selection
+        Optional<String> selectedLanguage = choiceDialog.showAndWait();
+
+        try {
+            language = selectedLanguage.get();
+            appProps.setProperty("language", language);
+
+            appProps.store(new FileWriter(appConfigPath), null);
+
+            //alert per dire che bisogna riavviare il programma
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle(resources.getString("attention"));
+            alert.setHeaderText(null);
+            alert.setContentText(resources.getString("restart"));
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
+            		new Image("file:src/main/resources/images/logo.png"));
+            alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/refresh.png")));
+            alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+            util.applyThemeToDialog(alert);
+            alert.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchElementException e){
+            System.out.println("User has changed his/her mind");
+        }
+    }
+    
+    @FXML
+    private void themeClicked() {
+    	System.out.println("Change the theme...");
+    	
+	   	 String rootPath = "src\\main\\resources\\";
+	     String appConfigPath = rootPath + "application.properties";
+	
+	     Properties appProps = new Properties();
+	     try {
+	         appProps.load(new FileInputStream(appConfigPath));
+	     }
+	     catch (FileNotFoundException e) {
+	         e.printStackTrace();
+	     } catch (IOException e) {
+	         e.printStackTrace();
+	     }
+	
+	     
+	     String theme = appProps.getProperty("theme");
+	
+	     ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
+	     choiceDialog.setHeaderText(resources.getString("selecttheme"));
+	     choiceDialog.setTitle(resources.getString("theme"));
+	     ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
+	    		 new Image("file:src/main/resources/images/logo.png"));
+	     Image img = new Image("file:src/main/resources/images/theme.png");
+	     choiceDialog.setGraphic(new ImageView(img));
+	
+	     //Retrieving the observable list
+	     ObservableList<String> list = choiceDialog.getItems();
+	     list.add(resources.getString("dark"));
+	     list.add(resources.getString("light"));
+	     list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
+	     
+	     choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+	     
+	     util.applyThemeToDialog(choiceDialog);
+	     
+	     
+	     // Show the dialog box and wait for a selection
+	     Optional<String> selectedTheme = choiceDialog.showAndWait();
+	
+	     try {
+	    	 theme = selectedTheme.get();
+	         appProps.setProperty("theme", theme);
+	         appProps.store(new FileWriter(appConfigPath), null);
+	
+	         //alert per dire che bisogna riavviare il programma
+	         Alert alert = new Alert(AlertType.WARNING);
+	         alert.setTitle(resources.getString("attention"));
+	         alert.setHeaderText(null);
+	         alert.setContentText(resources.getString("restart"));
+	         ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
+	        		 new Image("file:src/main/resources/images/logo.png"));
+	         alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/refresh.png")));
+	         alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+	         util.applyThemeToDialog(alert);
+	         
+	         alert.showAndWait();
+	     } 
+	     catch (IOException e) {
+	         e.printStackTrace();
+	     } 
+	     catch (NoSuchElementException e){
+	         System.out.println("User has changed his/her mind");
+	     }
+    }
+    
+    @FXML
+    private void interfaceClicked() {
+    	System.out.println("Switch interface...");
+    }
+    
+    @FXML
+    private void helpClicked() {
+    	System.out.println("See the tutorial...");
+    }
+    
+    //---------------------------------------------------------------------------------------------------------
+    // OTHER
+    //---------------------------------------------------------------------------------------------------------
+    
     public void showSongInfo(Song song) {
         String artistLabel = "-";
         String songLabel = "-";
@@ -421,7 +506,7 @@ public class ControllerSimple {
             // If there's another media set, we remove its mediaview and mediaplayer before setting the new ones
             if((mediaView != null) && (mediaPlayer != null)) {
             	
-            	print("playPauseSong(Song): deleting old mediaview and mediaplayer...");
+            	 System.out.println("playPauseSong(Song): deleting old mediaview and mediaplayer...");
             	
                 volume = mediaView.getMediaPlayer().getVolume(); //?? why ??
                 //questo è quello che fa stoppare la canzone quando ne premo un'altra nella lista
@@ -560,7 +645,7 @@ public class ControllerSimple {
 
         }
         else {
-            print("Come posso essere qui? PARADOSSOOOOO");
+        	 System.out.println("Come posso essere qui? PARADOSSOOOOO");
             if(pauseButton.isVisible()) {
                 if ((mediaPlayer != null) && (mediaView != null)) {
                     mediaPlayer = mediaView.getMediaPlayer();
@@ -686,30 +771,6 @@ public class ControllerSimple {
         thread.start();
     }
 
-    
-
-   
-
-   
-
-    private void showTransation(AnchorPane anchorPane) {
-        fadeIn.setNode(anchorPane);
-        fadeIn.setDuration(Duration.millis(1000));
-        fadeIn.setFromValue(0.0);
-        fadeIn.setToValue(1.0);
-        anchorPane.setVisible(true);
-        fadeIn.play();
-    }
-
-    private void hideTransation(AnchorPane anchorPane) {
-        fadeOut.setNode(anchorPane);
-        fadeOut.setDuration(Duration.millis(1000));
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        anchorPane.setVisible(false);
-        fadeOut.play();
-    }
-
     private void setImage() throws Exception {
         String path = "";
         path = path.replace("\\", "/");
@@ -717,9 +778,6 @@ public class ControllerSimple {
         //path = "file:/" + path;
         path = ClassLoader.getSystemResource("images/Question.PNG").toExternalForm();
         System.out.println(path);
-
-  
-
     }
 
     private void repeatSongs(){
@@ -749,11 +807,6 @@ public class ControllerSimple {
         });
     }
 
-    // ***************************************************************************************************************
-    // NOSTRE MODIFICHE
-    // ***************************************************************************************************************
-    
-    //Quando premo play dal menubar --> implementare con le nuove modifiche
     @FXML
     private void playPauseSong() {
     	
@@ -774,222 +827,8 @@ public class ControllerSimple {
         }
     }
 
-    @FXML
-    //se spingi ctrl+w ti esce questo
-    private void closeFolder(){
-        System.out.println("I'm closing the music folder");
-        players.clear();
-        songTable.getItems().clear();
-        mediaView = null;
-    }
-
-    
-
     // ----------------------------------------------------------------------------------------------------------------------
-    // THEME SELECTION
-    // ----------------------------------------------------------------------------------------------------------------------
-    
-    @FXML
-    private void themeSelection (ActionEvent event){
-    	 String rootPath = "src\\main\\resources\\";
-         String appConfigPath = rootPath + "application.properties";
-
-         Properties appProps = new Properties();
-         try {
-             appProps.load(new FileInputStream(appConfigPath));
-         }
-         catch (FileNotFoundException e) {
-             e.printStackTrace();
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
-
-         // Trying to get the language setting
-         String theme = appProps.getProperty("theme");
-
-         //Creating a choice box asking for the language
-         ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
-         choiceDialog.setHeaderText(resources.getString("selecttheme"));
-         choiceDialog.setTitle(resources.getString("theme"));
-         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
-        		 new Image("file:src/main/resources/images/logo.png"));
-         Image img = new Image("file:src/main/resources/images/theme.png");
-         choiceDialog.setGraphic(new ImageView(img));
-
-         //Retrieving the observable list
-         ObservableList<String> list = choiceDialog.getItems();
-         //Adding items to the language list
-         list.add(resources.getString("dark"));
-         list.add(resources.getString("light"));
-         list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
-         
-         choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-         
-         util.applyThemeToDialog(choiceDialog);
-         
-         
-         // Show the dialog box and wait for a selection
-         Optional<String> selectedTheme = choiceDialog.showAndWait();
-
-         try {
-        	 theme = selectedTheme.get();
-             appProps.setProperty("theme", theme);
-             appProps.store(new FileWriter(appConfigPath), null);
-
-             //alert per dire che bisogna riavviare il programma
-             Alert alert = new Alert(AlertType.WARNING);
-             alert.setTitle(resources.getString("attention"));
-             alert.setHeaderText(null);
-             alert.setContentText(resources.getString("restart"));
-             ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
-            		 new Image("file:src/main/resources/images/logo.png"));
-             alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/refresh.png")));
-             alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-             util.applyThemeToDialog(alert);
-             
-             alert.showAndWait();
-         } 
-         catch (IOException e) {
-             e.printStackTrace();
-         } 
-         catch (NoSuchElementException e){
-             System.out.println("User has changed his/her mind");
-         }
-    }
-    
-    // ----------------------------------------------------------------------------------------------------------------------
-    // LANGUAGE SELECTION
-    // ----------------------------------------------------------------------------------------------------------------------
-    
-    @FXML
-    private void languageSelection(ActionEvent event){
-        String rootPath = "src\\main\\resources\\";
-        String appConfigPath = rootPath + "application.properties";
-
-        Properties appProps = new Properties();
-        try {
-            appProps.load(new FileInputStream(appConfigPath));
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Trying to get the language setting
-        String language = appProps.getProperty("language");
-
-        //Creating a choice box asking for the language
-        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
-        choiceDialog.setHeaderText(resources.getString("selectlanguage"));
-        choiceDialog.setTitle(resources.getString("language"));
-        ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
-        		new Image("file:src/main/resources/images/logo.png"));
-        Image img = new Image("file:src/main/resources/images/languages.png");
-        choiceDialog.setGraphic(new ImageView(img));
-
-        //Retrieving the observable list
-        ObservableList<String> list = choiceDialog.getItems();
-        //Adding items to the language list
-        list.add("English");
-        list.add("Italiano");
-        list.add("Français");
-        list.add("Español");
-        list.remove(language); //rimuovo lingua corrente affinchÃ© non sia selezionabile
-        
-        choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-        util.applyThemeToDialog(choiceDialog);
-        
-        // Show the dialog box and wait for a selection
-        Optional<String> selectedLanguage = choiceDialog.showAndWait();
-
-        try {
-            language = selectedLanguage.get();
-            appProps.setProperty("language", language);
-
-            appProps.store(new FileWriter(appConfigPath), null);
-
-            //alert per dire che bisogna riavviare il programma
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle(resources.getString("attention"));
-            alert.setHeaderText(null);
-            alert.setContentText(resources.getString("restart"));
-            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
-            		new Image("file:src/main/resources/images/logo.png"));
-            alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/refresh.png")));
-            alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-            util.applyThemeToDialog(alert);
-            alert.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchElementException e){
-            System.out.println("User has changed his/her mind");
-        }
-    }	
-    
-	// ----------------------------------------------------------------------------------------------------------------------
-	// HANDLERS FOR MENU ITEMS
-	// ----------------------------------------------------------------------------------------------------------------------
-	
-    private void attachMenuActions(){
-    	
-    	
-		
-		exit_menu.setOnAction( new EventHandler<ActionEvent>() {
-    	    public void handle(ActionEvent t) {
-    	    	closeProgram();
-    	    }
-    	});          
-        
-        //Play/Pausa
-		playpause_menu.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent t) {
-				playPauseSong();
-			}
-		});
-
-		minimize_menu.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-	        public void handle(ActionEvent e) {
-	            stage.setIconified(true);
-	        }
-		});
-		
-		//Click sul MenuItem "About"
-		about_menu.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent e) {
-    	
-		    	String toShow = "WG Player has been developed for the Work Project on Multimedia Data Management M,"
-		    			+ " a course of Computer Science Engineering at the University of Bologna held by Prof. Ilaria Bartolini.\n"
-		    			+ "\nThe students Riccardo Rinaldi and Laura Gruppioni started using a very simple Music Player software created by Alexey Ktualhu" 
-		    			+ " with the aim of improving the User Interface by applying some of the most famous Design Principles written by Ben Shneiderman and his research partners.\n\n"
-		    			+ " _________________________________________________ \n\n"
-		    			+ "Here you can find the original software:\nhttps://github.com/ktualhu/ktPlayer-Music-Player\n"
-		    			+ "\nIf you want to join our team, here you can take a look at our highly evolved project:\nhttps://github.com/riccardorinaldi7/MusicPlayerMDM";
-            	
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle(resources.getString("about"));
-				alert.setHeaderText(null);
-				alert.setResizable(false);
-				alert.getDialogPane().setMinWidth(850);
-				alert.getDialogPane().setMinHeight(400);
-				alert.setContentText(toShow);
-				((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
-				alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/almamater.png")));
-					
-				alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-				util.applyThemeToDialog(alert); 
-				
-				alert.showAndWait();
-			}
-		});
-    }
-    
-   
-    
-    // ----------------------------------------------------------------------------------------------------------------------
-    // METHODS FOR GRAPHICS AND ICONS
+    //                                                 GRAPHICS AND ICONS
     // ----------------------------------------------------------------------------------------------------------------------
     
     //----------------------
@@ -998,45 +837,105 @@ public class ControllerSimple {
     
     private void insertToolTips() {
         //SIGNATURE: Tooltip.install(imageView, tooltip);
-        Tooltip.install(playButton, 		new Tooltip(resources.getString("tt_playbutton")));
+        
+    	Tooltip.install(playButton, 		new Tooltip(resources.getString("tt_playbutton")));
         Tooltip.install(pauseButton, 		new Tooltip(resources.getString("tt_pausebutton")));
         Tooltip.install(nextSongButton, 	new Tooltip(resources.getString("tt_nextsong")));
         Tooltip.install(previousSongButton, new Tooltip(resources.getString("tt_previoussong")));
-        Tooltip.install(volumePane, 		new Tooltip(resources.getString("tt_volumepane")));
-        
         
         //in alto a dx
         Tooltip.install(minimize, 		new Tooltip(resources.getString("tt_minimize")));
-        Tooltip.install(maximize, 		new Tooltip(resources.getString("tt_maximize")));
         Tooltip.install(exit, 		new Tooltip(resources.getString("tt_exit")));
     }
 
-    //----------------------
-    // SUB MENU
-    //----------------------
+    /*//---------------------------------------------------------------------------------------------------------
+    // 2 buttons on the title bar: minimize windows, quit the program
+    //---------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private Pane exit;
+    @FXML
+    private Pane minimize;
+    
+    @FXML
+    private ImageView exit_icon;
+    @FXML
+    private ImageView minimize_icon;
+    
+    //---------------------------------------------------------------------------------------------------------
+    // 4 buttons on top: Language, Theme, Interface, Help
+    //---------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private Button languageButton;
+    @FXML
+    private Button themeButton;
+    @FXML
+    private Button helpButton;
+    @FXML
+    private Button interfaceButton;
+    
+    //---------------------------------------------------------------------------------------------------------
+    // 3 buttons under label "Music Player": Add song, Remove song, Quit the program
+    //---------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private ImageView exitProgramButton;
+    @FXML
+    private ImageView removeButton;
+    @FXML
+    private ImageView addButton;
 
-    private void insertSubMenus_menuBar() {
-        menuInterface = new Menu();
-        menuInterface.setText(resources.getString("interface"));
-        settings_menu.getItems().add(menuInterface);
-        simpleInterface = new MenuItem();
-        simpleInterface.setText(resources.getString("simple"));
-        advancedInterface = new MenuItem();
-        advancedInterface.setText(resources.getString("advanced"));
-        menuInterface.getItems().addAll(simpleInterface, advancedInterface);
+    //---------------------------------------------------------------------------------------------------------
+    // Pane with songTable
+    //---------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private TableView<Song> songTable;
+    @FXML
+    private TableColumn<Song, String> idColumn;
+    @FXML
+    private TableColumn<Song, String> artistNameColumn;
+    @FXML
+    private TableColumn<Song, String> songNameColumn;
 
-        menuVolume = new Menu();
-        menuVolume.setText(resources.getString("volume"));
-        audio_menu.getItems().add(menuVolume);
-        decrVol = new MenuItem();
-        decrVol.setText(resources.getString("decreasevolume"));
-        incrVol = new MenuItem();
-        incrVol.setText(resources.getString("increasevolume"));
-        muteVol = new MenuItem();
-        muteVol.setText(resources.getString("novolume"));
-        menuVolume.getItems().addAll(decrVol, incrVol, muteVol);
-    }
+    //---------------------------------------------------------------------------------------------------------
+    // Pane with song name and artist playing
+    //---------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private Label artistName;
+    @FXML
+    private Label songName;
 
+    //---------------------------------------------------------------------------------------------------------
+    // Right panel for volume
+    //---------------------------------------------------------------------------------------------------------
+    @FXML
+    private Label volumeValue;
+    @FXML
+    private ImageView minusVol;
+    @FXML
+    private ImageView plusVol;
+    @FXML
+    private ImageView muteIcon;
+    @FXML
+    private ImageView volumeIcon;
+    
+    //---------------------------------------------------------------------------------------------------------
+    // Left panel with 3 buttons: previous song, play/pause, next song
+    //---------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private ImageView playButton;
+    @FXML
+    private ImageView pauseButton;
+    @FXML
+    private ImageView nextSongButton;
+	@FXML
+    private ImageView previousSongButton;
+     */
+    
     //----------------------
     // ICONS FOR THEMES
     //----------------------
@@ -1048,11 +947,9 @@ public class ControllerSimple {
     	else if (util.getCurrentTheme().equals("Dark")) {
     		setIconsForDarkTheme();	
     	}
-   }
+    }
     
     private void setIconsForDarkTheme() {
-    	
-    	//Icons for the main window
     	
     	exit_icon.setImage(new Image(new File("src/main/resources/images/cancelw.png").toURI().toString()));
         minimize_icon.setImage(new Image(new File("src/main/resources/images/minimizew.png").toURI().toString()));
@@ -1071,46 +968,14 @@ public class ControllerSimple {
         plusVol.setImage(new Image(new File("src/main/resources/images/simple/minusw.png").toURI().toString()));
         minusVol.setImage(new Image(new File("src/main/resources/images/simple/plusw.png").toURI().toString()));
         
-        //Icons for the menu bar
-        
-        //File menu
-    	openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/openw.png"));
-    	openfolder_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/openw.png"));
-    	exit_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closew.png"));
-    	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closefolderw.png"));
-    	removefiles_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/removew.png"));
-    	
-    	//Playback menu
-    	playpause_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/playpausew.png"));
-    	next_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/forwardw.png"));
-    	previous_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/rewindw.png"));
-    	menuVolume.setGraphic(new ImageView("file:src/main/resources/images/menubar/volumew.png"));
-    	
-    	decrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/minusw.png"));
-    	incrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/plusw.png"));
-    	muteVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/speakermutew.png"));
-    	
-    	//View menu
-    	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
-    	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimizew.png"));
-    	theme_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/themew.png"));
-    	
-    	
-    	//Settings menu
-    	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interfacew.png"));
-    	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languagesw.png"));
-    	
-    	//Help menu
-    	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logow.png"));
-    	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorialw.png"));
-    	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tipsw.png"));
-		
+        languageButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/languagesw.png"));
+        helpButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorialw.png"));
+        interfaceButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/interfacew.png"));
+        themeButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/themew.png"));
 	}
 
 	private void setIconsForLightTheme() {
     	
-		//Icons for the main window
-		
 		exit_icon.setImage(new Image(new File("src/main/resources/images/cancel.png").toURI().toString()));
 		minimize_icon.setImage(new Image(new File("src/main/resources/images/minimize.png").toURI().toString()));
 
@@ -1128,68 +993,13 @@ public class ControllerSimple {
         plusVol.setImage(new Image(new File("src/main/resources/images/simple/minus.png").toURI().toString()));
         minusVol.setImage(new Image(new File("src/main/resources/images/simple/plus.png").toURI().toString()));
         
-        //Icons for the menu bar
-        
-        //File menu
-		openfile_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
-    	openfolder_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/open.png"));
-    	exit_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/close.png"));
-    	close_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/closefolder.png"));
-    	removefiles_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/remove.png"));
-    	
-    	//Playback menu
-    	playpause_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/playpause.png"));
-    	next_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/forward.png"));
-    	previous_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/rewind.png"));
-    	menuVolume.setGraphic(new ImageView("file:src/main/resources/images/menubar/volume.png"));
-    	
-    	decrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/minus.png"));
-    	incrVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/plus.png"));
-    	muteVol.setGraphic(new ImageView("file:src/main/resources/images/menubar/speakermute.png"));
-    	
-    	//View menu
-    	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
-    	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimize.png"));
-    	theme_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/theme.png"));
-    	
-    	
-    	//Settings menu
-    	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languages.png"));
-    	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interface.png"));
-    	
-    	//Help menu
-    	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logo.png"));
-    	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
-    	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tips.png"));
-		
+        languageButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/languages.png"));
+        helpButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
+        interfaceButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/interface.png"));
+        themeButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/theme.png"));
 	}
     
-    // ----------------------------------------------------------------------------------------------------------------------
-    // METHOD FOR SHORTCUTS
-    // ----------------------------------------------------------------------------------------------------------------------
     
-    private void addShortcutsMenubar() {
-    	previous_menu.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
-    	next_menu.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN));
-    	playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
-    	
-    	language_menu.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
-    	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
-    	exit_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));			//quit
-    	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN));
-    	removefiles_menu.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));	//cut selected
-    	
-    	//decrVol.setAccelerator(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.CONTROL_DOWN));		//- not in numpad
-    	//incrVol.setAccelerator(new KeyCodeCombination(KeyCode.PLUS, KeyCombination.CONTROL_DOWN));		//+ not in numpad
-    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.SUBTRACT, KeyCombination.CONTROL_DOWN)); 		//- in numpad
-    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.ADD, KeyCombination.CONTROL_DOWN));			//+ in numpad
-    	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0, KeyCombination.CONTROL_DOWN));
-    	
-    	//fullscreen_menu.setAccelerator(new KeyCodeCombination(KeyCode.F11, KeyCombination.ALT_DOWN));
-    	minimize_menu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
-    	preview_menu.setAccelerator(new KeyCodeCombination(KeyCode.F1, KeyCombination.CONTROL_DOWN));	//help
-    }
-	
     
 
     
