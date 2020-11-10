@@ -12,16 +12,19 @@
     -fx-table-cell-border-color: transparent;
     -fx-table-header-border-color: transparent;
     -fx-padding: 0;
-    -fx-font-size: 15pt; 		/* For simple Interface */
-    /* -fx-font-size: 12pt; */ 	/* For advanced Interface */
+     -fx-font-size: 12pt;  	 /*For advanced Interface */
 }
+
+.huge-font {
+    -fx-font-size: 15pt; 		/* For simple Interface */
+}
+
 .table-view .column-header-background{
     -fx-background-color: transparent;
 }
 
 .table-view .column-header .label {
--fx-font-size: 18pt; 		/* For simple Interface */
-    /* -fx-font-size: 12pt; */ 	/* For advanced Interface */
+     -fx-font-size: 12pt;  	 /*For advanced Interface */
 
     -fx-font-family: "Berlin Sans FB";
     -fx-font-weight: normal;
@@ -29,6 +32,11 @@
     -fx-alignment: center;
     -fx-opacity: 1;
 }
+
+.huge-font .column-header .label{
+    -fx-font-size: 18pt; 		/* For simple Interface */
+}
+
 .table-view:focused .table-row-cell:filled:focused:selected {
     -fx-background-color: #d3d3d3;
     -fx-table-cell-border-color: transparent;
