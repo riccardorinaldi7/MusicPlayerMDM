@@ -75,14 +75,14 @@
                                        </styleClass>
                                     </TableColumn>
 									
-									<!-- Column with the size of the file --> 
+									<!-- Column with the size of the file
                                     <TableColumn fx:id="durationColumn" prefWidth="73.0" text="%width">
                                        <styleClass>
                                           <String fx:value="column-header-background" />
                                           <String fx:value="column-header" />
                                           <String fx:value="filler" />
                                        </styleClass>
-                                    </TableColumn>
+                                    </TableColumn>-->
 									
                                     <TableColumn fx:id="rateColumn" prefWidth="76.0" text="%length">
                                        <styleClass>
@@ -275,7 +275,7 @@
                      <cursor> <Cursor fx:constant="HAND" /> </cursor>
                   </Pane>
 
-					<!-- Ho messo visible FALSE perché per ora abbiamo detto che non ci interessa -->
+					<!-- Ho messo visible FALSE perchï¿½ per ora abbiamo detto che non ci interessa -->
                   <Pane fx:id="showPlaylist" visible="false" layoutX="550.0" layoutY="30.0" prefHeight="50.0" prefWidth="50.0" styleClass="pane-background">
 
                      <children>
@@ -288,7 +288,7 @@
                      <cursor> <Cursor fx:constant="HAND" /> </cursor>
                   </Pane>
 					
-					<!-- label seguente è la scritta "Tracks" sopra al titolo "Music player" -->
+					<!-- label seguente ï¿½ la scritta "Tracks" sopra al titolo "Music player" -->
                   <Label fx:id="songsCounter" alignment="CENTER" contentDisplay="BOTTOM" layoutX="227.0" layoutY="30.0" prefHeight="16.0" prefWidth="147.0" text="%tracks" AnchorPane.topAnchor="40.0">
                      <font> <Font name="Berlin Sans FB" size="14.0" /> </font>
                   </Label>

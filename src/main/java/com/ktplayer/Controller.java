@@ -72,8 +72,8 @@ public class Controller {
     private TableColumn<Song, String> artistNameColumn;
     @FXML
     private TableColumn<Song, String> songNameColumn;
-    @FXML
-    private TableColumn<Song, String> durationColumn;
+//    @FXML
+//    private TableColumn<Song, String> durationColumn;
     @FXML
     private TableColumn<Song, String> rateColumn;
     @FXML
@@ -249,8 +249,8 @@ public class Controller {
     @FXML
     private void initialize() throws Exception {
 
-        //--------------------------------------------------------------------------------------
-        // AGGIUNTI DA NOI
+
+        //-------- AGGIUNTI DA NOI ------------
         
         insertSubMenus_menuBar();	//enrich the menubar with submenus
         setIcons();					//set icons depending on the theme
@@ -258,25 +258,8 @@ public class Controller {
         volumeIconChanger(); 		//update volume icon if volume == 0
         addShortcutsMenubar();	
         attachMenuActions();		//add setOnAction to menuItems
-        
-        
-        // Shortcuts handler
-        // Add any shortcut you want here
-        /*window.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if(event.getCode().getName() == "Space"){
-                    try {
-                        playPauseSong();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        */
-       
-        //--------------------------------------------------------------------------------------
+
+        //----------------------------------------
         
         window.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -344,7 +327,7 @@ public class Controller {
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
         artistNameColumn.setCellValueFactory(cellData -> cellData.getValue().artistNameProperty());
         songNameColumn.setCellValueFactory(cellData -> cellData.getValue().songNameProperty());
-        durationColumn.setCellValueFactory(cellData -> cellData.getValue().durationProperty());
+        //durationColumn.setCellValueFactory(cellData -> cellData.getValue().durationProperty());
         rateColumn.setCellValueFactory(cellData -> cellData.getValue().rateProperty());
         formatColumn.setCellValueFactory(cellData -> cellData.getValue().formatProperty());
 
@@ -408,6 +391,7 @@ public class Controller {
         }
     }
 
+    // Shows information about the played song above the playback slider
     public void showSongInfo(Song song) {
         String artistLabel = "-";
         String songLabel = "-";
