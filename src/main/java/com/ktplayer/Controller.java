@@ -868,6 +868,20 @@ public class Controller {
     @FXML
     //se spingi ctrl+w ti esce questo
     private void closeFolder(){
+
+        //aggiunta alert di conferma prima di chiudere i file
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setContentText(resources.getString("closePlaylistMessage"));
+        alert.setHeaderText(null);
+        alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+        alert.setTitle(resources.getString("closePlaylistTitle"));
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+
+        util.applyThemeToDialog(alert);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() != ButtonType.OK) return;
+
         System.out.println("I'm closing the music folder");
         if(mediaView != null && mediaView.getMediaPlayer() != null){
             mediaView.getMediaPlayer().stop();
