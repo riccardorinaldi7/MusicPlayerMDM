@@ -2,7 +2,6 @@ package com.ktplayer;
 
 import com.jfoenix.controls.JFXSlider;
 import com.mpatric.mp3agic.*;
-import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -19,7 +18,6 @@ import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -33,7 +31,6 @@ import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.scene.paint.Color;
 import javafx.stage.*;
 import javafx.util.Duration;
 import javafx.scene.media.MediaPlayer.Status;
@@ -1363,7 +1360,7 @@ public class Controller {
     	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
     	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimizew.png"));
     	theme_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/themew.png"));
-    	hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubarw.png"));
+    	//hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubarw.png"));
     	
     	//Settings menu
     	menuInterface.setGraphic(new ImageView("file:src/main/resources/images/menubar/interfacew.png"));
@@ -1414,7 +1411,7 @@ public class Controller {
     	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
     	minimize_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/minimize.png"));
     	theme_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/theme.png"));
-    	hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubar.png"));
+    	//hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubar.png"));
     	
     	//Settings menu
     	language_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/languages.png"));

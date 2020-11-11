@@ -19,9 +19,9 @@ A very simple music player
 - [X] Open file
 - [X] Next song
 - [X] Previous song
-- [ ] Switch Interface
+- [X] Switch Interface
 - [ ] How to use
-- [ ] Hotkeys
+- [X] Hotkeys
 - [ ] ~~Hide menu bar (?) &rarr; decidere se implementarlo o meno~~
 ---
 
