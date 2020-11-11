@@ -257,6 +257,8 @@ public class Controller {
         addShortcutsMenubar();	
         attachMenuActions();		//add setOnAction to menuItems
 
+        //restartMessage();
+
         //----------------------------------------
         
         window.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
@@ -347,7 +349,35 @@ public class Controller {
             }
         });
     }
-    
+
+    //TODO
+    private void restartMessage() {
+        DialogPane dialogPane = new DialogPane();
+        Dialog<?> dialog = new Dialog<>();
+        HBox hb = new HBox();
+        Label label = new Label("Restart to apply changes");
+        Button offButton = new Button("Shutdown");
+        offButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        hb.getChildren().addAll(offButton);
+        hb.setSpacing(3);
+
+        VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.getChildren().addAll(label, hb);
+
+        dialogPane.setContent(vbox);
+        dialog.setTitle("Restart Message");
+        dialog.setDialogPane(dialogPane);
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).setAlwaysOnTop(true);
+        dialog.show();
+    }
+
     @FXML
     private void chooseFolder() {
         DirectoryChooser chooser = new DirectoryChooser();
