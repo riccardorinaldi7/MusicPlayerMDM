@@ -6,7 +6,7 @@ A very simple music player
 - [ ] Sistemare posizione copertina album
 - [ ] Aggiungere 4-5 canzoni al progetto con tutti i metatag
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
-- [ ] Implementare azione "previous song" (attualmente fa solo ripartire la canzone suonata)
+- [X] Implementare azione "previous song" (attualmente fa solo ripartire la canzone suonata)
 
 #### ToDo Simple Interface
 - [ ] Bottone -
@@ -16,14 +16,13 @@ A very simple music player
 - [ ] bottoni volume
 
 #### Bottoni menubar da implementare:
-- [ ] Open file
-- [ ] Next song
-- [ ] Previous song
-- [ ] Interface Simple
-- [ ] Interface Advanced
+- [X] Open file
+- [X] Next song
+- [X] Previous song
+- [ ] Switch Interface
 - [ ] How to use
 - [ ] Hotkeys
-- [ ] Hide menu bar (?) &rarr; decidere se implementarlo o meno
+- [ ] ~~Hide menu bar (?) &rarr; decidere se implementarlo o meno~~
 ---
 
 ## Done List

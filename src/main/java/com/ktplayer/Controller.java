@@ -579,7 +579,7 @@ public class Controller {
             previousSongButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if(mediaView.getMediaPlayer() != null) seekAndUpdate(Duration.ZERO);
+                    playPreviousSong();
                 }
             });
 
@@ -1143,7 +1143,7 @@ public class Controller {
 		previous_menu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(mediaView.getMediaPlayer() != null) seekAndUpdate(Duration.ZERO);
+                playPreviousSong();
             }
         });
 
@@ -1189,6 +1189,26 @@ public class Controller {
 				alert.showAndWait();
 			}
 		});
+    }
+
+    private void playPreviousSong() {
+        if(mediaView.getMediaPlayer() == null) return;
+        if(mediaView.getMediaPlayer().getCurrentTime().toSeconds() > 5) seekAndUpdate(Duration.ZERO);
+        else{
+            mediaView.getMediaPlayer().stop();
+            MediaPlayer prevPlayer = players.get((players.indexOf(mediaView.getMediaPlayer()) - 1) % players.size());
+            print("PrevSong: " + prevPlayer.getMedia().getSource());
+            mediaView.setMediaPlayer(prevPlayer);
+            mediaView.getMediaPlayer().seek(Duration.ZERO);
+            updateSliderPosition(Duration.ZERO);
+            songSlider.setValue(0);
+            double duration = mediaView.getMediaPlayer().getTotalDuration().toSeconds();
+            totalDuration.setText(secToMin((long) duration));
+            updateValues();
+            mediaView.getMediaPlayer().setVolume(volume);
+            mediaView.getMediaPlayer().play();
+            viewPauseIcon();
+        }
     }
 
     private void setEndOfMedia(MediaPlayer prevPlayer, MediaPlayer nextPlayer) {
