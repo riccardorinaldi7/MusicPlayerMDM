@@ -439,8 +439,35 @@ public class ControllerSimple {
     }
     
     @FXML
-    private void interfaceClicked() {
+    private void setAdvancedInterface() {
     	System.out.println("Switch interface...");
+        String rootPath = "src\\main\\resources\\";
+        String appConfigPath = rootPath + "application.properties";
+
+        Properties appProps = new Properties();
+        try {
+
+            appProps.load(new FileInputStream(appConfigPath));
+            appProps.setProperty("interface", "Advanced");
+            appProps.store(new FileWriter(appConfigPath), null);
+
+            //alert per dire che bisogna riavviare il programma
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle(resources.getString("attention"));
+            alert.setHeaderText(null);
+            alert.setContentText(resources.getString("restart"));
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
+                    new Image("file:src/main/resources/images/logo.png"));
+
+            alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+            util.applyThemeToDialog(alert);
+            alert.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchElementException e){
+            System.out.println("User has changed his/her mind");
+        }
     }
     
     @FXML

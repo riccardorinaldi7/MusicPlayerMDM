@@ -60,7 +60,7 @@
 				      </graphic>
 				      </Button>
 				      
-					<Button fx:id="interfaceButton" text="%interface" onAction="#interfaceClicked">
+					<Button fx:id="interfaceButton" text="%advanced" onAction="#setAdvancedInterface">
 					<font> <Font name="Verdana" size="16.0" /> </font>
 					<cursor> <Cursor fx:constant="HAND" /> </cursor>
 					<graphic>

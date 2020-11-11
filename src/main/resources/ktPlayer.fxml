@@ -245,6 +245,7 @@
                            <Menu fx:id="settings_menu" mnemonicParsing="false" text="%settings">
                               <items>
                                  <MenuItem fx:id="language_menu" onAction="#languageSelection" mnemonicParsing="false" text="%language"/>
+                                 <MenuItem fx:id="menuInterface" onAction="#simplifyInteface" mnemonicParsing="false" text="%interface"/>
                               </items>
                            </Menu>
 
@@ -252,7 +253,7 @@
                               <items>
                                  <MenuItem fx:id="about_menu" mnemonicParsing="false" text="%about" />
                                  <MenuItem fx:id="preview_menu" mnemonicParsing="false" text="%preview" />
-                                 <MenuItem fx:id="shortcuts_menu" mnemonicParsing="false" text="%shortcuts" />
+                                 <MenuItem fx:id="shortcuts_menu" mnemonicParsing="false" onAction="#shortcutsDialog" text="%shortcuts" />
                               </items>
                            </Menu>
                         </menus>

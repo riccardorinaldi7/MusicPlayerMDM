@@ -2,6 +2,7 @@ package com.ktplayer;
 
 import com.jfoenix.controls.JFXSlider;
 import com.mpatric.mp3agic.*;
+import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -22,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,10 +34,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.*;
 import javafx.util.Duration;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.control.Alert.AlertType;
@@ -187,7 +186,7 @@ public class Controller {
     @FXML
     private MenuItem muteVol;
     @FXML
-    private Menu menuInterface;
+    private MenuItem menuInterface;
     @FXML
     private MenuItem simpleInterface;
     @FXML
@@ -1292,14 +1291,14 @@ public class Controller {
     //----------------------
 
     private void insertSubMenus_menuBar() {
-        menuInterface = new Menu();
+        /*menuInterface = new Menu();
         menuInterface.setText(resources.getString("interface"));
         settings_menu.getItems().add(menuInterface);
         simpleInterface = new MenuItem();
         simpleInterface.setText(resources.getString("simple"));
         advancedInterface = new MenuItem();
         advancedInterface.setText(resources.getString("advanced"));
-        menuInterface.getItems().addAll(simpleInterface, advancedInterface);
+        menuInterface.getItems().addAll(simpleInterface, advancedInterface);*/
 
         menuVolume = new Menu();
         menuVolume.setText(resources.getString("volume"));
@@ -1438,7 +1437,8 @@ public class Controller {
     	playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
     	
     	language_menu.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
-    	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
+    	openfile_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
+    	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN));
     	exit_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));			//quit
     	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN));
     	removefiles_menu.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));	//cut selected
@@ -1448,14 +1448,78 @@ public class Controller {
     	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.SUBTRACT, KeyCombination.CONTROL_DOWN)); 		//- in numpad
     	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.ADD, KeyCombination.CONTROL_DOWN));			//+ in numpad
     	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0, KeyCombination.CONTROL_DOWN));
+
+    	theme_menu.setAccelerator(new KeyCodeCombination(KeyCode.T));
     	
     	//fullscreen_menu.setAccelerator(new KeyCodeCombination(KeyCode.F11, KeyCombination.ALT_DOWN));
     	minimize_menu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
     	preview_menu.setAccelerator(new KeyCodeCombination(KeyCode.F1, KeyCombination.CONTROL_DOWN));	//help
     }
-	
-    
 
-    
-    
+    @FXML
+    public void simplifyInteface(ActionEvent actionEvent) {
+        String rootPath = "src\\main\\resources\\";
+        String appConfigPath = rootPath + "application.properties";
+
+        Properties appProps = new Properties();
+        try {
+
+            appProps.load(new FileInputStream(appConfigPath));
+            appProps.setProperty("interface", "Simple");
+            appProps.store(new FileWriter(appConfigPath), null);
+
+            //alert per dire che bisogna riavviare il programma
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle(resources.getString("attention"));
+            alert.setHeaderText(null);
+            alert.setContentText(resources.getString("restart"));
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
+                    new Image("file:src/main/resources/images/logo.png"));
+
+            alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+            util.applyThemeToDialog(alert);
+            alert.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchElementException e){
+            System.out.println("User has changed his/her mind");
+        }
+    }
+
+    public void shortcutsDialog(ActionEvent actionEvent) {
+        DialogPane dialogPane = new DialogPane();
+        dialogPane.setHeaderText("These are the shortcuts available in the WG Player");
+
+        TableView<Shortcut> table = new TableView<Shortcut>();
+        final ObservableList<Shortcut> data = FXCollections.observableArrayList(
+                new Shortcut("CTRL + O", "Add music to the current list"),
+                new Shortcut("SHIFT + CTRL + O", "Add all music in the selected folder to the current list"),
+                new Shortcut("CTRL + Q", "Chiudi WG Player")
+        );
+        table.setEditable(false);
+        TableColumn shortcutColumn = new TableColumn("Shortcut");
+        shortcutColumn.setMinWidth(100);
+        shortcutColumn.setCellValueFactory(new PropertyValueFactory<Shortcut, String>("shortcut"));
+        TableColumn descriptionColumn = new TableColumn("Description");
+        descriptionColumn.setMinWidth(400);
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<Shortcut, String>("description"));
+
+        table.setItems(data);
+        table.getColumns().addAll(shortcutColumn, descriptionColumn);
+        dialogPane.setContent(new Group(table));
+
+        Dialog<DialogPane> dialog = new Dialog();
+        dialog.setTitle("Shortcuts");
+        dialog.setDialogPane(dialogPane);
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+
+        dialog.getDialogPane().getScene().getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                dialog.close();
+            }
+        });
+        dialog.show();
+    }
 }
