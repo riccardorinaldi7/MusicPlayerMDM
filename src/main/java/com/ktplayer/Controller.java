@@ -1140,6 +1140,20 @@ public class Controller {
 			}
 		});
 
+		previous_menu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(mediaView.getMediaPlayer() != null) seekAndUpdate(Duration.ZERO);
+            }
+        });
+
+		next_menu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(mediaView.getMediaPlayer() != null && players != null) seekAndUpdate(players.get(players.indexOf(mediaView.getMediaPlayer())).getTotalDuration());
+            }
+        });
+
 		minimize_menu.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 	        public void handle(ActionEvent e) {
