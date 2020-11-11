@@ -481,7 +481,7 @@ public class ControllerSimple {
                         Mp3File mp3 = new Mp3File(file.getPath());
                         ID3v2 tag = mp3.getId3v2Tag();
                         String title = tag.getTitle() == null ? name : tag.getTitle(); //use filename if no song title exists
-                        Song song = new Song(String.valueOf(i), tag.getArtist(), title, kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath());
+                        Song song = new Song(String.valueOf(i), tag.getArtist(), title, kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath(), tag.getAlbumImage());
                         players.add(createMediaPlayer(file.getAbsolutePath()));
                         songData.add(song);
                     }

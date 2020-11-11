@@ -3,14 +3,19 @@ A very simple music player
 
 ## ToDo List
 - [ ] Fare finestre di conferma per ogni azione
-- [ ] Visualizzazione copertina album (da fare??)
+- [ ] Sistemare posizione copertina album
+- [ ] Aggiungere 4-5 canzoni al progetto con tutti i metatag
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
 - [ ] Implementare azione "previous song" (attualmente fa solo ripartire la canzone suonata)
-- [X] "Add file..." &rarr; implementare come append
-- [X] "Add files from folder..." &rarr; modificare in modo che faccia append e non sostituisci
-- [X] Implementare "Remove selected files"
 
-### Bottoni menubar da implementare:
+#### ToDo Simple Interface
+- [ ] Bottone -
+- [ ] Bottone switch interface
+- [ ] bottone +
+- [ ] bottone help
+- [ ] bottoni volume
+
+#### Bottoni menubar da implementare:
 - [ ] Open file
 - [ ] Next song
 - [ ] Previous song
@@ -22,6 +27,10 @@ A very simple music player
 ---
 
 ## Done List
+- [X] Visualizzazione copertina album
+- [X] "Add file..." &rarr; implementare come append
+- [X] "Add files from folder..." &rarr; modificare in modo che faccia append e non sostituisci
+- [X] Implementare "Remove selected files"
 - [X] Eliminare colonna "Width" dalla tabella
 - [X] Fare menu in alto con File, Help, etc
 - [X] Tradurre in un'altra lingua, che sia inglese o italiano o altro

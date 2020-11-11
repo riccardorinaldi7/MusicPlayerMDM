@@ -11,11 +11,18 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -24,6 +31,7 @@ import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -34,6 +42,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyCodeCombination;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -50,9 +59,6 @@ public class Controller {
     
     @FXML
     private AnchorPane window;
-
-    @FXML
-    private AnchorPane playlistNode;
 
     @FXML
     private Pane showPlaylist;
@@ -148,9 +154,6 @@ public class Controller {
     private MenuItem exit_menu; 
     @FXML
     private MenuItem removefiles_menu;
-    @FXML
-    private Pane maximize;
-    
     @FXML
     private MenuItem playpause_menu;
     @FXML
@@ -297,7 +300,7 @@ public class Controller {
             }
         });
 
-        showPlaylist.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        /*showPlaylist.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if(playlistNode.isVisible() == true) {
@@ -307,7 +310,7 @@ public class Controller {
                     showTransation(playlistNode);
                 }
             }
-        });
+        });*/
 
         minimize.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -330,7 +333,7 @@ public class Controller {
         rateColumn.setCellValueFactory(cellData -> cellData.getValue().rateProperty());
         formatColumn.setCellValueFactory(cellData -> cellData.getValue().formatProperty());
 
-        showSongInfo(null);
+        showSongInfo((Song) null);
 
         //this runs everytime an item in tableview is single-clicked/selected
         songTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -400,6 +403,7 @@ public class Controller {
                         try {
                             takeCare();
                             if(currentPlaying != null) showSongInfo(currentPlaying);
+                            drawAlbumImage(currentPlaying);
                             print("SongTable: play - " + currentPlaying.getSongName());
                             //playPauseSong(); it is better to play inside takeCare() -> playPauseSong(song)
                         } catch (Exception exception) {
@@ -444,7 +448,7 @@ public class Controller {
                         Mp3File mp3 = new Mp3File(file.getPath());
                         ID3v2 tag = mp3.getId3v2Tag();
                         String title = tag.getTitle() == null ? name.split("[.]")[0] : tag.getTitle(); //use filename if no song title exists
-                        Song song = new Song(String.valueOf(i), tag.getArtist(), title, kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath());
+                        Song song = new Song(String.valueOf(i), tag.getArtist(), title, kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath(), tag.getAlbumImage());
                         players.add(createMediaPlayer(file.getAbsolutePath()));
                         songData.add(song);
                     }
@@ -452,7 +456,6 @@ public class Controller {
                 }
             }
         }
-        setImage();
         i = 0;
         System.out.println(players.size());
         songsCounter.setText("");
@@ -506,12 +509,15 @@ public class Controller {
                 public void changed(ObservableValue<? extends MediaPlayer> observable, MediaPlayer oldValue, MediaPlayer newValue) {
                     try {
                         //print("mediaView: mediaPlayer change detected...");
-                        setCurrentlyPlayer(newValue);
+                        showSongInfo(newValue);
                         updateValues();
+                        drawAlbumImage(songTable.getItems().get(players.indexOf(newValue)));
                     }
                     catch(IOException e) {}
                     catch(UnsupportedTagException e) {}
-                    catch(InvalidDataException e) {}
+                    catch(InvalidDataException e) {} catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -655,11 +661,11 @@ public class Controller {
         return player;
     }
 
-    public Media createMedia(String url) {
+    /*public Media createMedia(String url) {
         url.replace("\\", "/");
         final Media media = new Media(new File(url).toURI().toString());
         return media;
-    }
+    }*/
 
     public void viewPauseIcon() {
         playButton.setVisible(false);
@@ -675,7 +681,7 @@ public class Controller {
         playButton.setDisable(false);
     }
 
-    public void setCurrentlyPlayer(MediaPlayer player) throws InvalidDataException, IOException, UnsupportedTagException {
+    public void showSongInfo(MediaPlayer player) throws InvalidDataException, IOException, UnsupportedTagException {
         String artist = "-";
         String title = "-";
         String album = "-";
@@ -778,7 +784,7 @@ public class Controller {
         }
     }
 
-    private void showTransation(AnchorPane anchorPane) {
+    /*private void showTransation(AnchorPane anchorPane) {
         fadeIn.setNode(anchorPane);
         fadeIn.setDuration(Duration.millis(1000));
         fadeIn.setFromValue(0.0);
@@ -794,20 +800,25 @@ public class Controller {
         fadeOut.setToValue(0.0);
         anchorPane.setVisible(false);
         fadeOut.play();
-    }
+    }*/
 
-    private void setImage() throws Exception {
-        String path = "";
-        path = path.replace("\\", "/");
-        path = path.replace(" ", "%20");
-        //path = "file:/" + path;
-        path = ClassLoader.getSystemResource("images/Question.PNG").toExternalForm();
-        System.out.println(path);
+    private void drawAlbumImage(Song song) throws Exception {
+        ObservableList<Node> imgList = imagePane.getChildren();
+        if(!imgList.isEmpty()) imgList.removeAll(imgList);
 
-        /*imagePane.setStyle("-fx-background-image: url(\"" + path + "\"); " +
-                "-fx-background-position: center center; " +
-                "-fx-background-repeat: stretch;");*/
+        BufferedImage img = song.getImage();
+        if(img == null){
+            print("drawAlbum(): no image in this song");
+            return;
+        }
+        double W = imagePane.getPrefWidth();
+        double H = imagePane.getPrefHeight();
+        final Canvas canvas = new Canvas(W, H);
+        GraphicsContext ctx = canvas.getGraphicsContext2D();
+        Image image = SwingFXUtils.toFXImage(img, null);
+        ctx.drawImage(image, 0, 0, W, H);
 
+        imagePane.getChildren().add(new Group(canvas));
     }
 
     private void repeatSongs(){
@@ -1238,7 +1249,7 @@ public class Controller {
         
         //in alto a dx
         Tooltip.install(minimize, 		new Tooltip(resources.getString("tt_minimize")));
-        Tooltip.install(maximize, 		new Tooltip(resources.getString("tt_maximize")));
+        //Tooltip.install(maximize, 		new Tooltip(resources.getString("tt_maximize")));
         Tooltip.install(exit, 		new Tooltip(resources.getString("tt_exit")));
     }
 

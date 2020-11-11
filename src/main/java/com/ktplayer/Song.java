@@ -3,7 +3,12 @@ package com.ktplayer;
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.nio.Buffer;
 
 public class Song {
     private StringProperty id;
@@ -13,7 +18,7 @@ public class Song {
     private StringProperty duration;
     private StringProperty album;
     private StringProperty url;
-    private Image image;
+    private BufferedImage image;
 
     public Song() {}
 
@@ -21,7 +26,7 @@ public class Song {
         this.url = new SimpleStringProperty(url);
     }
 
-    public Song(String id, String artistName, String songName, String length, String duration, String album, String url) {
+    public Song(String id, String artistName, String songName, String length, String duration, String album, String url, byte[] imageData) throws IOException {
         this.id = new SimpleStringProperty(id);
         this.artistName = new SimpleStringProperty(artistName);
         this.songName = new SimpleStringProperty(songName);
@@ -29,6 +34,7 @@ public class Song {
         this.duration = new SimpleStringProperty(duration);
         this.album = new SimpleStringProperty(album);
         this.url = new SimpleStringProperty(url);
+        if(imageData != null) this.image = ImageIO.read(new ByteArrayInputStream(imageData));
     }
 
     public Song(File file) {
@@ -119,11 +125,11 @@ public class Song {
         this.url.set(url);
     }
 
-    public Image getImage() {
+    public BufferedImage getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(BufferedImage image) {
         this.image = image;
     }
 }
