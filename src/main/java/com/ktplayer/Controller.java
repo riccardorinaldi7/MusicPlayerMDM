@@ -972,8 +972,8 @@ public class Controller {
          //Retrieving the observable list
          ObservableList<String> list = choiceDialog.getItems();
          //Adding items to the language list
-         list.add(resources.getString("dark"));
-         list.add(resources.getString("light"));
+         list.add("Dark");
+         list.add("Light");
          list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
          
          choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo

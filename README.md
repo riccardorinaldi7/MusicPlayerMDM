@@ -2,27 +2,16 @@
 A very simple music player
 
 ## ToDo List
-- [ ] Fare finestre di conferma per ogni azione
+- [ ] Finestra conferma quando cambio tema
 - [ ] Sistemare posizione copertina album
 - [ ] Aggiungere 4-5 canzoni al progetto con tutti i metatag
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
-- [X] Implementare azione "previous song" (attualmente fa solo ripartire la canzone suonata)
-
-#### ToDo Simple Interface
-- [ ] Bottone -
-- [ ] Bottone switch interface
-- [ ] bottone +
-- [ ] bottone help
-- [ ] bottoni volume
-
-#### Bottoni menubar da implementare:
-- [X] Open file
-- [X] Next song
-- [X] Previous song
-- [X] Switch Interface
-- [ ] How to use
-- [X] Hotkeys
-- [ ] ~~Hide menu bar (?) &rarr; decidere se implementarlo o meno~~
+- [ ] Agganciare tutorial a "How to use" sia Simple che Advanced
+- [ ] mettere i puntini dove apre una dialog
+- [ ] mettere valori di default nelle choices dialog
+- [ ] aggiungere traduzione a dialog degli shortcuts
+- [ ] completare tabella degli shortcuts
+- [ ] Aggiungere ai messagi di riavvio un pulsante "chiudi programma"
 ---
 
 ## Done List
@@ -55,3 +44,20 @@ A very simple music player
 - [X] Aggiungere voce di Hide menu bar
 - [X] Implementare Dark Theme
 - [X] Realizzare interfaccia base seguendo design visto insieme con Paint
+- [X] Implementare azione "previous song" (attualmente fa solo ripartire la canzone suonata)
+- [X] Fare finestre di conferma per ogni azione
+
+#### ToDo Simple Interface
+- [X] Bottone -
+- [X] Bottone switch interface
+- [X] bottone +
+- [X] bottone help
+- [X] bottoni volume
+
+#### Bottoni menubar da implementare:
+- [X] Open file
+- [X] Next song
+- [X] Previous song
+- [X] Switch Interface
+- [X] Hotkeys
+- [ ] ~~Hide menu bar (?) &rarr; decidere se implementarlo o meno~~

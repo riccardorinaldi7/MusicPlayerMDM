@@ -233,12 +233,12 @@
                                              <!--<image> <Image url="@/images/speaker.png" /> </image>-->
                                           </ImageView>
 
-										  <ImageView fx:id="plusVol" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="130.0" >
+										  <ImageView fx:id="minusVol" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="130.0" >
                                              <!--<image> <Image url="@/images/speaker.png" /> </image>-->
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
-                                          
-                                          <ImageView fx:id="minusVol" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="45.0" AnchorPane.rightAnchor="130.0" >
+
+                                          <ImageView fx:id="plusVol" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="45.0" AnchorPane.rightAnchor="130.0" >
                                              <!--<image> <Image url="@/images/speaker.png" /> </image>-->
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>

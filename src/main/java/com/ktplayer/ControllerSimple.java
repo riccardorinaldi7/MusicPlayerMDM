@@ -1,49 +1,42 @@
 package com.ktplayer;
 
-import com.jfoenix.controls.JFXSlider;
 import com.mpatric.mp3agic.*;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyCodeCombination;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
 
 public class ControllerSimple {
+    private void print(String str) { System.out.println(str);}
     
     @FXML
     private AnchorPane window;
@@ -155,7 +148,7 @@ public class ControllerSimple {
     private MediaView mediaView;
 
     private boolean isAutoplay;
-    private double volume;
+    private int volume;
     private String path;
 
     private double xOffset = 0;
@@ -163,7 +156,7 @@ public class ControllerSimple {
 
     private FadeTransition fadeIn = new FadeTransition();
     private FadeTransition fadeOut = new FadeTransition();
-    private Song currentSelection;
+    private Song currentActive;
     private Song currentPlaying;
 
     //---------------------------------------------------------------------------------------------------------
@@ -174,7 +167,7 @@ public class ControllerSimple {
         players = new ArrayList<>();
         
         isAutoplay = false;
-        volume = 0.5; // between 0 and 1
+        volume = 50; // between 0 and 1
         stage = Main.getStage();
         stage.getIcons().add(new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
         util = new Utilities();
@@ -224,18 +217,25 @@ public class ControllerSimple {
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
         artistNameColumn.setCellValueFactory(cellData -> cellData.getValue().artistNameProperty());
         songNameColumn.setCellValueFactory(cellData -> cellData.getValue().songNameProperty());
-        showSongInfo(null);
+        showSongInfo((Song) null);
 
         //this runs everytime an item in tableview is single-clicked/selected
         songTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("SongTable: selection detected - " + newValue.getSongName());
-            currentSelection = newValue;
+            currentActive = newValue;
         });
         
         addButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-            	chooseFolder();
+            	chooseFile();
+            }
+        });
+
+        removeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                removeSong();
             }
         });
         
@@ -243,6 +243,152 @@ public class ControllerSimple {
             @Override
             public void handle(MouseEvent event) {
             	closeProgram();
+            }
+        });
+
+        minusVol.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(volume > 0) changeVolume(-10);
+            }
+        });
+
+        plusVol.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(volume < 100) changeVolume(10);
+            }
+        });
+    }
+
+    private void removeSong() {
+        if(currentActive == null) return;
+
+        //remove both from tableview and from players
+        int idRemovedSong = Integer.parseInt(currentActive.getId()) - 1;
+        String nameRemovedSong = currentActive.getSongName();
+
+        /************ WARNING ***********
+         * when you remove a selected item from a tableview,
+         * the item after the removed one will be automatically selected
+         */
+        songTable.getItems().remove(currentActive);
+        updateSongIds(songTable.getItems(), idRemovedSong);
+        songTable.refresh();
+        print("removeFile: removed " + nameRemovedSong + " from table...");
+        players.remove(idRemovedSong);
+        //print("removeFile: removed player's song");
+        //print("Current player list: ");
+        //for(int i = 0; i < players.size(); i++) print(players.get(i).getMedia().getSource());
+
+        //reset the onEndOfMedia of previous Song
+        MediaPlayer prevPlayer = players.get(idRemovedSong - 1);
+        MediaPlayer nextPlayer = players.get(idRemovedSong % players.size());
+        //print("I'm setting " + nextPlayer.getMedia().getSource() + " as next song for " + prevPlayer.getMedia().getSource());
+        setEndOfMedia(prevPlayer, nextPlayer);
+    }
+
+    private void updateSongIds(ObservableList<Song> items, int start) {
+        for(int i=start; i<items.size(); i++)
+            items.get(i).setId(Integer.toString(i+1));
+
+    }
+
+    private void chooseFile() {
+        FileChooser chooser = new FileChooser();
+        List<File> selectedFilesList = chooser.showOpenMultipleDialog(stage);
+        if(selectedFilesList == null) {
+            System.out.println("No files selected!");
+            return;
+        }
+        File[] selectedFiles = selectedFilesList.toArray(new File[selectedFilesList.size()]);
+        importSongs(selectedFiles);
+    }
+
+    private void importSongs(File[] selectedFiles) {
+        try {
+                /*if(!(players.isEmpty())) {
+                    players.clear();
+                    System.out.println("new array list");
+                }*/
+            ObservableList<Song> currentList = songTable.getItems();
+            ObservableList<Song> newList = createSongsAndMediaPlayers(selectedFiles);
+            //set endofmedia of new mediaPlayers
+            if(mediaView != null && !currentList.isEmpty()){
+                for(int i=currentList.size()-1; i<newList.size()+currentList.size(); i++){
+                    print("reset of media " + (i+1) + ": next song #" + ((i+1)%players.size()+1));
+                    setEndOfMedia(players.get(i), players.get((i+1) % players.size()));
+                }
+            }
+            songTable.setItems(appendList(currentList, newList));
+            songTable.setOnMouseClicked((MouseEvent e) -> {
+                     /*if(e.getClickCount() == 1) {
+                    	     try {
+		                    	 print("SongTable: prendo in carico...");
+                    	         takeCare();
+		                     }
+		                     catch (Exception ex) {}
+                    	 }*/
+                if (e.getClickCount() == 2) {    //double-clik to play a song
+                    try {
+                        takeCare();
+                        if(currentPlaying != null) showSongInfo(currentPlaying);
+                        print("SongTable: play - " + currentPlaying.getSongName());
+                        //playPauseSong(); it is better to play inside takeCare() -> playPauseSong(song)
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                }
+            });
+        } catch(Exception e) {}
+    }
+
+    private ObservableList<Song> appendList(ObservableList<Song> currentList, ObservableList<Song> newList) {
+        for(int i=0; i<newList.size(); i++) currentList.add(newList.get(i));
+        return currentList;
+    }
+
+    // Loads all files in a directory and creates Song and MediaPlayer for each file
+    public ObservableList<Song> createSongsAndMediaPlayers(File[] files)   throws Exception{
+        ObservableList<Song> songData = FXCollections.observableArrayList();
+        String name;
+        int i = players.size();
+        for(File file : files) {
+            if(file.isFile()) {
+                name = file.getName();
+                if(name.endsWith("mp3") || name.endsWith("wav")) {
+                    try {
+                        i++; //song id from 1 to n
+                        Mp3File mp3 = new Mp3File(file.getPath());
+                        ID3v2 tag = mp3.getId3v2Tag();
+                        String title = tag.getTitle() == null ? name.split("[.]")[0] : tag.getTitle(); //use filename if no song title exists
+                        Song song = new Song(String.valueOf(i), tag.getArtist(), title, kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath(), tag.getAlbumImage());
+                        players.add(createMediaPlayer(file.getAbsolutePath()));
+                        songData.add(song);
+                    }
+                    catch(IOException e) {e.printStackTrace();}
+                }
+            }
+        }
+        i = 0;
+        System.out.println(players.size());
+        return  songData;
+    }
+
+    private void setEndOfMedia(MediaPlayer prevPlayer, MediaPlayer nextPlayer) {
+        prevPlayer.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                //print("New setOnEndOfMedia detected!");
+                mediaView.getMediaPlayer().stop();
+                mediaView.getMediaPlayer().seek(Duration.ZERO);
+                mediaPlayer = nextPlayer;
+                mediaView.setMediaPlayer(mediaPlayer);
+                mediaView.getMediaPlayer().seek(Duration.ZERO);
+                updateValues();
+                mediaPlayer.setVolume(((double)volume)/100);
+                mediaPlayer.play();
+                viewPauseIcon();
             }
         });
     }
@@ -266,39 +412,24 @@ public class ControllerSimple {
         } else { }
     }
 
-    @FXML
-    private void chooseFolder() {
-        DirectoryChooser chooser = new DirectoryChooser();
-        File selectedDirectory = chooser.showDialog(stage);
-        if(selectedDirectory == null) {
-            System.out.println("No directory selected!");
+    public String kbToMb(long length) {
+        Long l = length;
+        double d = l.doubleValue();
+        DecimalFormat df = new DecimalFormat("#.00");
+        String form = df.format((d/1024)/1024);
+        return form + "Mb";
+    }
+
+    public String secToMin(long sec) {
+        Long s = sec;
+        String time = null;
+        if((s%60) < 10) {
+            time = s/60 + ":0" + s%60;
         }
         else {
-
-            try {
-                if(!(players.isEmpty())) {
-                    players.clear();
-                    System.out.println("new array list");
-                }
-                songTable.setItems(loadSongs(selectedDirectory));
-
-                songTable.setOnMouseClicked((MouseEvent e) -> {
-                	
-                    //con doppio click, parte la canzone!
-                    if (e.getClickCount() == 2) {
-                        try {
-                            takeCare();
-                            if(currentPlaying != null) showSongInfo(currentPlaying);
-                            System.out.println("SongTable: play - " + currentPlaying.getSongName());
-                            //playPauseSong(); it is better to play inside takeCare() -> playPauseSong(song)
-                        } catch (Exception exception) {
-                            exception.printStackTrace();
-                        }
-                    }
-                });
-            }
-            catch(Exception e) {}
+            time = s/60 + ":" + s%60;
         }
+        return time;
     }
 
     @FXML
@@ -400,8 +531,8 @@ public class ControllerSimple {
 	
 	     //Retrieving the observable list
 	     ObservableList<String> list = choiceDialog.getItems();
-	     list.add(resources.getString("dark"));
-	     list.add(resources.getString("light"));
+	     list.add("Dark");
+	     list.add("Light");
 	     list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
 	     
 	     choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
@@ -493,49 +624,19 @@ public class ControllerSimple {
    
     }
 
-    // Loads all files in a directory and creates Song and MediaPlayer for each file
-    public ObservableList<Song> loadSongs(File dir)   throws Exception{
-        ObservableList<Song> songData = FXCollections.observableArrayList();
-        File[] files = dir.listFiles();
-        String name;
-        int i = 0;
-        for(File file : files) {
-            if(file.isFile()) {
-                name = file.getName();
-                if(name.endsWith("mp3") || name.endsWith("wav")) {
-                    try {
-                        i++; //song id from 1 to n
-                        Mp3File mp3 = new Mp3File(file.getPath());
-                        ID3v2 tag = mp3.getId3v2Tag();
-                        String title = tag.getTitle() == null ? name : tag.getTitle(); //use filename if no song title exists
-                        Song song = new Song(String.valueOf(i), tag.getArtist(), title, kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath(), tag.getAlbumImage());
-                        players.add(createMediaPlayer(file.getAbsolutePath()));
-                        songData.add(song);
-                    }
-                    catch(IOException e) {e.printStackTrace();}
-                }
-            }
-        }
-        setImage();
-        i = 0;
-        System.out.println(players.size());
-        
-        return  songData;
-    }
-
     public void playPauseSong(Song song) throws Exception{
         if(song != null) {
-        	
+
             File file = new File(song.getUrl());
             String path = file.getAbsolutePath();
             path.replace("\\", "/");
 
             // If there's another media set, we remove its mediaview and mediaplayer before setting the new ones
             if((mediaView != null) && (mediaPlayer != null)) {
-            	
-            	 System.out.println("playPauseSong(Song): deleting old mediaview and mediaplayer...");
-            	
-                volume = mediaView.getMediaPlayer().getVolume(); //?? why ??
+
+                print("playPauseSong(Song): deleting old mediaview and mediaplayer...");
+
+                //volume = ((int)mediaView.getMediaPlayer().getVolume()) * 100; //?? why ??
                 //questo è quello che fa stoppare la canzone quando ne premo un'altra nella lista
                 mediaView.getMediaPlayer().stop();
                 mediaView = null;
@@ -553,12 +654,8 @@ public class ControllerSimple {
             mediaView = new MediaView(players.get(Integer.parseInt(song.getId()) - 1));
 
             // Put some value before playing
-           
-            mediaView.getMediaPlayer().setVolume(volume);
+            mediaView.getMediaPlayer().setVolume(((double)volume)/100);
             mediaView.getMediaPlayer().seek(Duration.ZERO);
-            
-            double duration = mediaView.getMediaPlayer().getTotalDuration().toSeconds();
-            
 
             // create a Thread that runs throughout the song and update values of slider, timing and volume
             updateValues();
@@ -567,112 +664,57 @@ public class ControllerSimple {
                 @Override
                 public void changed(ObservableValue<? extends MediaPlayer> observable, MediaPlayer oldValue, MediaPlayer newValue) {
                     try {
-                        setCurrentlyPlayer(newValue);
+                        //print("mediaView: mediaPlayer change detected...");
+                        showSongInfo(newValue);
                         updateValues();
                     }
                     catch(IOException e) {}
                     catch(UnsupportedTagException e) {}
-                    catch(InvalidDataException e) {}
-                }
-            });
-
-            /*playButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    mediaView.getMediaPlayer().play();
-                    viewPauseIcon();
-                    updateValues();
-                    for (int i = ((players.indexOf(mediaView.getMediaPlayer())) % players.size()); i < players.size(); i++) {
-                        final MediaPlayer player = players.get(i);
-                        mediaPlayer = player;
-                        final MediaPlayer nextPlayer = players.get((i + 1) % players.size());
-                        mediaPlayer.setOnEndOfMedia(new Runnable() {
-                            @Override
-                            public void run() {
-                                mediaView.getMediaPlayer().stop();
-                                mediaView.getMediaPlayer().seek(Duration.ZERO);
-                                if(isAutoplay) {
-                                    mediaView.getMediaPlayer().seek(Duration.ZERO);
-                                    repeatSongs();
-                                    return;
-                                }
-                                mediaPlayer = nextPlayer;
-                                mediaView.setMediaPlayer(mediaPlayer);
-                                mediaView.getMediaPlayer().seek(Duration.ZERO);
-                                updateSliderPosition(Duration.ZERO);
-                                songSlider.setValue(0);
-                                updateValues();
-                                mediaPlayer.setVolume(volume);
-                                mediaPlayer.play();
-                                viewPauseIcon();
-                            }
-                        });
-                        setPlayButtonHandler();
+                    catch(InvalidDataException e) {} catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
-            });*/
+            });
 
             pauseButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    mediaView.getMediaPlayer().pause();
-                    viewPlayIcon();
-                    setPlayButtonHandler();
-                    updateValues();
+                    if(mediaView.getMediaPlayer() != null) {
+                        mediaView.getMediaPlayer().pause();
+                        viewPlayIcon();
+                        setPlayButtonHandler();
+                        updateValues();
+                    }
                 }
             });
 
             nextSongButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    seekAndUpdate(players.get(players.indexOf(mediaView.getMediaPlayer())).getTotalDuration());
+                    if(mediaView.getMediaPlayer() != null && players != null) seekAndUpdate(players.get(players.indexOf(mediaView.getMediaPlayer())).getTotalDuration());
                 }
             });
 
             previousSongButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    seekAndUpdate(Duration.ZERO);
+                    playPreviousSong();
                 }
             });
-
-            
 
             // TODO: reset all players everytime we takeCare of a Song?? Too expensive...should be fixed
             for (int i = ((players.indexOf(mediaView.getMediaPlayer())) % players.size()); i < players.size(); i++) {
                 final MediaPlayer player = players.get(i);
                 mediaPlayer = player;
                 final MediaPlayer nextPlayer = players.get((i + 1) % players.size());
-                mediaPlayer.setOnEndOfMedia(new Runnable() {
-                    @Override
-                    public void run() {
-                        mediaView.getMediaPlayer().stop();
-                        mediaView.getMediaPlayer().seek(Duration.ZERO);
-                        if(isAutoplay) {
-                            mediaView.getMediaPlayer().seek(Duration.ZERO);
-                            repeatSongs();
-                            return;
-                        }
-                        mediaPlayer = nextPlayer;
-                        mediaView.setMediaPlayer(mediaPlayer);
-                        mediaView.getMediaPlayer().seek(Duration.ZERO);
-                        
-                       
-                        double duration = mediaView.getMediaPlayer().getTotalDuration().toSeconds();
-                        
-                        updateValues();
-                        mediaPlayer.setVolume(volume);
-                        mediaPlayer.play();
-                        viewPauseIcon();
-                    }
-                });
+                setEndOfMedia(mediaPlayer, nextPlayer);
             }
 
             playPauseSong();
 
         }
         else {
-        	 System.out.println("Come posso essere qui? PARADOSSOOOOO");
+            print("Come posso essere qui? PARADOSSOOOOO");
             if(pauseButton.isVisible()) {
                 if ((mediaPlayer != null) && (mediaView != null)) {
                     mediaPlayer = mediaView.getMediaPlayer();
@@ -686,29 +728,48 @@ public class ControllerSimple {
         }
     }
 
+    private void playPreviousSong() {
+        if(mediaView.getMediaPlayer() == null) return;
+        if(mediaView.getMediaPlayer().getCurrentTime().toSeconds() > 5) seekAndUpdate(Duration.ZERO);
+        else{
+            mediaView.getMediaPlayer().stop();
+            MediaPlayer prevPlayer = players.get((players.indexOf(mediaView.getMediaPlayer()) - 1) % players.size());
+            print("PrevSong: " + prevPlayer.getMedia().getSource());
+            mediaView.setMediaPlayer(prevPlayer);
+            mediaView.getMediaPlayer().seek(Duration.ZERO);
+            updateValues();
+            mediaView.getMediaPlayer().setVolume(((double)volume)/100);
+            mediaView.getMediaPlayer().play();
+            viewPauseIcon();
+        }
+    }
+
+    public void showSongInfo(MediaPlayer player) throws InvalidDataException, IOException, UnsupportedTagException {
+        String artist = "-";
+        String title = "-";
+        String album = "-";
+        if(player != null) {
+            String source = player.getMedia().getSource();
+            source = source.replace("/", "\\");
+            source = source.replaceAll("%20", " ");
+            source = source.replaceAll("%5B", "[");
+            source = source.replaceAll("%5D", "]");
+            source = source.substring(6, source.length());
+            //print("Playing a new song...");
+            Mp3File mp3 = new Mp3File(source);
+            ID3v2 tag = mp3.getId3v2Tag();
+            String splittedSource[] = source.split("\\\\");
+            String name = splittedSource[splittedSource.length - 1];
+            artist = tag.getArtist() == null ? "-" : tag.getArtist();
+            title = tag.getTitle() == null ? name : tag.getTitle();
+            album = tag.getAlbum() == null ? "-" : tag.getAlbum();
+        }
+        artistName.setText(artist);
+        songName.setText(title);
+    }
+
     public void setMain(Main main) {
         this.main = main;
-    }
-
-
-    public String kbToMb(long length) {
-        Long l = length;
-        double d = l.doubleValue();
-        DecimalFormat df = new DecimalFormat("#.00");
-        String form = df.format((d/1024)/1024);
-        return form + "Mb";
-    }
-
-    public String secToMin(long sec) {
-        Long s = sec;
-        String time = null;
-        if((s%60) < 10) {
-            time = s/60 + ":0" + s%60;
-        }
-        else {
-            time = s/60 + ":" + s%60;
-        }
-        return time;
     }
 
     public MediaPlayer createMediaPlayer(String url) {
@@ -798,29 +859,6 @@ public class ControllerSimple {
         thread.start();
     }
 
-    private void setImage() throws Exception {
-        String path = "";
-        path = path.replace("\\", "/");
-        path = path.replace(" ", "%20");
-        //path = "file:/" + path;
-        path = ClassLoader.getSystemResource("images/Question.PNG").toExternalForm();
-        System.out.println(path);
-    }
-
-    private void repeatSongs(){
-        mediaView.getMediaPlayer().setOnRepeat(new Runnable() {
-            @Override
-            public void run() {
-                mediaView.getMediaPlayer().seek(Duration.ZERO);
-            }
-        });
-        if(isAutoplay) {
-            mediaView.getMediaPlayer().play();
-            viewPauseIcon();
-        }
-        else return;
-    }
-
     private void setPlayButtonHandler() {
         //mediaView.getMediaPlayer().setAutoPlay(true);
         playButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -851,6 +889,24 @@ public class ControllerSimple {
             playButton.setDisable(true);
             pauseButton.setVisible(true);
             pauseButton.setDisable(false);
+        }
+    }
+
+    private void changeVolume(int amount){
+        volume += amount;
+        volumeValue.setText(Integer.toString(volume));
+        if(mediaView != null && mediaView.getMediaPlayer() != null) mediaView.getMediaPlayer().setVolume(((double)volume)/100);
+        volumeIconChanger();
+    }
+
+    private void volumeIconChanger() {
+        if(volume == 0) {
+            muteIcon.setVisible(true);
+            volumeIcon.setVisible(false);
+        }
+        else {
+            muteIcon.setVisible(false);
+            volumeIcon.setVisible(true);
         }
     }
 
@@ -985,15 +1041,15 @@ public class ControllerSimple {
         removeButton.setImage(new Image(new File("src/main/resources/images/simple/removeSongw.png").toURI().toString()));
 		addButton.setImage(new Image(new File("src/main/resources/images/simple/addSongw.png").toURI().toString()));
         
-        muteIcon.setImage(new Image(new File("src/main/resources/images/speakermutew.png").toURI().toString()));
+        muteIcon.setImage(new Image(new File("src/main/resources/images/simple/speakermutew.png").toURI().toString()));
         volumeIcon.setImage(new Image(new File("src/main/resources/images/simple/speakerw.png").toURI().toString()));
         previousSongButton.setImage(new Image(new File("src/main/resources/images/simple/back-arrowsw.png").toURI().toString()));
         nextSongButton.setImage(new Image(new File("src/main/resources/images/simple/forward-arrowsw.png").toURI().toString()));
         pauseButton.setImage(new Image(new File("src/main/resources/images/simple/pausew.png").toURI().toString()));
         playButton.setImage(new Image(new File("src/main/resources/images/simple/playw.png").toURI().toString()));
         
-        plusVol.setImage(new Image(new File("src/main/resources/images/simple/minusw.png").toURI().toString()));
-        minusVol.setImage(new Image(new File("src/main/resources/images/simple/plusw.png").toURI().toString()));
+        plusVol.setImage(new Image(new File("src/main/resources/images/simple/plusw.png").toURI().toString()));
+        minusVol.setImage(new Image(new File("src/main/resources/images/simple/minusw.png").toURI().toString()));
         
         languageButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/languagesw.png"));
         helpButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorialw.png"));
@@ -1010,15 +1066,15 @@ public class ControllerSimple {
 		removeButton.setImage(new Image(new File("src/main/resources/images/simple/removeSong.png").toURI().toString()));
 		addButton.setImage(new Image(new File("src/main/resources/images/simple/addSong.png").toURI().toString()));
 		
-		muteIcon.setImage(new Image(new File("src/main/resources/images/speakermute.png").toURI().toString()));
+		muteIcon.setImage(new Image(new File("src/main/resources/images/simple/speakermute.png").toURI().toString()));
         volumeIcon.setImage(new Image(new File("src/main/resources/images/simple/speaker.png").toURI().toString()));
         previousSongButton.setImage(new Image(new File("src/main/resources/images/simple/back-arrows.png").toURI().toString()));
         nextSongButton.setImage(new Image(new File("src/main/resources/images/simple/forward-arrows.png").toURI().toString()));
         pauseButton.setImage(new Image(new File("src/main/resources/images/simple/pause.png").toURI().toString()));
         playButton.setImage(new Image(new File("src/main/resources/images/simple/play.png").toURI().toString()));
 		
-        plusVol.setImage(new Image(new File("src/main/resources/images/simple/minus.png").toURI().toString()));
-        minusVol.setImage(new Image(new File("src/main/resources/images/simple/plus.png").toURI().toString()));
+        plusVol.setImage(new Image(new File("src/main/resources/images/simple/plus.png").toURI().toString()));
+        minusVol.setImage(new Image(new File("src/main/resources/images/simple/minus.png").toURI().toString()));
         
         languageButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/languages.png"));
         helpButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
