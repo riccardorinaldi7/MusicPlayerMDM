@@ -236,6 +236,7 @@ public class Controller {
         alert.setTitle(resources.getString("confirmExit"));
         ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
         
+        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/exit32.png")));
         util.applyThemeToDialog(alert);
         
         Optional<ButtonType> result = alert.showAndWait();
@@ -962,7 +963,7 @@ public class Controller {
         String theme = appProps.getProperty("theme");
 
         //Creating a choice box asking for the language
-        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
+        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>(theme);
         choiceDialog.setHeaderText(resources.getString("selecttheme"));
         choiceDialog.setTitle(resources.getString("theme"));
         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
@@ -979,7 +980,7 @@ public class Controller {
         //Adding items to the language list
         list.add("Dark");
         list.add("Light");
-        list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
+        //list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
         
         // Show the dialog box and wait for a selection
         Optional<String> selectedTheme = choiceDialog.showAndWait();
@@ -995,7 +996,7 @@ public class Controller {
 	        alert.setContentText(resources.getString("restart"));
 	        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
 	        		new Image("file:src/main/resources/images/logo.png"));
-	        
+	        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/theme.png")));
 	        alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
 	        util.applyThemeToDialog(alert);
 
@@ -1032,15 +1033,6 @@ public class Controller {
         else {
 			System.out.println("User has changed his/her mind");
 		}
-    	
-    	
-
-         
-
-         
-         
-         
-         
     }
     
     // ----------------------------------------------------------------------------------------------------------------------
@@ -1066,7 +1058,7 @@ public class Controller {
         String language = appProps.getProperty("language");
 
         //Creating a choice box asking for the language
-        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
+        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>(util.returnLanguageToShow(language));
         choiceDialog.setHeaderText(resources.getString("selectlanguage"));
         choiceDialog.setTitle(resources.getString("language"));
         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
@@ -1081,7 +1073,7 @@ public class Controller {
         list.add("Italiano");
         list.add("Français");
         list.add("Español");
-        list.remove(language); //rimuovo lingua corrente affinche' non sia selezionabile
+        //list.remove(language); //rimuovo lingua corrente affinche' non sia selezionabile
         
         choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
         util.applyThemeToDialog(choiceDialog);
@@ -1100,7 +1092,7 @@ public class Controller {
 	        alert.setContentText(resources.getString("restart"));
 	        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
 	        		new Image("file:src/main/resources/images/logo.png"));
-	        
+	        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/languages.png")));
 	        alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
 	        util.applyThemeToDialog(alert);
 
@@ -1114,7 +1106,7 @@ public class Controller {
 	        if (result.get() == okButton) {	
 	        	// ... user chose "Ok" --> don't close the program now
 	        	try {
-		        	appProps.setProperty("language", language);
+	        		appProps.setProperty("language", util.returnLanguageToWrite(language));
 		            appProps.store(new FileWriter(appConfigPath), null);
 	        	} 
 		        catch (IOException e) {
@@ -1125,7 +1117,7 @@ public class Controller {
 	        else {	
 	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
 	        	try {
-		        	appProps.setProperty("language", language);
+	        		appProps.setProperty("language", util.returnLanguageToWrite(language));
 		            appProps.store(new FileWriter(appConfigPath), null);
 	        	} 
 		        catch (IOException e) {
@@ -1373,6 +1365,7 @@ public class Controller {
 
         alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
         util.applyThemeToDialog(alert);
+        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/interfaces.png")));
         
         ButtonType okButton = new ButtonType("Ok", ButtonData.OK_DONE);
         ButtonType buttonTypeCancel = new ButtonType(resources.getString("quitButton"), ButtonData.CANCEL_CLOSE);

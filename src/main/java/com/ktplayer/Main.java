@@ -115,6 +115,7 @@ public class Main extends Application {
 	        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
 
 	        alert.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
+	        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/interfaces.png")));
 	        
 	        ButtonType simpleButton = new ButtonType("Simple", ButtonData.OK_DONE);
 	        ButtonType advancedButton = new ButtonType("Advanced", ButtonData.CANCEL_CLOSE);
@@ -158,7 +159,6 @@ public class Main extends Application {
 			choiceDialog.setHeaderText("Select the language you prefer");
 			choiceDialog.setTitle("Language");
 			Image img = new Image("file:src/main/resources/images/languages.png");
-			System.out.println(img.toString());
 			choiceDialog.setGraphic(new ImageView(img));
 			choiceDialog.initStyle(StageStyle.UNDECORATED);
 			choiceDialog.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
@@ -202,9 +202,9 @@ public class Main extends Application {
 		// Set the language Bundle according to the selected language
 		Locale locale;
 		switch (language){
-			case "Italiano": locale = Locale.ITALIAN; break;
-			case "Français": locale = Locale.FRENCH; break;
-			case "Español": locale = new Locale("es", "ES"); break;
+			case "Italian": locale = Locale.ITALIAN; break;
+			case "French": locale = Locale.FRENCH; break;
+			case "Spanish": locale = new Locale("es", "ES"); break;
 			default: locale = Locale.ROOT;
 		}
 		ResourceBundle bundle = ResourceBundle.getBundle("UIText", locale);
