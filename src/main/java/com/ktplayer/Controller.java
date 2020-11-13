@@ -37,7 +37,7 @@ import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyCodeCombination;
-
+import javafx.scene.control.ButtonBar.ButtonData;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -944,70 +944,103 @@ public class Controller {
     
     @FXML
     private void themeSelection (ActionEvent event){
-    	 String rootPath = "src\\main\\resources\\";
-         String appConfigPath = rootPath + "application.properties";
+    	 
+        String rootPath = "src\\main\\resources\\";
+        String appConfigPath = rootPath + "application.properties";
 
-         Properties appProps = new Properties();
-         try {
-             appProps.load(new FileInputStream(appConfigPath));
-         }
-         catch (FileNotFoundException e) {
-             e.printStackTrace();
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
+        Properties appProps = new Properties();
+        try {
+            appProps.load(new FileInputStream(appConfigPath));
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-         // Trying to get the language setting
-         String theme = appProps.getProperty("theme");
+        // Trying to get the language setting
+        String theme = appProps.getProperty("theme");
 
-         //Creating a choice box asking for the language
-         ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
-         choiceDialog.setHeaderText(resources.getString("selecttheme"));
-         choiceDialog.setTitle(resources.getString("theme"));
-         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
-        		 new Image("file:src/main/resources/images/logo.png"));
-         Image img = new Image("file:src/main/resources/images/theme.png");
-         choiceDialog.setGraphic(new ImageView(img));
+        //Creating a choice box asking for the language
+        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>();
+        choiceDialog.setHeaderText(resources.getString("selecttheme"));
+        choiceDialog.setTitle(resources.getString("theme"));
+        ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
+       		 new Image("file:src/main/resources/images/logo.png"));
+        Image img = new Image("file:src/main/resources/images/theme.png");
+        choiceDialog.setGraphic(new ImageView(img));
+      
+        choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+        
+        util.applyThemeToDialog(choiceDialog);
 
-         //Retrieving the observable list
-         ObservableList<String> list = choiceDialog.getItems();
-         //Adding items to the language list
-         list.add("Dark");
-         list.add("Light");
-         list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
+      //Retrieving the observable list
+        ObservableList<String> list = choiceDialog.getItems();
+        //Adding items to the language list
+        list.add("Dark");
+        list.add("Light");
+        list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
+        
+        // Show the dialog box and wait for a selection
+        Optional<String> selectedTheme = choiceDialog.showAndWait();
+
+        if (selectedTheme.isPresent()) {		// Ok was pressed
+		    
+			theme = selectedTheme.get();
+			
+			//alert per dire che bisogna riavviare il programma
+	        Alert alert = new Alert(AlertType.CONFIRMATION);
+	        alert.setTitle(resources.getString("attention"));
+	        alert.setHeaderText(null);
+	        alert.setContentText(resources.getString("restart"));
+	        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
+	        		new Image("file:src/main/resources/images/logo.png"));
+	        
+	        alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+	        util.applyThemeToDialog(alert);
+
+	        ButtonType okButton = new ButtonType("Ok", ButtonData.OK_DONE);
+	        ButtonType buttonTypeCancel = new ButtonType(resources.getString("quitButton"), ButtonData.CANCEL_CLOSE);
+
+	        alert.getButtonTypes().setAll(okButton, buttonTypeCancel);
+
+	        Optional<ButtonType> result = alert.showAndWait();
+
+	        if (result.get() == okButton) {	
+	        	// ... user chose "Ok" --> don't close the program now
+	        	try {
+		        	appProps.setProperty("theme", theme);
+		            appProps.store(new FileWriter(appConfigPath), null);
+	        	} 
+		        catch (IOException e) {
+		                e.printStackTrace();
+		        }   	
+	        } 
+	        
+	        else {	
+	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
+	        	try {
+		        	appProps.setProperty("theme", theme);
+		            appProps.store(new FileWriter(appConfigPath), null);
+	        	} 
+		        catch (IOException e) {
+		                e.printStackTrace();
+		        }   
+	        	closeProgram();
+	        }
+		} 
+        else {
+			System.out.println("User has changed his/her mind");
+		}
+    	
+    	
+
          
-         choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-         
-         util.applyThemeToDialog(choiceDialog);
-         
-         
-         // Show the dialog box and wait for a selection
-         Optional<String> selectedTheme = choiceDialog.showAndWait();
 
-         try {
-        	 theme = selectedTheme.get();
-             appProps.setProperty("theme", theme);
-             appProps.store(new FileWriter(appConfigPath), null);
-
-             //alert per dire che bisogna riavviare il programma
-             Alert alert = new Alert(AlertType.WARNING);
-             alert.setTitle(resources.getString("attention"));
-             alert.setHeaderText(null);
-             alert.setContentText(resources.getString("restart"));
-             ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
-            		 new Image("file:src/main/resources/images/logo.png"));
-             
-             alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-             util.applyThemeToDialog(alert);
-             
-             alert.showAndWait();
-         } 
-         catch (IOException e) {
-             e.printStackTrace();
-         } 
-         catch (NoSuchElementException e){
-             System.out.println("User has changed his/her mind");
-         }
+         
+         
+         
+         
     }
     
     // ----------------------------------------------------------------------------------------------------------------------
@@ -1048,37 +1081,62 @@ public class Controller {
         list.add("Italiano");
         list.add("Français");
         list.add("Español");
-        list.remove(language); //rimuovo lingua corrente affinchÃ© non sia selezionabile
+        list.remove(language); //rimuovo lingua corrente affinche' non sia selezionabile
         
         choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
         util.applyThemeToDialog(choiceDialog);
         
         // Show the dialog box and wait for a selection
         Optional<String> selectedLanguage = choiceDialog.showAndWait();
+        
+        if (selectedLanguage.isPresent()) {		// Ok was pressed
+		    
+			language = selectedLanguage.get();
+			
+			//alert per dire che bisogna riavviare il programma
+	        Alert alert = new Alert(AlertType.CONFIRMATION);
+	        alert.setTitle(resources.getString("attention"));
+	        alert.setHeaderText(null);
+	        alert.setContentText(resources.getString("restart"));
+	        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
+	        		new Image("file:src/main/resources/images/logo.png"));
+	        
+	        alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+	        util.applyThemeToDialog(alert);
 
-        try {
-            language = selectedLanguage.get();
-            appProps.setProperty("language", language);
+	        ButtonType okButton = new ButtonType("Ok", ButtonData.OK_DONE);
+	        ButtonType buttonTypeCancel = new ButtonType(resources.getString("quitButton"), ButtonData.CANCEL_CLOSE);
 
-            appProps.store(new FileWriter(appConfigPath), null);
+	        alert.getButtonTypes().setAll(okButton, buttonTypeCancel);
 
-            //alert per dire che bisogna riavviare il programma
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle(resources.getString("attention"));
-            alert.setHeaderText(null);
-            alert.setContentText(resources.getString("restart"));
-            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
-            		new Image("file:src/main/resources/images/logo.png"));
-            
-            alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-            util.applyThemeToDialog(alert);
-            alert.showAndWait();
+	        Optional<ButtonType> result = alert.showAndWait();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchElementException e){
-            System.out.println("User has changed his/her mind");
-        }
+	        if (result.get() == okButton) {	
+	        	// ... user chose "Ok" --> don't close the program now
+	        	try {
+		        	appProps.setProperty("language", language);
+		            appProps.store(new FileWriter(appConfigPath), null);
+	        	} 
+		        catch (IOException e) {
+		                e.printStackTrace();
+		        }   	
+	        } 
+	        
+	        else {	
+	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
+	        	try {
+		        	appProps.setProperty("language", language);
+		            appProps.store(new FileWriter(appConfigPath), null);
+	        	} 
+		        catch (IOException e) {
+		                e.printStackTrace();
+		        }   
+	        	closeProgram();
+	        }
+		} 
+        else {
+			System.out.println("User has changed his/her mind");
+		}
     }	
     
 	// ----------------------------------------------------------------------------------------------------------------------
@@ -1289,6 +1347,63 @@ public class Controller {
     	volumeIconChanger(); 
     }
     
+    @FXML
+    public void simplifyInteface(ActionEvent actionEvent) {
+        String rootPath = "src\\main\\resources\\";
+        String appConfigPath = rootPath + "application.properties";
+
+        Properties appProps = new Properties();
+        try {
+            appProps.load(new FileInputStream(appConfigPath));
+        }
+        catch (IOException e) {
+        	e.printStackTrace();
+        } 
+        catch (NoSuchElementException e){
+        	System.out.println("User has changed his/her mind");
+        }
+
+        //alert per dire che bisogna riavviare il programma
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle(resources.getString("attention"));
+        alert.setHeaderText(null);
+        alert.setContentText(resources.getString("restart"));
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
+                new Image("file:src/main/resources/images/logo.png"));
+
+        alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+        util.applyThemeToDialog(alert);
+        
+        ButtonType okButton = new ButtonType("Ok", ButtonData.OK_DONE);
+        ButtonType buttonTypeCancel = new ButtonType(resources.getString("quitButton"), ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(okButton, buttonTypeCancel);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == okButton) {	
+        	// ... user chose "Ok" --> don't close the program now
+        	try {
+        		appProps.setProperty("interface", "Simple");
+                appProps.store(new FileWriter(appConfigPath), null);
+        	} 
+            catch (IOException e) {
+                    e.printStackTrace();
+            }   	
+        } 
+        
+        else {	
+        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
+        	try {
+        		appProps.setProperty("interface", "Simple");
+                appProps.store(new FileWriter(appConfigPath), null);
+        	} 
+            catch (IOException e) {
+                    e.printStackTrace();
+            }   
+        	closeProgram();
+        }  
+    }
+    
     // ----------------------------------------------------------------------------------------------------------------------
     // METHODS FOR GRAPHICS AND ICONS
     // ----------------------------------------------------------------------------------------------------------------------
@@ -1303,10 +1418,10 @@ public class Controller {
         Tooltip.install(pauseButton, 		new Tooltip(resources.getString("tt_pausebutton")));
         Tooltip.install(nextSongButton, 	new Tooltip(resources.getString("tt_nextsong")));
         Tooltip.install(previousSongButton, new Tooltip(resources.getString("tt_previoussong")));
-        Tooltip.install(volumePane, 		new Tooltip(resources.getString("tt_volumepane")));
+        Tooltip.install(volumeSlider, 		new Tooltip(resources.getString("tt_volumepane")));
         Tooltip.install(showPlaylist, 		new Tooltip(resources.getString("tt_playlist")));
         Tooltip.install(folderChooser, 		new Tooltip(resources.getString("tt_folder")));
-        
+
         //in alto a dx
         Tooltip.install(minimize, 		new Tooltip(resources.getString("tt_minimize")));
         //Tooltip.install(maximize, 		new Tooltip(resources.getString("tt_maximize")));
@@ -1461,7 +1576,8 @@ public class Controller {
     private void addShortcutsMenubar() {
     	previous_menu.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
     	next_menu.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN));
-    	playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
+    	//playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
+    	playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.SPACE));
     	
     	language_menu.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
     	openfile_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
@@ -1481,37 +1597,6 @@ public class Controller {
     	//fullscreen_menu.setAccelerator(new KeyCodeCombination(KeyCode.F11, KeyCombination.ALT_DOWN));
     	minimize_menu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
     	preview_menu.setAccelerator(new KeyCodeCombination(KeyCode.F1, KeyCombination.CONTROL_DOWN));	//help
-    }
-
-    @FXML
-    public void simplifyInteface(ActionEvent actionEvent) {
-        String rootPath = "src\\main\\resources\\";
-        String appConfigPath = rootPath + "application.properties";
-
-        Properties appProps = new Properties();
-        try {
-
-            appProps.load(new FileInputStream(appConfigPath));
-            appProps.setProperty("interface", "Simple");
-            appProps.store(new FileWriter(appConfigPath), null);
-
-            //alert per dire che bisogna riavviare il programma
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle(resources.getString("attention"));
-            alert.setHeaderText(null);
-            alert.setContentText(resources.getString("restart"));
-            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
-                    new Image("file:src/main/resources/images/logo.png"));
-
-            alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
-            util.applyThemeToDialog(alert);
-            alert.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchElementException e){
-            System.out.println("User has changed his/her mind");
-        }
     }
 
     public void shortcutsDialog(ActionEvent actionEvent) {

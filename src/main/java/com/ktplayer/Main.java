@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -42,6 +43,7 @@ public class Main extends Application {
 	public Main() {}
 
 	public void start(Stage primaryStage) throws Exception {
+	
 		setStage(primaryStage);
 
 		String rootPath = "src\\main\\resources\\";
@@ -107,19 +109,24 @@ public class Main extends Application {
 
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setHeaderText(null);
-			alert.setContentText("If you prefer a Simplified Interface, press OK");
+			alert.setContentText("Please, choose an interface");
 			alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
 	        alert.setTitle("Interface");
 	        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+
+	        alert.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
 	        
-	        
+	        ButtonType simpleButton = new ButtonType("Simple", ButtonData.OK_DONE);
+	        ButtonType advancedButton = new ButtonType("Advanced", ButtonData.CANCEL_CLOSE);
+	        alert.getButtonTypes().setAll(simpleButton, advancedButton);
+
 			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == ButtonType.OK){
-				// user chose OK
-			    interfaceType = "Simple";
-			} 
-			else {
-			    // user chose CANCEL
+			if (result.get() == simpleButton) {	
+	        	// ... user chose "SIMPLE"
+				interfaceType = "Simple";
+	        } 
+	        else {	
+	        	// ... user chose "ADVANCED" 
 				interfaceType = "Advanced";
 			}
 			
@@ -154,6 +161,7 @@ public class Main extends Application {
 			System.out.println(img.toString());
 			choiceDialog.setGraphic(new ImageView(img));
 			choiceDialog.initStyle(StageStyle.UNDECORATED);
+			choiceDialog.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
 			
 			//Retrieving the observable list
 			ObservableList<String> list = choiceDialog.getItems();
@@ -226,7 +234,7 @@ public class Main extends Application {
 			System.out.println(img.toString());
 			choiceDialog.setGraphic(new ImageView(img));
 			choiceDialog.initStyle(StageStyle.UNDECORATED);
-			
+			choiceDialog.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
 			//Retrieving the observable list
 			ObservableList<String> list = choiceDialog.getItems();
 			//Adding items to the language list

@@ -294,6 +294,7 @@ public class ControllerSimple {
 
     }
 
+    //choose multiple files
     private void chooseFile() {
         FileChooser chooser = new FileChooser();
         List<File> selectedFilesList = chooser.showOpenMultipleDialog(stage);
@@ -920,105 +921,34 @@ public class ControllerSimple {
     
     private void insertToolTips() {
         //SIGNATURE: Tooltip.install(imageView, tooltip);
-        
     	Tooltip.install(playButton, 		new Tooltip(resources.getString("tt_playbutton")));
         Tooltip.install(pauseButton, 		new Tooltip(resources.getString("tt_pausebutton")));
         Tooltip.install(nextSongButton, 	new Tooltip(resources.getString("tt_nextsong")));
         Tooltip.install(previousSongButton, new Tooltip(resources.getString("tt_previoussong")));
         
         //in alto a dx
-        Tooltip.install(minimize, 		new Tooltip(resources.getString("tt_minimize")));
-        Tooltip.install(exit, 		new Tooltip(resources.getString("tt_exit")));
+        Tooltip.install(minimize, 			new Tooltip(resources.getString("tt_minimize")));
+        Tooltip.install(exit, 				new Tooltip(resources.getString("tt_exit")));
+        
+        //4 bottoni in alto
+        Tooltip.install(languageButton, 		new Tooltip(resources.getString("tt_language")));
+        Tooltip.install(themeButton, 		new Tooltip(resources.getString("tt_theme")));
+        Tooltip.install(helpButton, 		new Tooltip(resources.getString("tt_help")));
+        Tooltip.install(interfaceButton, 		new Tooltip(resources.getString("tt_interface")));
+        
+        //3 bottoni tondi
+        Tooltip.install(exitProgramButton, 		new Tooltip(resources.getString("tt_exit")));
+        Tooltip.install(removeButton, 		new Tooltip(resources.getString("tt_removesong")));
+        Tooltip.install(addButton, 		new Tooltip(resources.getString("tt_addsongs")));
+        
+        //volume
+        Tooltip.install(minusVol, 		new Tooltip(resources.getString("tt_decrvol")));
+        Tooltip.install(plusVol, 		new Tooltip(resources.getString("tt_incrvol")));
+        Tooltip.install(muteIcon, 		new Tooltip(resources.getString("tt_muted")));
+        Tooltip.install(volumeIcon, 		new Tooltip(resources.getString("tt_volumepane")));       
+        
     }
 
-    /*//---------------------------------------------------------------------------------------------------------
-    // 2 buttons on the title bar: minimize windows, quit the program
-    //---------------------------------------------------------------------------------------------------------
-    
-    @FXML
-    private Pane exit;
-    @FXML
-    private Pane minimize;
-    
-    @FXML
-    private ImageView exit_icon;
-    @FXML
-    private ImageView minimize_icon;
-    
-    //---------------------------------------------------------------------------------------------------------
-    // 4 buttons on top: Language, Theme, Interface, Help
-    //---------------------------------------------------------------------------------------------------------
-    
-    @FXML
-    private Button languageButton;
-    @FXML
-    private Button themeButton;
-    @FXML
-    private Button helpButton;
-    @FXML
-    private Button interfaceButton;
-    
-    //---------------------------------------------------------------------------------------------------------
-    // 3 buttons under label "Music Player": Add song, Remove song, Quit the program
-    //---------------------------------------------------------------------------------------------------------
-    
-    @FXML
-    private ImageView exitProgramButton;
-    @FXML
-    private ImageView removeButton;
-    @FXML
-    private ImageView addButton;
-
-    //---------------------------------------------------------------------------------------------------------
-    // Pane with songTable
-    //---------------------------------------------------------------------------------------------------------
-    
-    @FXML
-    private TableView<Song> songTable;
-    @FXML
-    private TableColumn<Song, String> idColumn;
-    @FXML
-    private TableColumn<Song, String> artistNameColumn;
-    @FXML
-    private TableColumn<Song, String> songNameColumn;
-
-    //---------------------------------------------------------------------------------------------------------
-    // Pane with song name and artist playing
-    //---------------------------------------------------------------------------------------------------------
-    
-    @FXML
-    private Label artistName;
-    @FXML
-    private Label songName;
-
-    //---------------------------------------------------------------------------------------------------------
-    // Right panel for volume
-    //---------------------------------------------------------------------------------------------------------
-    @FXML
-    private Label volumeValue;
-    @FXML
-    private ImageView minusVol;
-    @FXML
-    private ImageView plusVol;
-    @FXML
-    private ImageView muteIcon;
-    @FXML
-    private ImageView volumeIcon;
-    
-    //---------------------------------------------------------------------------------------------------------
-    // Left panel with 3 buttons: previous song, play/pause, next song
-    //---------------------------------------------------------------------------------------------------------
-    
-    @FXML
-    private ImageView playButton;
-    @FXML
-    private ImageView pauseButton;
-    @FXML
-    private ImageView nextSongButton;
-	@FXML
-    private ImageView previousSongButton;
-     */
-    
     //----------------------
     // ICONS FOR THEMES
     //----------------------
