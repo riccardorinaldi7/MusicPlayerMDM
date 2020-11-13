@@ -7,9 +7,7 @@ A very simple music player
 - [ ] Aggiungere 4-5 canzoni al progetto con tutti i metatag
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
 - [ ] Agganciare tutorial a "How to use" sia Simple che Advanced
-- [ ] Mettere valori di default nelle choices dialog
 - [ ] Aggiungere traduzione a dialog degli shortcuts
-- [ ] Completare tabella degli shortcuts
 
 ---
 
@@ -49,6 +47,8 @@ A very simple music player
 - [X] Aggiungere ai messagi di riavvio un pulsante "chiudi programma"
 - [X] Finestra conferma quando cambio tema
 - [X] Mettere i puntini dove apre una dialog
+- [X] Mettere valori di default nelle choices dialog
+- [X] Completare tabella degli shortcuts
 
 #### ToDo Simple Interface
 - [X] Bottone -
