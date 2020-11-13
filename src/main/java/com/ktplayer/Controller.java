@@ -1010,7 +1010,7 @@ public class Controller {
 	        if (result.get() == okButton) {	
 	        	// ... user chose "Ok" --> don't close the program now
 	        	try {
-		        	appProps.setProperty("theme", theme);
+	        		appProps.setProperty("theme", util.returnThemeToWrite(theme));
 		            appProps.store(new FileWriter(appConfigPath), null);
 	        	} 
 		        catch (IOException e) {
@@ -1021,7 +1021,7 @@ public class Controller {
 	        else {	
 	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
 	        	try {
-		        	appProps.setProperty("theme", theme);
+	        		appProps.setProperty("theme", util.returnThemeToWrite(theme));
 		            appProps.store(new FileWriter(appConfigPath), null);
 	        	} 
 		        catch (IOException e) {
@@ -1567,41 +1567,61 @@ public class Controller {
     // ----------------------------------------------------------------------------------------------------------------------
     
     private void addShortcutsMenubar() {
-    	previous_menu.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
-    	next_menu.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN));
+    	//SHORTCUT_DOWN vs CONTROL_DOWN --> Control is only for Windows, Shortcut is platform independent
+    	
+    	previous_menu.setAccelerator(new KeyCodeCombination(KeyCode.R));
+    	next_menu.setAccelerator(new KeyCodeCombination(KeyCode.F));
     	//playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
     	playpause_menu.setAccelerator(new KeyCodeCombination(KeyCode.SPACE));
     	
-    	language_menu.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
-    	openfile_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
-    	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN));
-    	exit_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));			//quit
-    	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN));
-    	removefiles_menu.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));	//cut selected
+    	language_menu.setAccelerator(new KeyCodeCombination(KeyCode.L));
+    	openfile_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
+    	openfolder_menu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN));
+    	exit_menu.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN));			//quit
+    	close_menu.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN));
+    	removefiles_menu.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN));	//cut selected
     	
-    	//decrVol.setAccelerator(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.CONTROL_DOWN));		//- not in numpad
-    	//incrVol.setAccelerator(new KeyCodeCombination(KeyCode.PLUS, KeyCombination.CONTROL_DOWN));		//+ not in numpad
-    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.SUBTRACT, KeyCombination.CONTROL_DOWN)); 		//- in numpad
-    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.ADD, KeyCombination.CONTROL_DOWN));			//+ in numpad
-    	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0, KeyCombination.CONTROL_DOWN));
-
+    	//decrVol.setAccelerator(new KeyCodeCombination(KeyCode.MINUS));	//- not in numpad
+    	//incrVol.setAccelerator(new KeyCodeCombination(KeyCode.PLUS));		//+ not in numpad
+    	decrVol.setAccelerator(new KeyCodeCombination(KeyCode.SUBTRACT)); 	//- in numpad
+    	incrVol.setAccelerator(new KeyCodeCombination(KeyCode.ADD));		//+ in numpad
+    	muteVol.setAccelerator(new KeyCodeCombination(KeyCode.NUMPAD0));
     	theme_menu.setAccelerator(new KeyCodeCombination(KeyCode.T));
     	
     	//fullscreen_menu.setAccelerator(new KeyCodeCombination(KeyCode.F11, KeyCombination.ALT_DOWN));
-    	minimize_menu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
-    	preview_menu.setAccelerator(new KeyCodeCombination(KeyCode.F1, KeyCombination.CONTROL_DOWN));	//help
+    	minimize_menu.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.SHORTCUT_DOWN));
+    	menuInterface.setAccelerator(new KeyCodeCombination(KeyCode.I));
+    	preview_menu.setAccelerator(new KeyCodeCombination(KeyCode.F1, KeyCombination.SHORTCUT_DOWN));	//help
     }
 
     public void shortcutsDialog(ActionEvent actionEvent) {
+    	
+    	System.out.println(System.getProperty("os.name"));
+    	
         DialogPane dialogPane = new DialogPane();
-        dialogPane.setHeaderText("These are the shortcuts available in the WG Player");
+        dialogPane.setHeaderText(resources.getString("sc_shortcuts"));
 
         TableView<Shortcut> table = new TableView<Shortcut>();
+      
         final ObservableList<Shortcut> data = FXCollections.observableArrayList(
-                new Shortcut("CTRL + O", "Add music to the current list"),
-                new Shortcut("SHIFT + CTRL + O", "Add all music in the selected folder to the current list"),
-                new Shortcut("CTRL + Q", "Chiudi WG Player")
+                new Shortcut("CTRL + O", resources.getString("sc_openfiles")),
+                new Shortcut("CTRL + SHIFT + O", resources.getString("tt_folder")),
+                new Shortcut("CTRL + X", resources.getString("tt_removesong")),
+                new Shortcut("CTRL + W", resources.getString("sc_closeplaylist")),
+                new Shortcut("CTRL + Q", resources.getString("sc_exit")),
+                new Shortcut("SPACE", resources.getString("sc_playpause")),
+                new Shortcut("F", resources.getString("tt_nextsong")),
+                new Shortcut("R", resources.getString("tt_previoussong")),
+                new Shortcut("-", resources.getString("tt_decrvol")),
+                new Shortcut("+", resources.getString("tt_incrvol")),
+                new Shortcut("0", resources.getString("sc_zerovol")),
+                new Shortcut("CTRL + M", resources.getString("tt_minimize")),
+                new Shortcut("T", resources.getString("sc_theme")),
+                new Shortcut("L", resources.getString("sc_language")),
+                new Shortcut("I", resources.getString("sc_interface")),
+                new Shortcut("CTRL + F1", resources.getString("sc_help"))
         );
+      
         table.setEditable(false);
         TableColumn shortcutColumn = new TableColumn("Shortcut");
         shortcutColumn.setMinWidth(100);

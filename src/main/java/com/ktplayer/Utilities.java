@@ -85,7 +85,7 @@ public class Utilities {
 	//return Dark or Light
 	public String returnThemeToWrite (String theme) {
 		
-		if (theme.equals("Light") || theme.equals("Claro") || theme.equals("Clair") || theme.equals("Chiaro"))
+		if (theme.equalsIgnoreCase("Light") || theme.equalsIgnoreCase("Claro") || theme.equalsIgnoreCase("Clair") || theme.equalsIgnoreCase("Chiaro"))
 			return "Light";
 		else
 			return "Dark";	
