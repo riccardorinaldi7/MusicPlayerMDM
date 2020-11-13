@@ -2,19 +2,19 @@
 A very simple music player
 
 ## ToDo List
-- [ ] Finestra conferma quando cambio tema
+
 - [ ] Sistemare posizione copertina album
 - [ ] Aggiungere 4-5 canzoni al progetto con tutti i metatag
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
 - [ ] Agganciare tutorial a "How to use" sia Simple che Advanced
-- [ ] mettere i puntini dove apre una dialog
-- [ ] mettere valori di default nelle choices dialog
-- [ ] aggiungere traduzione a dialog degli shortcuts
-- [ ] completare tabella degli shortcuts
-- [ ] Aggiungere ai messagi di riavvio un pulsante "chiudi programma"
+- [ ] Mettere valori di default nelle choices dialog
+- [ ] Aggiungere traduzione a dialog degli shortcuts
+- [ ] Completare tabella degli shortcuts
+
 ---
 
 ## Done List
+
 - [X] Visualizzazione copertina album
 - [X] "Add file..." &rarr; implementare come append
 - [X] "Add files from folder..." &rarr; modificare in modo che faccia append e non sostituisci
@@ -46,6 +46,9 @@ A very simple music player
 - [X] Realizzare interfaccia base seguendo design visto insieme con Paint
 - [X] Implementare azione "previous song" (attualmente fa solo ripartire la canzone suonata)
 - [X] Fare finestre di conferma per ogni azione
+- [X] Aggiungere ai messagi di riavvio un pulsante "chiudi programma"
+- [X] Finestra conferma quando cambio tema
+- [X] Mettere i puntini dove apre una dialog
 
 #### ToDo Simple Interface
 - [X] Bottone -
