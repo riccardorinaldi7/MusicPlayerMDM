@@ -963,7 +963,7 @@ public class Controller {
         String theme = appProps.getProperty("theme");
 
         //Creating a choice box asking for the language
-        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>(theme);
+        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>(resources.getString(theme.toLowerCase()));
         choiceDialog.setHeaderText(resources.getString("selecttheme"));
         choiceDialog.setTitle(resources.getString("theme"));
         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
@@ -978,8 +978,8 @@ public class Controller {
       //Retrieving the observable list
         ObservableList<String> list = choiceDialog.getItems();
         //Adding items to the language list
-        list.add("Dark");
-        list.add("Light");
+        list.add(resources.getString("dark"));
+        list.add(resources.getString("light"));
         //list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
         
         // Show the dialog box and wait for a selection

@@ -137,6 +137,7 @@ public class ControllerSimple {
 	//---------------------------------------------------------------------------------------------------------
     
     private String currentTheme;
+    private String currentLanguage;
     private Boolean currentlyMuted = false;
     private Double volumeBeforeMute = 0.00;
     private Utilities util;
@@ -174,6 +175,7 @@ public class ControllerSimple {
         stage.getIcons().add(new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
         util = new Utilities();
         currentTheme = util.getCurrentTheme();
+        currentLanguage = util.getCurrentLanguage();
     }
 
     //---------------------------------------------------------------------------------------------------------
@@ -550,7 +552,7 @@ public class ControllerSimple {
         String theme = appProps.getProperty("theme");
 
         //Creating a choice box asking for the language
-        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>(theme);
+        ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>(resources.getString(theme.toLowerCase()));
         choiceDialog.setHeaderText(resources.getString("selecttheme"));
         choiceDialog.setTitle(resources.getString("theme"));
         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
@@ -565,8 +567,8 @@ public class ControllerSimple {
       //Retrieving the observable list
         ObservableList<String> list = choiceDialog.getItems();
         //Adding items to the language list
-        list.add("Dark");
-        list.add("Light");
+        list.add(resources.getString("dark"));
+        list.add(resources.getString("light"));
         //list.remove(theme); //rimuovo tema corrente affinche' non sia selezionabile
         
         // Show the dialog box and wait for a selection
@@ -597,7 +599,7 @@ public class ControllerSimple {
 	        if (result.get() == okButton) {	
 	        	// ... user chose "Ok" --> don't close the program now
 	        	try {
-		        	appProps.setProperty("theme", theme);
+		        	appProps.setProperty("theme", util.returnThemeToWrite(theme));
 		            appProps.store(new FileWriter(appConfigPath), null);
 	        	} 
 		        catch (IOException e) {
@@ -608,7 +610,7 @@ public class ControllerSimple {
 	        else {	
 	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
 	        	try {
-	        		appProps.setProperty("theme", theme);
+	        		appProps.setProperty("theme", util.returnThemeToWrite(theme));
 		            appProps.store(new FileWriter(appConfigPath), null);
 	        	} 
 		        catch (IOException e) {

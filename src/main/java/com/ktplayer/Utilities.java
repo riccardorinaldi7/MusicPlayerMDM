@@ -13,12 +13,12 @@ public class Utilities {
 
 	private String currentTheme;
 	private String currentInterface;
-	@FXML
-    private ResourceBundle resources ;
+	private String currentLanguage;
 	
 	public Utilities() {
 		currentTheme = readProperty("theme");
 		currentInterface = readProperty("interface");
+		currentLanguage = readProperty("language");
 	}
 
 	// -------------------------------------------------------------------------
@@ -82,8 +82,21 @@ public class Utilities {
 			dialog.getDialogPane().getStylesheets().add(ClassLoader.getSystemResource("big-font.css").toExternalForm());
     }
 	
+	//return Dark or Light
+	public String returnThemeToWrite (String theme) {
+		
+		if (theme.equals("Light") || theme.equals("Claro") || theme.equals("Clair") || theme.equals("Chiaro"))
+			return "Light";
+		else
+			return "Dark";	
+	}
+	
 	public String getCurrentTheme() {
 		return currentTheme;
+	}
+	
+	public String getCurrentLanguage() {
+		return currentLanguage;
 	}
 	
 	// -------------------------------------------------------------------------
