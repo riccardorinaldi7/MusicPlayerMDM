@@ -44,12 +44,12 @@
 
                <children>
                		<!-- for SplitPane to disable column resize use mouseTransparent="true"-->
-                  <SplitPane fx:id="splitpane" dividerPositions="0.6582466567607727" layoutX="207.0" layoutY="188.0" orientation="VERTICAL" prefHeight="400.0" prefWidth="160.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane fx:id="splitpane" dividerPositions="0.6582466567607727" layoutX="207.0" layoutY="188.0" orientation="VERTICAL" prefHeight="350.0" prefWidth="160.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
                         <AnchorPane fx:id="paneTable" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
 
                            <children>
-                              <TableView fx:id="songTable" layoutX="199.0" layoutY="85.0" prefHeight="200.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TableView fx:id="songTable" layoutX="199.0" layoutY="85.0" prefHeight="150.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <columns>
                                     <TableColumn fx:id="idColumn" prefWidth="45.0" text="ID">
                                        <styleClass>
@@ -114,7 +114,7 @@
 					</items>
                   </SplitPane>
                   
-                  <AnchorPane fx:id="paneUnderTable" minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="400.0" BorderPane.alignment="CENTER">
+                  <AnchorPane fx:id="paneUnderTable" minHeight="0.0" minWidth="0.0" prefHeight="350.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="350.0" BorderPane.alignment="CENTER">
                            <children>
                               <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="118.0" prefWidth="598.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                  <children>
@@ -137,31 +137,31 @@
                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
 
                                        <children>
-                                          <Label fx:id="currentDuration" layoutX="14.0" layoutY="16.0" text="00:00" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="0.0">
+                                          <Label fx:id="currentDuration" layoutX="14.0" layoutY="16.0" text="00:00" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="0.0">
                                              <font> <Font name="Berlin Sans FB" size="17.0" /> </font>
                                           </Label>
 
-                                          <ImageView fx:id="playButton" accessibleRole="BUTTON" fitHeight="40.0" fitWidth="40.0" layoutX="285.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="285.0" AnchorPane.rightAnchor="284.0" AnchorPane.topAnchor="10.0">
+                                          <ImageView fx:id="playButton" accessibleRole="BUTTON" fitHeight="40.0" fitWidth="40.0" layoutX="285.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="285.0" AnchorPane.rightAnchor="284.0" AnchorPane.topAnchor="10.0">
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                              <!--<image> <Image url="@/images/play.png" /> </image>-->
                                           </ImageView>
 
-                                          <ImageView fx:id="pauseButton" fitHeight="40.0" fitWidth="40.0" layoutX="285.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="285.0" AnchorPane.rightAnchor="284.0" AnchorPane.topAnchor="10.0">
+                                          <ImageView fx:id="pauseButton" fitHeight="40.0" fitWidth="40.0" layoutX="285.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="285.0" AnchorPane.rightAnchor="284.0" AnchorPane.topAnchor="10.0">
                                              <!--<image> <Image url="@/images/pause.png" /> </image>-->
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
 
-                                          <ImageView fx:id="nextSongButton" fitHeight="30.0" fitWidth="30.0" layoutX="360.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="10.0">
+                                          <ImageView fx:id="nextSongButton" fitHeight="30.0" fitWidth="30.0" layoutX="360.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="10.0">
                                              <!--<image> <Image url="@/images/forward-arrows.png" /> </image>-->
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
 
-                                          <ImageView fx:id="previousSongButton" fitHeight="30.0" fitWidth="30.0" layoutX="179.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="10.0">
+                                          <ImageView fx:id="previousSongButton" fitHeight="30.0" fitWidth="30.0" layoutX="179.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="10.0">
                                              <!--<image> <Image url="@/images/back-arrows.png" /> </image>-->
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
 
-                                          <Label fx:id="totalDuration" alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="505.0" layoutY="16.0" prefHeight="37.0" prefWidth="79.0" text="00:00" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="505.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="0.0">
+                                          <Label fx:id="totalDuration" alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="505.0" layoutY="16.0" prefHeight="37.0" prefWidth="79.0" text="00:00" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="505.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
                                              <font> <Font name="Berlin Sans FB" size="17.0" /> </font>
                                           </Label>
                                        </children>
@@ -169,7 +169,7 @@
                                  </children>
                               </VBox>
 
-                              <HBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="168.0" prefHeight="56.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="168.0">
+                              <HBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="168.0" prefHeight="56.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="200.0">
                                  <children>
                                     <AnchorPane fx:id="volumePane" prefHeight="59.0" prefWidth="600.0">
                                        <children>
@@ -181,7 +181,7 @@
                                              <!--<image> <Image url="@/images/speaker.png" /> </image>-->
                                           </ImageView>
 
-                                          <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="50" textAlignment="CENTER">
+                                          <Label fx:id="volumeValue" layoutX="191.0" layoutY="22.0" text="100" textAlignment="CENTER">
                                              <font> <Font name="Berlin Sans FB" size="17.0" /> </font>
                                           </Label>
 											
@@ -199,7 +199,7 @@
                                  </children>
                               </HBox>
 
-                              <JFXSlider fx:id="songSlider" layoutX="14.0" layoutY="119.0" value="1.0E-4" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="100.0" />
+                              <JFXSlider fx:id="songSlider" layoutX="14.0" layoutY="119.0" value="1.0E-4" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="130.0" />
                               <Pane fx:id="imagePane" layoutY="8.0" prefHeight="105.0" prefWidth="105.0" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="8.0" />
                            </children>
                         </AnchorPane>

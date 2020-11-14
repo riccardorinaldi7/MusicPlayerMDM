@@ -843,7 +843,7 @@ public class Controller {
         final Canvas canvas = new Canvas(W, H);
         GraphicsContext ctx = canvas.getGraphicsContext2D();
         Image image = SwingFXUtils.toFXImage(img, null);
-        ctx.drawImage(image, 0, 0, W, H);
+        ctx.drawImage(image, 5, 10, W, H);
 
         imagePane.getChildren().add(new Group(canvas));
     }
@@ -1596,11 +1596,12 @@ public class Controller {
 
     public void shortcutsDialog(ActionEvent actionEvent) {
     	
-    	System.out.println(System.getProperty("os.name"));
+    	//System.out.println(System.getProperty("os.name"));
     	
         DialogPane dialogPane = new DialogPane();
         dialogPane.setHeaderText(resources.getString("sc_shortcuts"));
-
+        
+        util.applyThemeToDialogPane(dialogPane);
         TableView<Shortcut> table = new TableView<Shortcut>();
       
         final ObservableList<Shortcut> data = FXCollections.observableArrayList(
@@ -1623,10 +1624,10 @@ public class Controller {
         );
       
         table.setEditable(false);
-        TableColumn shortcutColumn = new TableColumn("Shortcut");
-        shortcutColumn.setMinWidth(100);
+        TableColumn shortcutColumn = new TableColumn(resources.getString("sc_colShortcut"));
+        shortcutColumn.setMinWidth(200);
         shortcutColumn.setCellValueFactory(new PropertyValueFactory<Shortcut, String>("shortcut"));
-        TableColumn descriptionColumn = new TableColumn("Description");
+        TableColumn descriptionColumn = new TableColumn(resources.getString("sc_colDescr"));
         descriptionColumn.setMinWidth(400);
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<Shortcut, String>("description"));
 
@@ -1635,7 +1636,7 @@ public class Controller {
         dialogPane.setContent(new Group(table));
 
         Dialog<DialogPane> dialog = new Dialog();
-        dialog.setTitle("Shortcuts");
+        dialog.setTitle(resources.getString("shortcuts"));
         dialog.setDialogPane(dialogPane);
         ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
 

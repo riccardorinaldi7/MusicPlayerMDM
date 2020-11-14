@@ -20,10 +20,57 @@
     -fx-background-color: #737373;
 }
 
-/*
-.dialog-pane:header .header-panel .label {
-    -fx-font-style: italic;
-    -fx-font-size: 2em;
+.table-view {
+    -fx-base: #4d4d4d;
+    -fx-control-inner-background: #4d4d4d;
+    -fx-background-color: #4d4d4d;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 0;
+    -fx-font-size: 12pt; 	/* For advanced Interface */
 }
-*/
 
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label {
+     -fx-font-size: 12pt;  	/* For advanced Interface */
+    -fx-font-family: "Berlin Sans FB";
+    -fx-font-weight: normal;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-opacity: 1;
+}
+
+.table-row-cell {
+    -fx-background-color: -fx-table-cell-border-color, #4d4d4d;
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-padding: 0.0em; /* 0 */
+    -fx-table-cell-border-color: transparent;
+}
+
+/* titoli colonne tabella */
+.table-row-cell .label {
+    -fx-background-color: -fx-table-cell-border-color, #4d4d4d;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+    -fx-alignment: center;
+    -fx-text-fill: white;
+}
+
+/* righe dispari hanno diverso colore */
+.table-row-cell:odd {
+    -fx-background-color: -fx-table-cell-border-color, #5a5a5a;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+    -fx-text-fill: #000;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #282828;
+}
+
+.table-view .scroll-bar {
+	-fx-background-color: #8c8c8c;
+}

@@ -66,6 +66,10 @@
     -fx-text-fill: #000;
 }
 
+.table-view .scroll-bar {
+	-fx-background-color: #8c8c8c;
+}
+
 .table-row-cell:selected {
     -fx-background-color: #282828;
 }
