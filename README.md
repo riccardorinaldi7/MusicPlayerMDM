@@ -3,11 +3,8 @@ A very simple music player
 
 ## ToDo List
 
-- [ ] Sistemare posizione copertina album
-- [ ] Aggiungere 4-5 canzoni al progetto con tutti i metatag
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
 - [ ] Agganciare tutorial a "How to use" sia Simple che Advanced
-- [ ] Aggiungere traduzione a dialog degli shortcuts
 
 ---
 
@@ -49,6 +46,9 @@ A very simple music player
 - [X] Mettere i puntini dove apre una dialog
 - [X] Mettere valori di default nelle choices dialog
 - [X] Completare tabella degli shortcuts
+- [X] Aggiungere traduzione a dialog degli shortcuts
+- [X] Sistemare posizione copertina album
+- [X] Aggiungere 4-5 canzoni al progetto con tutti i metatag
 
 #### ToDo Simple Interface
 - [X] Bottone -
