@@ -894,7 +894,6 @@ public class ControllerSimple {
         ID3v2 tag = mp3.getId3v2Tag();
         artistName.setText(tag.getArtist());
         songName.setText(tag.getTitle());
-
     }
 
     public void takeCare() throws Exception {

@@ -538,7 +538,8 @@ public class Controller {
                         //print("mediaView: mediaPlayer change detected...");
                         showSongInfo(newValue);
                         updateValues();
-                        drawAlbumImage(songTable.getItems().get(players.indexOf(newValue)));
+                        if(newValue !=  null) drawAlbumImage(songTable.getItems().get(players.indexOf(newValue)));
+                        else removeAlbumImage();
                     }
                     catch(IOException e) {}
                     catch(UnsupportedTagException e) {}
@@ -846,6 +847,11 @@ public class Controller {
         ctx.drawImage(image, 5, 10, W, H);
 
         imagePane.getChildren().add(new Group(canvas));
+    }
+
+    private void removeAlbumImage() {
+        ObservableList<Node> imgList = imagePane.getChildren();
+        if(!imgList.isEmpty()) imgList.removeAll(imgList);
     }
 
     private void repeatSongs(){
