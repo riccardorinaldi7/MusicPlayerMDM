@@ -3,6 +3,7 @@ package com.ktplayer;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -111,12 +112,15 @@ public class Utilities {
 		return currentLanguage;
 	}
 	
+
+	
 	// -------------------------------------------------------------------------
 	//    PRIVATE METHODS
 	// -------------------------------------------------------------------------
 	
     private String readProperty(String property) {
-	   	 String rootPath = "src\\main\\resources\\";
+	  
+    	String rootPath = "src\\main\\resources\\";
 	     String appConfigPath = rootPath + "application.properties";
 	
 	     Properties appProps = new Properties();

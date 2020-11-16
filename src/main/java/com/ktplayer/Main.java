@@ -40,6 +40,7 @@ public class Main extends Application {
 	private String defaultLanguage = "English";
 	private String defaultTheme = "Light";
 	
+	
 	public Main() {}
 
 	public void start(Stage primaryStage) throws Exception {
@@ -78,6 +79,7 @@ public class Main extends Application {
 			Controller controller = fxmlLoader.getController(); 
 			System.out.println("Advanced Interface");
 			controller.setMain(this);
+			
 		}
 		
 		Scene scene = new Scene(root, 820, 740);

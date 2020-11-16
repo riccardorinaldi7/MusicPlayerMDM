@@ -29,11 +29,14 @@ import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -686,6 +689,16 @@ public class ControllerSimple {
     @FXML
     private void helpClicked() {
     	System.out.println("See the tutorial...");
+    	Desktop desktop = Desktop.getDesktop();
+		try {
+			desktop.browse(new URI("https://www.youtube.com/watch?v=ANbDIIsi5Pg&t=3s"));
+		} 
+		catch (IOException e1) {
+			e1.printStackTrace();
+		} 
+		catch (URISyntaxException e1) {					
+			e1.printStackTrace();
+		}
     }
     
     //---------------------------------------------------------------------------------------------------------

@@ -38,12 +38,16 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.control.ButtonBar.ButtonData;
+
+import java.awt.Desktop;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -1271,6 +1275,22 @@ public class Controller {
 				alert.showAndWait();
 			}
 		});
+		
+		preview_menu.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				Desktop desktop = Desktop.getDesktop();
+				try {
+					desktop.browse(new URI("https://www.youtube.com/watch?v=ANbDIIsi5Pg&t=3s"));
+				} 
+				catch (IOException e1) {
+					e1.printStackTrace();
+				} 
+				catch (URISyntaxException e1) {					
+					e1.printStackTrace();
+				}
+			}
+		});
+
     }
 
     private void playPreviousSong() {
@@ -1654,4 +1674,7 @@ public class Controller {
         });
         dialog.show();
     }
+    
+
+    
 }
