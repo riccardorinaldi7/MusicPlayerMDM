@@ -36,7 +36,6 @@ public class Main extends Application {
 	private String fxmlName = "ktPlayer.fxml"; //default
 	private String fxmlName_simpleInterface = "ktPlayerSimple.fxml";
 	private Properties appProps;
-	private String appConfigPath;
 	private String defaultLanguage = "English";
 	private String defaultTheme = "Light";
 	
@@ -47,11 +46,8 @@ public class Main extends Application {
 	
 		setStage(primaryStage);
 
-		String rootPath = "src\\main\\resources\\";
-		appConfigPath = rootPath + "application.properties";
-
 		appProps = new Properties();
-		appProps.load(new FileInputStream(appConfigPath));
+		appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
 
 		//language selection
 		ResourceBundle bundle = handleLanguageSelection();
@@ -73,7 +69,7 @@ public class Main extends Application {
 		}
 		//LOAD XML FILE per INTERFACCIA AVANZATA
 		else if (interfaceType.equals("Advanced" )) {
-			
+
 			FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName), bundle);
 			root =(Parent) fxmlLoader.load();
 			Controller controller = fxmlLoader.getController(); 
@@ -81,7 +77,7 @@ public class Main extends Application {
 			controller.setMain(this);
 			
 		}
-		
+
 		Scene scene = new Scene(root, 820, 740);
 		//scene.getStylesheets().add(ClassLoader.getSystemResource("LightTheme.css").toExternalForm());
 		scene.getStylesheets().add(ClassLoader.getSystemResource(nameCssToLoad).toExternalForm());
@@ -135,7 +131,7 @@ public class Main extends Application {
 			
 			appProps.setProperty("interface", interfaceType);
 			try {
-				appProps.store(new FileWriter(appConfigPath), null);
+				appProps.store(new FileWriter(ClassLoader.getSystemResource("application.properties").toExternalForm()), null);
 			} 
 			catch (IOException e) {
 				e.printStackTrace();
@@ -181,7 +177,7 @@ public class Main extends Application {
 				language = selectedLanguage.get();
 				appProps.setProperty("language", Utilities.returnLanguageToWrite(language));
 				try {
-					appProps.store(new FileWriter(appConfigPath), null);
+					appProps.store(new FileWriter(ClassLoader.getSystemResource("application.properties").toExternalForm()), null);
 				} 
 				catch (IOException e) {
 					e.printStackTrace();
@@ -191,7 +187,7 @@ public class Main extends Application {
 				language = defaultLanguage;
 				appProps.setProperty("language", Utilities.returnLanguageToWrite(defaultLanguage));
 				try {
-					appProps.store(new FileWriter(appConfigPath), null);
+					appProps.store(new FileWriter(ClassLoader.getSystemResource("application.properties").toExternalForm()), null);
 				} 
 				catch (IOException e) {
 					e.printStackTrace();
@@ -209,8 +205,7 @@ public class Main extends Application {
 			case "Spanish": locale = new Locale("es", "ES"); break;
 			default: locale = Locale.ROOT;
 		}
-		ResourceBundle bundle = ResourceBundle.getBundle("UIText", locale);
-		return bundle;
+		return ResourceBundle.getBundle("UIText", locale);
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -252,7 +247,7 @@ public class Main extends Application {
 
 				appProps.setProperty("theme", Utilities.returnThemeToWrite(theme));
 				try {
-					appProps.store(new FileWriter(appConfigPath), null);
+					appProps.store(new FileWriter(ClassLoader.getSystemResource("application.properties").toExternalForm()), null);
 				} 
 				catch (IOException e) {
 					e.printStackTrace();
@@ -262,7 +257,7 @@ public class Main extends Application {
 				theme = defaultTheme;
 				appProps.setProperty("theme", Utilities.returnThemeToWrite(theme));
 				try {
-					appProps.store(new FileWriter(appConfigPath), null);
+					appProps.store(new FileWriter(ClassLoader.getSystemResource("application.properties").toExternalForm()), null);
 				} 
 				catch (IOException e) {
 					e.printStackTrace();

@@ -1489,8 +1489,8 @@ public class Controller {
     private void setIconsForDarkTheme() {
     	
     	//Icons for the main window
-    	
-    	exit_icon.setImage(new Image(new File("src/main/resources/images/cancelw.png").toURI().toString()));
+    	//TODO: sistemare accesso icone come esempio in prima riga. La cartella "resources" è considerata root
+    	exit_icon.setImage(new Image(ClassLoader.getSystemResource("images/cancelw.png").toExternalForm()));
         minimize_icon.setImage(new Image(new File("src/main/resources/images/minimizew.png").toURI().toString()));
         folderChooser.setImage(new Image(new File("src/main/resources/images/music-folderw.png").toURI().toString()));
         
@@ -1540,7 +1540,7 @@ public class Controller {
 	private void setIconsForLightTheme() {
     	
 		//Icons for the main window
-		
+		//TODO: sistemare accesso risorse
 		exit_icon.setImage(new Image(new File("src/main/resources/images/cancel.png").toURI().toString()));
 		minimize_icon.setImage(new Image(new File("src/main/resources/images/minimize.png").toURI().toString()));
 		folderChooser.setImage(new Image(new File("src/main/resources/images/music-folder.png").toURI().toString()));

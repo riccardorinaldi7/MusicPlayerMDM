@@ -1056,7 +1056,7 @@ public class ControllerSimple {
     }
     
     private void setIconsForDarkTheme() {
-    	
+    	//TODO: sistemare accesso risorse
     	exit_icon.setImage(new Image(new File("src/main/resources/images/cancelw.png").toURI().toString()));
         minimize_icon.setImage(new Image(new File("src/main/resources/images/minimizew.png").toURI().toString()));
    
@@ -1081,7 +1081,7 @@ public class ControllerSimple {
 	}
 
 	private void setIconsForLightTheme() {
-    	
+    	//TODO: sistemare accesso risorse
 		exit_icon.setImage(new Image(new File("src/main/resources/images/cancel.png").toURI().toString()));
 		minimize_icon.setImage(new Image(new File("src/main/resources/images/minimize.png").toURI().toString()));
 
