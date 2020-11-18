@@ -179,7 +179,7 @@ public class Main extends Application {
 			if (selectedLanguage.isPresent()) {
 			    // ok was pressed
 				language = selectedLanguage.get();
-				appProps.setProperty("language", language);
+				appProps.setProperty("language", Utilities.returnLanguageToWrite(language));
 				try {
 					appProps.store(new FileWriter(appConfigPath), null);
 				} 
@@ -189,7 +189,7 @@ public class Main extends Application {
 			} else {
 			    // cancel might have been pressed --> default language = English
 				language = defaultLanguage;
-				appProps.setProperty("language", defaultLanguage);
+				appProps.setProperty("language", Utilities.returnLanguageToWrite(defaultLanguage));
 				try {
 					appProps.store(new FileWriter(appConfigPath), null);
 				} 
@@ -203,7 +203,7 @@ public class Main extends Application {
 
 		// Set the language Bundle according to the selected language
 		Locale locale;
-		switch (language){
+		switch (Utilities.returnLanguageToWrite(language)){
 			case "Italian": locale = Locale.ITALIAN; break;
 			case "French": locale = Locale.FRENCH; break;
 			case "Spanish": locale = new Locale("es", "ES"); break;
@@ -250,7 +250,7 @@ public class Main extends Application {
 			    // ok was pressed
 				theme = selectedTheme.get();
 
-				appProps.setProperty("theme", theme);
+				appProps.setProperty("theme", Utilities.returnThemeToWrite(theme));
 				try {
 					appProps.store(new FileWriter(appConfigPath), null);
 				} 
@@ -260,7 +260,7 @@ public class Main extends Application {
 			} else {
 			    // cancel might have been pressed --> default theme = Light
 				theme = defaultTheme;
-				appProps.setProperty("theme", theme);
+				appProps.setProperty("theme", Utilities.returnThemeToWrite(theme));
 				try {
 					appProps.store(new FileWriter(appConfigPath), null);
 				} 
