@@ -148,7 +148,8 @@ public class Main extends Application {
 	private ResourceBundle handleLanguageSelection() {
 		// Trying to get the language setting
 		String language = appProps.getProperty("language");
-
+		Locale locale;
+		
 		// If no language setting exists a dialog box is shown to the user to ask for it
 		if(language == null) {
 			
@@ -193,17 +194,26 @@ public class Main extends Application {
 					e.printStackTrace();
 				}
 			}
-			
+					
+			System.out.println("Selected language: " + language);
+			// Set the language Bundle according to the selected language
+			switch (Utilities.returnLanguageToWrite(language)){
+				case "Italian": locale = Locale.ITALIAN; break;
+				case "French": locale = Locale.FRENCH; break;
+				case "Spanish": locale = new Locale("es", "ES"); break;
+				default: locale = Locale.ROOT;
+			}
 		}
-		System.out.println("Selected language: " + language);
-
-		// Set the language Bundle according to the selected language
-		Locale locale;
-		switch (Utilities.returnLanguageToWrite(language)){
-			case "Italian": locale = Locale.ITALIAN; break;
-			case "French": locale = Locale.FRENCH; break;
-			case "Spanish": locale = new Locale("es", "ES"); break;
-			default: locale = Locale.ROOT;
+		//language != null
+		else {
+			System.out.println("Language in file: " + language);
+			// Set the language Bundle according to the selected language
+			switch (language){
+				case "Italian": locale = Locale.ITALIAN; break;
+				case "French": locale = Locale.FRENCH; break;
+				case "Spanish": locale = new Locale("es", "ES"); break;
+				default: locale = Locale.ROOT;
+			}
 		}
 		return ResourceBundle.getBundle("UIText", locale);
 	}

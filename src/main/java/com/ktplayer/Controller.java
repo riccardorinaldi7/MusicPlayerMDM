@@ -1488,9 +1488,57 @@ public class Controller {
     
     private void setIconsForDarkTheme() {
     	
-    	//Icons for the main window
-    	//TODO: sistemare accesso icone come esempio in prima riga. La cartella "resources" è considerata root
+    	//nuovi setImage
+    	//cartella "resources" è considerata root
     	exit_icon.setImage(new Image(ClassLoader.getSystemResource("images/cancelw.png").toExternalForm()));
+    	minimize_icon.setImage(new Image(ClassLoader.getSystemResource("images/minimizew.png").toExternalForm()));
+        folderChooser.setImage(new Image(ClassLoader.getSystemResource("images/music-folderw.png").toExternalForm()));
+        
+        muteIcon.setImage(new Image(ClassLoader.getSystemResource("images/speakermutew.png").toExternalForm()));
+        volumeIcon.setImage(new Image(ClassLoader.getSystemResource("images/speakerw.png").toExternalForm()));
+        previousSongButton.setImage(new Image(ClassLoader.getSystemResource("images/back-arrowsw.png").toExternalForm()));
+        nextSongButton.setImage(new Image(ClassLoader.getSystemResource("images/forward-arrowsw.png").toExternalForm()));
+        pauseButton.setImage(new Image(ClassLoader.getSystemResource("images/pausew.png").toExternalForm()));
+        playButton.setImage(new Image(ClassLoader.getSystemResource("images/playw.png").toExternalForm()));
+        
+        //Icons for the menu bar
+        
+        //File menu
+    	openfile_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/openw.png").toExternalForm()));
+    	openfolder_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/openw.png").toExternalForm()));
+    	exit_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/closew.png").toExternalForm()));
+    	close_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/closefolderw.png").toExternalForm()));
+    	removefiles_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/removew.png").toExternalForm()));
+    	
+    	//Playback menu
+    	playpause_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/playpausew.png").toExternalForm()));
+    	next_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/forwardw.png").toExternalForm()));
+    	previous_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/rewindw.png").toExternalForm()));
+    	menuVolume.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/volumew.png").toExternalForm()));
+    	
+    	decrVol.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/minusw.png").toExternalForm()));
+    	incrVol.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/plusw.png").toExternalForm()));
+    	muteVol.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/speakermutew.png").toExternalForm()));
+    	
+    	//View menu
+    	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
+    	minimize_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/minimizew.png").toExternalForm()));
+    	theme_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/themew.png").toExternalForm()));
+    	//hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubarw.png"));
+    	
+    	//Settings menu
+    	menuInterface.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/interfacew.png").toExternalForm()));
+    	language_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/languagesw.png").toExternalForm()));
+    	
+    	//Help menu
+    	about_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/logow.png").toExternalForm()));
+    	preview_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/tutorialw.png").toExternalForm()));
+    	shortcuts_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/tipsw.png").toExternalForm()));
+    	
+    	//vecchi setImage
+    	/*
+    	//Icons for the main window
+    	exit_icon.setImage(new Image(new File("src/main/resources/images/cancelw.png").toURI().toString()));
         minimize_icon.setImage(new Image(new File("src/main/resources/images/minimizew.png").toURI().toString()));
         folderChooser.setImage(new Image(new File("src/main/resources/images/music-folderw.png").toURI().toString()));
         
@@ -1534,13 +1582,61 @@ public class Controller {
     	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logow.png"));
     	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorialw.png"));
     	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tipsw.png"));
-		
+		*/
 	}
 
 	private void setIconsForLightTheme() {
     	
+		//nuovi setImage
+    	//cartella "resources" è considerata root
+    	exit_icon.setImage(new Image(ClassLoader.getSystemResource("images/cancel.png").toExternalForm()));
+    	minimize_icon.setImage(new Image(ClassLoader.getSystemResource("images/minimize.png").toExternalForm()));
+        folderChooser.setImage(new Image(ClassLoader.getSystemResource("images/music-folder.png").toExternalForm()));
+        
+        muteIcon.setImage(new Image(ClassLoader.getSystemResource("images/speakermute.png").toExternalForm()));
+        volumeIcon.setImage(new Image(ClassLoader.getSystemResource("images/speaker.png").toExternalForm()));
+        previousSongButton.setImage(new Image(ClassLoader.getSystemResource("images/back-arrows.png").toExternalForm()));
+        nextSongButton.setImage(new Image(ClassLoader.getSystemResource("images/forward-arrows.png").toExternalForm()));
+        pauseButton.setImage(new Image(ClassLoader.getSystemResource("images/pause.png").toExternalForm()));
+        playButton.setImage(new Image(ClassLoader.getSystemResource("images/play.png").toExternalForm()));
+        
+        //Icons for the menu bar
+        
+        //File menu
+    	openfile_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/open.png").toExternalForm()));
+    	openfolder_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/open.png").toExternalForm()));
+    	exit_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/close.png").toExternalForm()));
+    	close_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/closefolder.png").toExternalForm()));
+    	removefiles_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/remove.png").toExternalForm()));
+    	
+    	//Playback menu
+    	playpause_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/playpause.png").toExternalForm()));
+    	next_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/forward.png").toExternalForm()));
+    	previous_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/rewind.png").toExternalForm()));
+    	menuVolume.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/volume.png").toExternalForm()));
+    	
+    	decrVol.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/minus.png").toExternalForm()));
+    	incrVol.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/plus.png").toExternalForm()));
+    	muteVol.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/speakermute.png").toExternalForm()));
+    	
+    	//View menu
+    	//fullscreen_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/fullscreen.png"));
+    	minimize_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/minimize.png").toExternalForm()));
+    	theme_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/theme.png").toExternalForm()));
+    	//hidebar_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/menubar.png"));
+    	
+    	//Settings menu
+    	menuInterface.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/interface.png").toExternalForm()));
+    	language_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/languages.png").toExternalForm()));
+    	
+    	//Help menu
+    	about_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/logo.png").toExternalForm()));
+    	preview_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/tutorial.png").toExternalForm()));
+    	shortcuts_menu.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/tips.png").toExternalForm()));
+		
+    	//vecchie icone
+    	/*
 		//Icons for the main window
-		//TODO: sistemare accesso risorse
 		exit_icon.setImage(new Image(new File("src/main/resources/images/cancel.png").toURI().toString()));
 		minimize_icon.setImage(new Image(new File("src/main/resources/images/minimize.png").toURI().toString()));
 		folderChooser.setImage(new Image(new File("src/main/resources/images/music-folder.png").toURI().toString()));
@@ -1585,7 +1681,7 @@ public class Controller {
     	about_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/logo.png"));
     	preview_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
     	shortcuts_menu.setGraphic(new ImageView("file:src/main/resources/images/menubar/tips.png"));
-		
+		*/
 	}
     
     // ----------------------------------------------------------------------------------------------------------------------
