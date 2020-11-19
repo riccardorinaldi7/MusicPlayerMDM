@@ -807,6 +807,9 @@ public class ControllerSimple {
 
             playPauseSong();
 
+            // ********************************************************************************************************
+        	songTable.getSelectionModel().clearSelection(); //TOLTA SELEZIONE modifica del 19/11/2020
+        	// ********************************************************************************************************
         }
         else {
             print("Come posso essere qui? PARADOSSOOOOO");
