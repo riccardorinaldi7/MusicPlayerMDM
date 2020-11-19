@@ -20,9 +20,12 @@ import javafx.stage.StageStyle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.awt.Desktop;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
@@ -38,7 +41,7 @@ public class Main extends Application {
 	private Properties appProps;
 	private String defaultLanguage = "English";
 	private String defaultTheme = "Light";
-	
+	private Boolean firstConfig;
 	
 	public Main() {}
 
@@ -48,13 +51,17 @@ public class Main extends Application {
 
 		appProps = new Properties();
 		appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
-
+		
+		if (appProps.isEmpty()) firstConfig=true;
+		else firstConfig=false;
+		//System.out.println("\n" + firstConfig + "\n");
+		
 		//language selection
 		ResourceBundle bundle = handleLanguageSelection();
 		//theme selection
 		String nameCssToLoad = handleThemeSelection();
-		
-		String interfaceType = handleInterfaceSelection(); //interfaceType = Simple|Advanced
+		//interface selection
+		String interfaceType = handleInterfaceSelection(); 
 		Parent root = null;
 		
 		//LOAD XML FILE per INTERFACCIA SEMPLICE
@@ -78,6 +85,8 @@ public class Main extends Application {
 			
 		}
 
+		if (firstConfig) askForTutorial(); //alla prima configurazione chiediamo se vogliono vedere il tutorial
+		
 		Scene scene = new Scene(root, 820, 740);
 		//scene.getStylesheets().add(ClassLoader.getSystemResource("LightTheme.css").toExternalForm());
 		scene.getStylesheets().add(ClassLoader.getSystemResource(nameCssToLoad).toExternalForm());
@@ -88,6 +97,43 @@ public class Main extends Application {
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
 		primaryStage.setResizable(true);
 		primaryStage.show();
+	}
+
+	//only the first time you configure your program
+	private void askForTutorial() {
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setHeaderText(null);
+		alert.setContentText("Do you want to see a tutorial first?");
+		alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
+        alert.setTitle("Tutorial");
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+
+        alert.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
+        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/youtube.png")));
+        
+        ButtonType yesButton = new ButtonType("Yes", ButtonData.OK_DONE);
+        ButtonType noButton = new ButtonType("No", ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(yesButton, noButton);
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == yesButton) {	
+        	//Open the browser
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.browse(new URI("https://www.youtube.com/watch?v=ANbDIIsi5Pg&t=3s"));
+			} 
+			catch (IOException e1) {
+				e1.printStackTrace();
+			} 
+			catch (URISyntaxException e1) {					
+				e1.printStackTrace();
+			}
+        } 
+        else {	
+        	//do nothing
+		}
+		
 	}
 
 	//----------------------------------------------------------------------------------------------------
