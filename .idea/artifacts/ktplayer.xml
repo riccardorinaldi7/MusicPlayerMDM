@@ -4,11 +4,18 @@
     <properties id="javafx-properties">
       <options>
         <option name="appClass" value="com.ktplayer.Main" />
-        <option name="description" value="" />
+        <option name="description" value="A simple music player with a beautiful interface built by two UI designer in Bologna" />
         <option name="htmlPlaceholderId" value="" />
+        <option name="icons">
+          <JavaFxApplicationIcons>
+            <option name="linuxIcon" value="$PROJECT_DIR$/src/main/resources/images/logo.png" />
+            <option name="macIcon" value="$PROJECT_DIR$/src/main/resources/images/logo_mac.icns" />
+            <option name="windowsIcon" value="$PROJECT_DIR$/src/main/resources/images/logo.ico" />
+          </JavaFxApplicationIcons>
+        </option>
         <option name="nativeBundle" value="all" />
-        <option name="title" value="" />
-        <option name="vendor" value="" />
+        <option name="title" value="WG Player" />
+        <option name="vendor" value="MDM Inc." />
         <option name="version" value="" />
       </options>
     </properties>

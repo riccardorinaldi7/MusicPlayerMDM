@@ -119,13 +119,10 @@ public class Utilities {
 	// -------------------------------------------------------------------------
 	
     private String readProperty(String property) {
-	  
-    	String rootPath = "src\\main\\resources\\";
-	     String appConfigPath = rootPath + "application.properties";
 	
 	     Properties appProps = new Properties();
 	     try {
-	         appProps.load(new FileInputStream(appConfigPath));
+	         appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
 	     }
 	     catch (FileNotFoundException e) {
 	         e.printStackTrace();

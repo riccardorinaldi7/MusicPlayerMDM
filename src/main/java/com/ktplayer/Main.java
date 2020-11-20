@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -166,20 +167,15 @@ public class Main extends Application {
 	        alert.getButtonTypes().setAll(simpleButton, advancedButton);
 
 			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == simpleButton) {	
-	        	// ... user chose "SIMPLE"
-				interfaceType = "Simple";
-	        } 
-	        else {	
-	        	// ... user chose "ADVANCED" 
-				interfaceType = "Advanced";
-			}
+
+			if (result.get() == simpleButton) interfaceType = "Simple";
+	        else interfaceType = "Advanced";
 			
 			appProps.setProperty("interface", interfaceType);
 			try {
-				appProps.store(new FileWriter(ClassLoader.getSystemResource("application.properties").toExternalForm()), null);
+				appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
 			} 
-			catch (IOException e) {
+			catch (IOException | URISyntaxException e) {
 				e.printStackTrace();
 			}
 		}
@@ -219,26 +215,15 @@ public class Main extends Application {
 			// Show the dialog box and wait for a selection
 			Optional<String> selectedLanguage = choiceDialog.showAndWait();
 
-			if (selectedLanguage.isPresent()) {
-			    // ok was pressed
-				language = selectedLanguage.get();
-				appProps.setProperty("language", Utilities.returnLanguageToWrite(language));
-				try {
-					appProps.store(new FileWriter(ClassLoader.getSystemResource("application.properties").toExternalForm()), null);
-				} 
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-			    // cancel might have been pressed --> default language = English
-				language = defaultLanguage;
-				appProps.setProperty("language", Utilities.returnLanguageToWrite(defaultLanguage));
-				try {
-					appProps.store(new FileWriter(ClassLoader.getSystemResource("application.properties").toExternalForm()), null);
-				} 
-				catch (IOException e) {
-					e.printStackTrace();
-				}
+			if (selectedLanguage.isPresent()) language = selectedLanguage.get();
+			else language = defaultLanguage;
+
+			appProps.setProperty("language", Utilities.returnLanguageToWrite(language));
+			try {
+				appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
+			}
+			catch (IOException | URISyntaxException e) {
+				e.printStackTrace();
 			}
 					
 			System.out.println("Selected language: " + language);
@@ -296,28 +281,16 @@ public class Main extends Application {
 
 			// Show the dialog box and wait for a selection
 			Optional<String> selectedTheme = choiceDialog.showAndWait();
-			
-			if (selectedTheme.isPresent()) {
-			    // ok was pressed
-				theme = selectedTheme.get();
 
-				appProps.setProperty("theme", Utilities.returnThemeToWrite(theme));
-				try {
-					appProps.store(new FileWriter(ClassLoader.getSystemResource("application.properties").toExternalForm()), null);
-				} 
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-			    // cancel might have been pressed --> default theme = Light
-				theme = defaultTheme;
-				appProps.setProperty("theme", Utilities.returnThemeToWrite(theme));
-				try {
-					appProps.store(new FileWriter(ClassLoader.getSystemResource("application.properties").toExternalForm()), null);
-				} 
-				catch (IOException e) {
-					e.printStackTrace();
-				}
+			if (selectedTheme.isPresent()) theme = selectedTheme.get();
+			else theme = defaultTheme;
+
+			appProps.setProperty("theme", Utilities.returnThemeToWrite(theme));
+			try {
+				appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
+			}
+			catch (IOException | URISyntaxException e) {
+				e.printStackTrace();
 			}
 		}
 		System.out.println("Selected theme: " + theme);

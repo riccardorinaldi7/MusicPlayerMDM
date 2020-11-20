@@ -960,13 +960,10 @@ public class Controller {
     
     @FXML
     private void themeSelection (ActionEvent event){
-    	 
-        String rootPath = "src\\main\\resources\\";
-        String appConfigPath = rootPath + "application.properties";
 
         Properties appProps = new Properties();
         try {
-            appProps.load(new FileInputStream(appConfigPath));
+            appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -1026,9 +1023,9 @@ public class Controller {
 	        	// ... user chose "Ok" --> don't close the program now
 	        	try {
 	        		appProps.setProperty("theme", util.returnThemeToWrite(theme));
-		            appProps.store(new FileWriter(appConfigPath), null);
+		            appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
 	        	} 
-		        catch (IOException e) {
+		        catch (IOException | URISyntaxException e) {
 		                e.printStackTrace();
 		        }   	
 	        } 
@@ -1037,9 +1034,9 @@ public class Controller {
 	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
 	        	try {
 	        		appProps.setProperty("theme", util.returnThemeToWrite(theme));
-		            appProps.store(new FileWriter(appConfigPath), null);
+                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
 	        	} 
-		        catch (IOException e) {
+		        catch (IOException | URISyntaxException e) {
 		                e.printStackTrace();
 		        }   
 	        	closeProgram();
@@ -1056,12 +1053,10 @@ public class Controller {
     
     @FXML
     private void languageSelection(ActionEvent event){
-        String rootPath = "src\\main\\resources\\";
-        String appConfigPath = rootPath + "application.properties";
 
         Properties appProps = new Properties();
         try {
-            appProps.load(new FileInputStream(appConfigPath));
+            appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -1122,9 +1117,9 @@ public class Controller {
 	        	// ... user chose "Ok" --> don't close the program now
 	        	try {
 	        		appProps.setProperty("language", util.returnLanguageToWrite(language));
-		            appProps.store(new FileWriter(appConfigPath), null);
+                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
 	        	} 
-		        catch (IOException e) {
+		        catch (IOException | URISyntaxException e) {
 		                e.printStackTrace();
 		        }   	
 	        } 
@@ -1133,9 +1128,9 @@ public class Controller {
 	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
 	        	try {
 	        		appProps.setProperty("language", util.returnLanguageToWrite(language));
-		            appProps.store(new FileWriter(appConfigPath), null);
+                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
 	        	} 
-		        catch (IOException e) {
+		        catch (IOException | URISyntaxException e) {
 		                e.printStackTrace();
 		        }   
 	        	closeProgram();
@@ -1372,12 +1367,10 @@ public class Controller {
     
     @FXML
     public void simplifyInteface(ActionEvent actionEvent) {
-        String rootPath = "src\\main\\resources\\";
-        String appConfigPath = rootPath + "application.properties";
 
         Properties appProps = new Properties();
         try {
-            appProps.load(new FileInputStream(appConfigPath));
+            appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
         }
         catch (IOException e) {
         	e.printStackTrace();
@@ -1408,9 +1401,9 @@ public class Controller {
         	// ... user chose "Ok" --> don't close the program now
         	try {
         		appProps.setProperty("interface", "Simple");
-                appProps.store(new FileWriter(appConfigPath), null);
+                appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
         	} 
-            catch (IOException e) {
+            catch (IOException | URISyntaxException e) {
                     e.printStackTrace();
             }   	
         } 
@@ -1419,9 +1412,9 @@ public class Controller {
         	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
         	try {
         		appProps.setProperty("interface", "Simple");
-                appProps.store(new FileWriter(appConfigPath), null);
+                appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
         	} 
-            catch (IOException e) {
+            catch (IOException | URISyntaxException e) {
                     e.printStackTrace();
             }   
         	closeProgram();

@@ -443,13 +443,10 @@ public class ControllerSimple {
     @FXML
     private void languageClicked() {
     	System.out.println("Change the language...");
-    	
-    	String rootPath = "src\\main\\resources\\";
-        String appConfigPath = rootPath + "application.properties";
 
         Properties appProps = new Properties();
         try {
-            appProps.load(new FileInputStream(appConfigPath));
+            appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -510,9 +507,9 @@ public class ControllerSimple {
 	        	// ... user chose "Ok" --> don't close the program now
 	        	try {
 		        	appProps.setProperty("language", util.returnLanguageToWrite(language));
-		            appProps.store(new FileWriter(appConfigPath), null);
+                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
 	        	} 
-		        catch (IOException e) {
+		        catch (IOException | URISyntaxException e) {
 		                e.printStackTrace();
 		        }   	
 	        } 
@@ -521,9 +518,9 @@ public class ControllerSimple {
 	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
 	        	try {
 	        		appProps.setProperty("language", util.returnLanguageToWrite(language));
-		            appProps.store(new FileWriter(appConfigPath), null);
+                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
 	        	} 
-		        catch (IOException e) {
+		        catch (IOException | URISyntaxException e) {
 		                e.printStackTrace();
 		        }   
 	        	closeProgram();
@@ -537,13 +534,10 @@ public class ControllerSimple {
     @FXML
     private void themeClicked() {
     	System.out.println("Change the theme...");
-    	
-       String rootPath = "src\\main\\resources\\";
-        String appConfigPath = rootPath + "application.properties";
 
         Properties appProps = new Properties();
         try {
-            appProps.load(new FileInputStream(appConfigPath));
+            appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -603,9 +597,9 @@ public class ControllerSimple {
 	        	// ... user chose "Ok" --> don't close the program now
 	        	try {
 		        	appProps.setProperty("theme", util.returnThemeToWrite(theme));
-		            appProps.store(new FileWriter(appConfigPath), null);
+                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
 	        	} 
-		        catch (IOException e) {
+		        catch (IOException | URISyntaxException e) {
 		                e.printStackTrace();
 		        }   	
 	        } 
@@ -614,9 +608,9 @@ public class ControllerSimple {
 	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
 	        	try {
 	        		appProps.setProperty("theme", util.returnThemeToWrite(theme));
-		            appProps.store(new FileWriter(appConfigPath), null);
+                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
 	        	} 
-		        catch (IOException e) {
+		        catch (IOException | URISyntaxException e) {
 		                e.printStackTrace();
 		        }   
 	        	closeProgram();
@@ -630,12 +624,10 @@ public class ControllerSimple {
     @FXML
     private void setAdvancedInterface() {
     	System.out.println("Switch interface...");
-        String rootPath = "src\\main\\resources\\";
-        String appConfigPath = rootPath + "application.properties";
 
         Properties appProps = new Properties();
         try {
-            appProps.load(new FileInputStream(appConfigPath));
+            appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
         }
         catch (IOException e) {
         	e.printStackTrace();
@@ -666,9 +658,9 @@ public class ControllerSimple {
         	// ... user chose "Ok" --> don't close the program now
         	try {
         		appProps.setProperty("interface", "Advanced");
-                appProps.store(new FileWriter(appConfigPath), null);
+                appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
         	} 
-            catch (IOException e) {
+            catch (IOException | URISyntaxException e) {
                     e.printStackTrace();
             }   	
         } 
@@ -677,9 +669,9 @@ public class ControllerSimple {
         	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
         	try {
         		appProps.setProperty("interface", "Advanced");
-                appProps.store(new FileWriter(appConfigPath), null);
+                appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
         	} 
-            catch (IOException e) {
+            catch (IOException | URISyntaxException e) {
                     e.printStackTrace();
             }   
         	closeProgram();
@@ -1059,53 +1051,51 @@ public class ControllerSimple {
     }
     
     private void setIconsForDarkTheme() {
-    	//TODO: sistemare accesso risorse
-    	exit_icon.setImage(new Image(new File("src/main/resources/images/cancelw.png").toURI().toString()));
-        minimize_icon.setImage(new Image(new File("src/main/resources/images/minimizew.png").toURI().toString()));
-   
-        exitProgramButton.setImage(new Image(new File("src/main/resources/images/simple/offw.png").toURI().toString()));
-        removeButton.setImage(new Image(new File("src/main/resources/images/simple/removeSongw.png").toURI().toString()));
-		addButton.setImage(new Image(new File("src/main/resources/images/simple/addSongw.png").toURI().toString()));
-        
-        muteIcon.setImage(new Image(new File("src/main/resources/images/simple/speakermutew.png").toURI().toString()));
-        volumeIcon.setImage(new Image(new File("src/main/resources/images/simple/speakerw.png").toURI().toString()));
-        previousSongButton.setImage(new Image(new File("src/main/resources/images/simple/back-arrowsw.png").toURI().toString()));
-        nextSongButton.setImage(new Image(new File("src/main/resources/images/simple/forward-arrowsw.png").toURI().toString()));
-        pauseButton.setImage(new Image(new File("src/main/resources/images/simple/pausew.png").toURI().toString()));
-        playButton.setImage(new Image(new File("src/main/resources/images/simple/playw.png").toURI().toString()));
-        
-        plusVol.setImage(new Image(new File("src/main/resources/images/simple/plusw.png").toURI().toString()));
-        minusVol.setImage(new Image(new File("src/main/resources/images/simple/minusw.png").toURI().toString()));
-        
-        languageButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/languagesw.png"));
-        helpButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorialw.png"));
-        interfaceButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/interfacew.png"));
-        themeButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/themew.png"));
+    	exit_icon.setImage(new Image(ClassLoader.getSystemResource("images/cancelw.png").toExternalForm()));
+        minimize_icon.setImage(new Image(ClassLoader.getSystemResource("images/minimizew.png").toExternalForm()));
+
+        exitProgramButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/offw.png").toExternalForm()));
+        removeButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/removeSongw.png").toExternalForm()));
+		addButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/addSongw.png").toExternalForm()));
+
+        muteIcon.setImage(new Image(ClassLoader.getSystemResource("images/simple/speakermutew.png").toExternalForm()));
+        volumeIcon.setImage(new Image(ClassLoader.getSystemResource("images/simple/speakerw.png").toExternalForm()));
+        previousSongButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/back-arrowsw.png").toExternalForm()));
+        nextSongButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/forward-arrowsw.png").toExternalForm()));
+        pauseButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/pausew.png").toExternalForm()));
+        playButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/playw.png").toExternalForm()));
+
+        plusVol.setImage(new Image(ClassLoader.getSystemResource("images/simple/plusw.png").toExternalForm()));
+        minusVol.setImage(new Image(ClassLoader.getSystemResource("images/simple/minusw.png").toExternalForm()));
+
+        languageButton.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/languagesw.png").toExternalForm()));
+        helpButton.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/tutorialw.png").toExternalForm()));
+        interfaceButton.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/interfacew.png").toExternalForm()));
+        themeButton.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/themew.png").toExternalForm()));
 	}
 
 	private void setIconsForLightTheme() {
-    	//TODO: sistemare accesso risorse
-		exit_icon.setImage(new Image(new File("src/main/resources/images/cancel.png").toURI().toString()));
-		minimize_icon.setImage(new Image(new File("src/main/resources/images/minimize.png").toURI().toString()));
+        exit_icon.setImage(new Image(ClassLoader.getSystemResource("images/cancel.png").toExternalForm()));
+        minimize_icon.setImage(new Image(ClassLoader.getSystemResource("images/minimize.png").toExternalForm()));
 
-		exitProgramButton.setImage(new Image(new File("src/main/resources/images/simple/off.png").toURI().toString()));
-		removeButton.setImage(new Image(new File("src/main/resources/images/simple/removeSong.png").toURI().toString()));
-		addButton.setImage(new Image(new File("src/main/resources/images/simple/addSong.png").toURI().toString()));
-		
-		muteIcon.setImage(new Image(new File("src/main/resources/images/simple/speakermute.png").toURI().toString()));
-        volumeIcon.setImage(new Image(new File("src/main/resources/images/simple/speaker.png").toURI().toString()));
-        previousSongButton.setImage(new Image(new File("src/main/resources/images/simple/back-arrows.png").toURI().toString()));
-        nextSongButton.setImage(new Image(new File("src/main/resources/images/simple/forward-arrows.png").toURI().toString()));
-        pauseButton.setImage(new Image(new File("src/main/resources/images/simple/pause.png").toURI().toString()));
-        playButton.setImage(new Image(new File("src/main/resources/images/simple/play.png").toURI().toString()));
-		
-        plusVol.setImage(new Image(new File("src/main/resources/images/simple/plus.png").toURI().toString()));
-        minusVol.setImage(new Image(new File("src/main/resources/images/simple/minus.png").toURI().toString()));
-        
-        languageButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/languages.png"));
-        helpButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/tutorial.png"));
-        interfaceButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/interface.png"));
-        themeButton.setGraphic(new ImageView("file:src/main/resources/images/menubar/theme.png"));
+        exitProgramButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/off.png").toExternalForm()));
+        removeButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/removeSong.png").toExternalForm()));
+        addButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/addSong.png").toExternalForm()));
+
+        muteIcon.setImage(new Image(ClassLoader.getSystemResource("images/simple/speakermute.png").toExternalForm()));
+        volumeIcon.setImage(new Image(ClassLoader.getSystemResource("images/simple/speaker.png").toExternalForm()));
+        previousSongButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/back-arrows.png").toExternalForm()));
+        nextSongButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/forward-arrows.png").toExternalForm()));
+        pauseButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/pause.png").toExternalForm()));
+        playButton.setImage(new Image(ClassLoader.getSystemResource("images/simple/play.png").toExternalForm()));
+
+        plusVol.setImage(new Image(ClassLoader.getSystemResource("images/simple/plus.png").toExternalForm()));
+        minusVol.setImage(new Image(ClassLoader.getSystemResource("images/simple/minus.png").toExternalForm()));
+
+        languageButton.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/languages.png").toExternalForm()));
+        helpButton.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/tutorial.png").toExternalForm()));
+        interfaceButton.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/interface.png").toExternalForm()));
+        themeButton.setGraphic(new ImageView(ClassLoader.getSystemResource("images/menubar/theme.png").toExternalForm()));
 	}
     
     
