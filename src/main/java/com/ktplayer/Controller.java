@@ -1023,9 +1023,9 @@ public class Controller {
 	        	// ... user chose "Ok" --> don't close the program now
 	        	try {
 	        		appProps.setProperty("theme", util.returnThemeToWrite(theme));
-		            appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
+		            appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toExternalForm())), null);
 	        	} 
-		        catch (IOException | URISyntaxException e) {
+		        catch (IOException e) {
 		                e.printStackTrace();
 		        }   	
 	        } 
@@ -1298,7 +1298,7 @@ public class Controller {
         if(mediaView.getMediaPlayer().getCurrentTime().toSeconds() > 5) seekAndUpdate(Duration.ZERO);
         else{
             mediaView.getMediaPlayer().stop();
-            MediaPlayer prevPlayer = players.get((players.indexOf(mediaView.getMediaPlayer()) - 1) % players.size());
+            MediaPlayer prevPlayer = players.get((players.indexOf(mediaView.getMediaPlayer()) - 1)  % players.size());
             print("PrevSong: " + prevPlayer.getMedia().getSource());
             mediaView.setMediaPlayer(prevPlayer);
             mediaView.getMediaPlayer().seek(Duration.ZERO);
