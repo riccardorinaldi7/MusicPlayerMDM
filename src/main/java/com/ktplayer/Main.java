@@ -21,21 +21,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.awt.Desktop;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.nio.file.*;
+import java.util.*;
 
 
 public class Main extends Application {
 
-	private ObservableList<Song> songData = FXCollections.observableArrayList();
+	//private ObservableList<Song> songData = FXCollections.observableArrayList();
 	static Stage primaryStage;
 	private String fxmlName = "ktPlayer.fxml"; //default
 	private String fxmlName_simpleInterface = "ktPlayerSimple.fxml";
@@ -50,8 +45,7 @@ public class Main extends Application {
 	
 		setStage(primaryStage);
 
-		appProps = new Properties();
-		appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
+		loadOrCreatePropertyFile();
 		
 		if (appProps.isEmpty()) firstConfig=true;
 		else firstConfig=false;
@@ -67,27 +61,31 @@ public class Main extends Application {
 		
 		//LOAD XML FILE per INTERFACCIA SEMPLICE
 		if(interfaceType.equals("Simple")) {
-			
+
 			FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName_simpleInterface), bundle);
-			root =(Parent) fxmlLoader.load();
+			root = fxmlLoader.load();
 			ControllerSimple controller = fxmlLoader.getController();
-			System.out.println("Simple Interface");
+			System.out.println("Main: Loading simple interface...");
 			controller.setMain(this);
-			
+
 		}
 		//LOAD XML FILE per INTERFACCIA AVANZATA
-		else if (interfaceType.equals("Advanced" )) {
+		else if (interfaceType.equals("Advanced")) {
 
 			FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemResource(fxmlName), bundle);
-			root =(Parent) fxmlLoader.load();
-			Controller controller = fxmlLoader.getController(); 
-			System.out.println("Advanced Interface");
+			root = fxmlLoader.load();
+			Controller controller = fxmlLoader.getController();
+			System.out.println("Main: Loading advanced interface...");
 			controller.setMain(this);
-			
+
+		} else {
+			System.out.println("Main: interface unknown, something bad happened...");
+			getStage().close();
 		}
 
 		if (firstConfig) askForTutorial(); //alla prima configurazione chiediamo se vogliono vedere il tutorial
-		
+
+		assert root != null;
 		Scene scene = new Scene(root, 820, 740);
 		//scene.getStylesheets().add(ClassLoader.getSystemResource("LightTheme.css").toExternalForm());
 		scene.getStylesheets().add(ClassLoader.getSystemResource(nameCssToLoad).toExternalForm());
@@ -100,6 +98,43 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+	private void loadOrCreatePropertyFile() {
+		appProps = new Properties();
+
+		Path configPath;
+		Path configFile = null;
+		InputStream configInputStream;
+
+		try{
+			configPath = Paths.get(System.getProperty("user.home"));
+			configFile = configPath.resolve("ktplayer.properties");
+		} catch (InvalidPathException e){
+			System.out.println("loadOrCreatePropertyFile: Cannot find user's home folder.");
+			primaryStage.close();
+		}
+
+		if(configFile != null) {
+
+			try {
+				Files.createFile(configFile);
+			} catch (FileAlreadyExistsException e){
+				System.out.println("loadOrCreatePropertyFile: file already exists.");
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				configInputStream = Files.newInputStream(configFile);
+				appProps.load(configInputStream);
+				System.out.println("loadOrCreatePropertyFile: config file loaded.");
+			} catch (IOException e) {
+				e.printStackTrace();
+				primaryStage.close();
+			}
+		}
+	}
+
 	//only the first time you configure your program
 	private void askForTutorial() {
 		
@@ -108,31 +143,25 @@ public class Main extends Application {
 		alert.setContentText("Do you want to see a tutorial first?");
 		alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
         alert.setTitle("Tutorial");
-        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+        //((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
 
         alert.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
-        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/youtube.png")));
+        alert.setGraphic(new ImageView(new Image(ClassLoader.getSystemResource("images/youtube.png").toExternalForm())));
         
         ButtonType yesButton = new ButtonType("Yes", ButtonData.OK_DONE);
         ButtonType noButton = new ButtonType("No", ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(yesButton, noButton);
 
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == yesButton) {	
+		if (result.isPresent() && result.get() == yesButton) {
         	//Open the browser
 			Desktop desktop = Desktop.getDesktop();
 			try {
 				desktop.browse(new URI("https://www.youtube.com/watch?v=ANbDIIsi5Pg&t=3s"));
 			} 
-			catch (IOException e1) {
-				e1.printStackTrace();
-			} 
-			catch (URISyntaxException e1) {					
+			catch (IOException | URISyntaxException e1) {
 				e1.printStackTrace();
 			}
-        } 
-        else {	
-        	//do nothing
 		}
 		
 	}
@@ -157,10 +186,10 @@ public class Main extends Application {
 			alert.setContentText("Please, choose an interface");
 			alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
 	        alert.setTitle("Interface");
-	        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
+	        //((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
 
 	        alert.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
-	        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/interfaces.png")));
+	        alert.setGraphic(new ImageView(new Image(ClassLoader.getSystemResource("images/interfaces.png").toExternalForm())));
 	        
 	        ButtonType simpleButton = new ButtonType("Simple", ButtonData.OK_DONE);
 	        ButtonType advancedButton = new ButtonType("Advanced", ButtonData.CANCEL_CLOSE);
@@ -168,16 +197,10 @@ public class Main extends Application {
 
 			Optional<ButtonType> result = alert.showAndWait();
 
-			if (result.get() == simpleButton) interfaceType = "Simple";
+			if ( result.isPresent() && result.get() == simpleButton) interfaceType = "Simple";
 	        else interfaceType = "Advanced";
 			
-			appProps.setProperty("interface", interfaceType);
-			try {
-				appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
-			} 
-			catch (IOException | URISyntaxException e) {
-				e.printStackTrace();
-			}
+			setAndStoreProperty("interface", interfaceType);
 		}
 		System.out.println("Selected interface: " + interfaceType);
 		return interfaceType;
@@ -194,59 +217,58 @@ public class Main extends Application {
 		
 		// If no language setting exists a dialog box is shown to the user to ask for it
 		if(language == null) {
-			
-			//Creating a choice box asking for the language
-			ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>("English");
-			choiceDialog.setHeaderText("Select the language you prefer");
-			choiceDialog.setTitle("Language");
-			Image img = new Image("file:src/main/resources/images/languages.png");
-			choiceDialog.setGraphic(new ImageView(img));
-			choiceDialog.initStyle(StageStyle.UNDECORATED);
-			choiceDialog.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
-			
-			//Retrieving the observable list
-			ObservableList<String> list = choiceDialog.getItems();
-			//Adding items to the language list
-			list.add("English");
-			list.add("Italiano");
-			list.add("Français");
-			list.add("Español");
 
-			// Show the dialog box and wait for a selection
-			Optional<String> selectedLanguage = choiceDialog.showAndWait();
+			List<String> languageOptions = Arrays.asList("English", "Italiano", "Français", "Español");
+			Optional<String> selectedLanguage = showStringChoicesDialog("Language","Select the language you prefer", "languages.png", languageOptions);
 
-			if (selectedLanguage.isPresent()) language = selectedLanguage.get();
-			else language = defaultLanguage;
+			language = selectedLanguage.orElseGet(() -> defaultLanguage);
 
-			appProps.setProperty("language", Utilities.returnLanguageToWrite(language));
-			try {
-				appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
-			}
-			catch (IOException | URISyntaxException e) {
-				e.printStackTrace();
-			}
-					
-			System.out.println("Selected language: " + language);
-			// Set the language Bundle according to the selected language
-			switch (Utilities.returnLanguageToWrite(language)){
-				case "Italian": locale = Locale.ITALIAN; break;
-				case "French": locale = Locale.FRENCH; break;
-				case "Spanish": locale = new Locale("es", "ES"); break;
-				default: locale = Locale.ROOT;
-			}
+			language = Utilities.returnLanguageToWrite(language);
+
+			setAndStoreProperty("language", language);
+
 		}
-		//language != null
-		else {
-			System.out.println("Language in file: " + language);
-			// Set the language Bundle according to the selected language
-			switch (language){
-				case "Italian": locale = Locale.ITALIAN; break;
-				case "French": locale = Locale.FRENCH; break;
-				case "Spanish": locale = new Locale("es", "ES"); break;
-				default: locale = Locale.ROOT;
-			}
+
+		System.out.println("Selected language: " + language);
+
+		// Set the language Bundle according to the selected language
+		switch (language){
+			case "Italian": locale = Locale.ITALIAN; break;
+			case "French": locale = Locale.FRENCH; break;
+			case "Spanish": locale = new Locale("es", "ES"); break;
+			default: locale = Locale.ROOT;
 		}
 		return ResourceBundle.getBundle("UIText", locale);
+	}
+
+	private void setAndStoreProperty(String key, String value) {
+		appProps.setProperty(key, value);
+		try {
+			Path configPath = Paths.get(System.getProperty("user.home"));
+			Path configFile = configPath.resolve("ktplayer.properties");
+			BufferedWriter writer = Files.newBufferedWriter(configFile);
+			appProps.store(writer, null);
+		}
+		catch (IOException e) {
+			System.out.println("setAndStoreProperty: an error occurred writing the property");
+		}
+	}
+
+	private Optional<String> showStringChoicesDialog(String title, String message, String icon, List<String> options) {
+		//Creating a choice box asking for the language
+		ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>(options.get(0));
+		choiceDialog.setHeaderText(message);
+		choiceDialog.setTitle(title);
+		Image img = new Image(ClassLoader.getSystemResource("images/" + icon).toExternalForm());
+		choiceDialog.setGraphic(new ImageView(img));
+		choiceDialog.initStyle(StageStyle.UNDECORATED);
+		choiceDialog.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
+
+		//add options to items
+		choiceDialog.getItems().addAll(options);
+
+		// Show the dialog box and wait for a selection
+		return choiceDialog.showAndWait();
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -260,43 +282,19 @@ public class Main extends Application {
 		// If no theme setting exists a dialog box is shown to the user to ask for it
 		if(theme == null) {
 
-			//----------------------------------------------------------------------------------------------------
-			//CHOICE DIALOG PER SCELTA TEMA
-			//----------------------------------------------------------------------------------------------------
-
-			//Creating a choice box asking for the theme
-			ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>("Light");
-			choiceDialog.setHeaderText("Select the theme you prefer");
-			choiceDialog.setTitle("Theme");
-			Image img = new Image("file:src/main/resources/images/theme.png");
-			System.out.println(img.toString());
-			choiceDialog.setGraphic(new ImageView(img));
-			choiceDialog.initStyle(StageStyle.UNDECORATED);
-			choiceDialog.getDialogPane().setStyle("-fx-border-color: #b3b3b3; -fx-border-width: 1.0px;");
-			//Retrieving the observable list
-			ObservableList<String> list = choiceDialog.getItems();
-			//Adding items to the language list
-			list.add("Dark");
-			list.add("Light");
-
+			List<String> themeOptions = Arrays.asList("Light", "Dark");
 			// Show the dialog box and wait for a selection
-			Optional<String> selectedTheme = choiceDialog.showAndWait();
+			Optional<String> selectedTheme = showStringChoicesDialog("Theme", "Select the theme you prefer", "theme.png", themeOptions);
 
-			if (selectedTheme.isPresent()) theme = selectedTheme.get();
-			else theme = defaultTheme;
+			theme = selectedTheme.orElseGet(() -> defaultTheme);
 
-			appProps.setProperty("theme", Utilities.returnThemeToWrite(theme));
-			try {
-				appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
-			}
-			catch (IOException | URISyntaxException e) {
-				e.printStackTrace();
-			}
+			theme = Utilities.returnThemeToWrite(theme);
+
+			setAndStoreProperty("theme", theme);
 		}
 		System.out.println("Selected theme: " + theme);
 		// Set the theme according to the selected theme
-		if (theme.equals("Dark"))
-			return "DarkTheme.css";
+		if (theme.equals("Dark")) return "DarkTheme.css";
 		else return "LightTheme.css";
 	}
 	

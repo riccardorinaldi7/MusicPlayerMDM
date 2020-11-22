@@ -3,7 +3,11 @@ package com.ktplayer;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -122,15 +126,15 @@ public class Utilities {
 	
 	     Properties appProps = new Properties();
 	     try {
-	         appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
-	     }
-	     catch (FileNotFoundException e) {
-	         e.printStackTrace();
+			 Path configPath = Paths.get(System.getProperty("user.home"));
+			 Path configFile = configPath.resolve("ktplayer.properties");
+			 InputStream configInputStream = Files.newInputStream(configFile);
+	         appProps.load(configInputStream);
 	     } catch (IOException e) {
-	         e.printStackTrace();
+	     	System.out.println("Utils.readProperty: error opening the config file");
 	     }
 
-	     return appProps.getProperty(property);
+		return appProps.getProperty(property);
    }
 	
 }

@@ -30,13 +30,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 
 import java.awt.Desktop;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -228,8 +227,10 @@ public class ControllerSimple {
 
         //this runs everytime an item in tableview is single-clicked/selected
         songTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("SongTable: selection detected - " + newValue.getSongName());
-            currentActive = newValue;
+            if(newValue != null) {
+                System.out.println("SongTable: selection detected - " + newValue.getSongName());
+                currentActive = newValue;
+            }
         });
         
         addButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -410,7 +411,7 @@ public class ControllerSimple {
         alert.setTitle(resources.getString("confirmExit"));
         ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("file:src/main/resources/images/logo.png"));
         
-        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/exit.png")));
+        alert.setGraphic(new ImageView(new Image( ClassLoader.getSystemResource("images/exit.png").toExternalForm())));
         
         util.applyThemeToDialog(alert);
         
@@ -440,19 +441,37 @@ public class ControllerSimple {
         return time;
     }
 
+    private void setAndStoreProperty(Properties appProps, String key, String value) {
+        appProps.setProperty(key, value);
+        try {
+            Path configPath = Paths.get(System.getProperty("user.home"));
+            Path configFile = configPath.resolve("ktplayer.properties");
+            BufferedWriter writer = Files.newBufferedWriter(configFile);
+            appProps.store(writer, null);
+        }
+        catch (IOException e) {
+            System.out.println("setAndStoreProperty: an error occurred writing the property");
+        }
+    }
+
+    private Properties loadPropertyFile() {
+        Properties appProps = new Properties();
+        try {
+            Path configPath = Paths.get(System.getProperty("user.home"));
+            Path configFile = configPath.resolve("ktplayer.properties");
+            InputStream configInputStream = Files.newInputStream(configFile);
+            appProps.load(configInputStream);
+        } catch (IOException e) {
+            System.out.println("Utils.readProperty: error opening the config file");
+        }
+        return appProps;
+    }
+
     @FXML
     private void languageClicked() {
     	System.out.println("Change the language...");
 
-        Properties appProps = new Properties();
-        try {
-            appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Properties appProps = loadPropertyFile();
 
         // Trying to get the language setting
         String language = appProps.getProperty("language");
@@ -462,8 +481,8 @@ public class ControllerSimple {
         choiceDialog.setHeaderText(resources.getString("selectlanguage"));
         choiceDialog.setTitle(resources.getString("language"));
         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
-        		new Image("file:src/main/resources/images/logo.png"));
-        Image img = new Image("file:src/main/resources/images/languages.png");
+        		new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
+        Image img = new Image(ClassLoader.getSystemResource("images/languages.png").toExternalForm());
         choiceDialog.setGraphic(new ImageView(img));
 
         //Retrieving the observable list
@@ -491,8 +510,8 @@ public class ControllerSimple {
 	        alert.setHeaderText(null);
 	        alert.setContentText(resources.getString("restart"));
 	        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
-	        		new Image("file:src/main/resources/images/logo.png"));
-	        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/languages.png")));
+	        		new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
+	        alert.setGraphic(new ImageView(new Image(ClassLoader.getSystemResource("images/languages.png").toExternalForm())));
 	        alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
 	        util.applyThemeToDialog(alert);
 
@@ -503,28 +522,9 @@ public class ControllerSimple {
 
 	        Optional<ButtonType> result = alert.showAndWait();
 
-	        if (result.get() == okButton) {	
-	        	// ... user chose "Ok" --> don't close the program now
-	        	try {
-		        	appProps.setProperty("language", util.returnLanguageToWrite(language));
-                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
-	        	} 
-		        catch (IOException | URISyntaxException e) {
-		                e.printStackTrace();
-		        }   	
-	        } 
-	        
-	        else {	
-	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
-	        	try {
-	        		appProps.setProperty("language", util.returnLanguageToWrite(language));
-                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
-	        	} 
-		        catch (IOException | URISyntaxException e) {
-		                e.printStackTrace();
-		        }   
-	        	closeProgram();
-	        }
+	        setAndStoreProperty(appProps, "language", Utilities.returnLanguageToWrite(language));
+
+	        if (result.isPresent() && result.get() != okButton) closeProgram();
 		} 
         else {
 			System.out.println("User has changed his/her mind");
@@ -535,15 +535,7 @@ public class ControllerSimple {
     private void themeClicked() {
     	System.out.println("Change the theme...");
 
-        Properties appProps = new Properties();
-        try {
-            appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Properties appProps = loadPropertyFile();
 
         // Trying to get the language setting
         String theme = appProps.getProperty("theme");
@@ -553,8 +545,8 @@ public class ControllerSimple {
         choiceDialog.setHeaderText(resources.getString("selecttheme"));
         choiceDialog.setTitle(resources.getString("theme"));
         ((Stage)choiceDialog.getDialogPane().getScene().getWindow()).getIcons().add(
-       		 new Image("file:src/main/resources/images/logo.png"));
-        Image img = new Image("file:src/main/resources/images/theme.png");
+       		 new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
+        Image img = new Image(ClassLoader.getSystemResource("images/theme.png").toExternalForm());
         choiceDialog.setGraphic(new ImageView(img));
       
         choiceDialog.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
@@ -581,8 +573,8 @@ public class ControllerSimple {
 	        alert.setHeaderText(null);
 	        alert.setContentText(resources.getString("restart"));
 	        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
-	        		new Image("file:src/main/resources/images/logo.png"));
-	        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/theme.png")));
+	        		new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
+	        alert.setGraphic(new ImageView(new Image(ClassLoader.getSystemResource("images/theme.png").toExternalForm())));
 	        alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
 	        util.applyThemeToDialog(alert);
 
@@ -593,28 +585,9 @@ public class ControllerSimple {
 
 	        Optional<ButtonType> result = alert.showAndWait();
 
-	        if (result.get() == okButton) {	
-	        	// ... user chose "Ok" --> don't close the program now
-	        	try {
-		        	appProps.setProperty("theme", util.returnThemeToWrite(theme));
-                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
-	        	} 
-		        catch (IOException | URISyntaxException e) {
-		                e.printStackTrace();
-		        }   	
-	        } 
-	        
-	        else {	
-	        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
-	        	try {
-	        		appProps.setProperty("theme", util.returnThemeToWrite(theme));
-                    appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
-	        	} 
-		        catch (IOException | URISyntaxException e) {
-		                e.printStackTrace();
-		        }   
-	        	closeProgram();
-	        }
+            setAndStoreProperty(appProps, "theme", Utilities.returnThemeToWrite(theme));
+
+            if (result.isPresent() && result.get() != okButton) closeProgram();
 		} 
         else {
 			System.out.println("User has changed his/her mind");
@@ -625,16 +598,7 @@ public class ControllerSimple {
     private void setAdvancedInterface() {
     	System.out.println("Switch interface...");
 
-        Properties appProps = new Properties();
-        try {
-            appProps.load(ClassLoader.getSystemResourceAsStream("application.properties"));
-        }
-        catch (IOException e) {
-        	e.printStackTrace();
-        } 
-        catch (NoSuchElementException e){
-        	System.out.println("User has changed his/her mind");
-        }
+        Properties appProps = loadPropertyFile();
 
         //alert per dire che bisogna riavviare il programma
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -642,11 +606,11 @@ public class ControllerSimple {
         alert.setHeaderText(null);
         alert.setContentText(resources.getString("restart"));
         ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(
-                new Image("file:src/main/resources/images/logo.png"));
+                new Image(ClassLoader.getSystemResource("images/logo.png").toExternalForm()));
 
         alert.initStyle(StageStyle.UNDECORATED); //toglie completamente la barra del titolo
         util.applyThemeToDialog(alert);
-        alert.setGraphic(new ImageView(new Image("file:src/main/resources/images/interfaces.png")));
+        alert.setGraphic(new ImageView(new Image(ClassLoader.getSystemResource("images/interfaces.png").toExternalForm())));
         
         ButtonType okButton = new ButtonType("Ok", ButtonData.OK_DONE);
         ButtonType buttonTypeCancel = new ButtonType(resources.getString("quitButton"), ButtonData.CANCEL_CLOSE);
@@ -654,28 +618,9 @@ public class ControllerSimple {
 
         Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.get() == okButton) {	
-        	// ... user chose "Ok" --> don't close the program now
-        	try {
-        		appProps.setProperty("interface", "Advanced");
-                appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
-        	} 
-            catch (IOException | URISyntaxException e) {
-                    e.printStackTrace();
-            }   	
-        } 
-        
-        else {	
-        	// ... user chose CANCEL or closed the dialog --> the program will close, after having set the properties
-        	try {
-        		appProps.setProperty("interface", "Advanced");
-                appProps.store(new FileWriter(new File(ClassLoader.getSystemResource("application.properties").toURI())), null);
-        	} 
-            catch (IOException | URISyntaxException e) {
-                    e.printStackTrace();
-            }   
-        	closeProgram();
-        }  
+        setAndStoreProperty(appProps, "interface", "Advanced");
+
+        if (result.isPresent() && result.get() != okButton) closeProgram();
     }
     
     @FXML
