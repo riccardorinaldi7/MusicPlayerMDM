@@ -1,6 +1,24 @@
 # MusicPlayerMDM
 A very simple music player
 
+#####Build .exe - IntelliJ:
+    - File -> Project Structure... -> Artifacts
+    
+    - "+" -> JavaFX Application -> From module xxx
+    
+    - Tab "Output Layout": 
+        -- Inserire dipendenze jar che sono a dx, a sinistra dentro il jar finale
+        -- Estrarle (ovvero tasto destro sul jar della dipendenza -> Extract artifact)
+    
+    - Tab "Java FX":
+        -- Indicare application class
+        -- Native Bundle: all
+        -- Non inserire le icone perchè fanno andare in errore il build!
+        
+    - Apply -> Ok
+    
+    - Dalla barra dei menu: Build -> Build artifacts... -> xxx -> Build
+
 ## ToDo List
 
 - [ ] Fare tutorial da far partire al primo avvio dell'applicazione
