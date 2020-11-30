@@ -1,17 +1,15 @@
 package com.ktplayer;
 
 import javafx.beans.property.*;
-import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
 
 public class Song {
-    private StringProperty id;
+    private IntegerProperty id;
     private StringProperty artistName;
     private StringProperty songName;
     private StringProperty length;
@@ -26,8 +24,8 @@ public class Song {
         this.url = new SimpleStringProperty(url);
     }
 
-    public Song(String id, String artistName, String songName, String length, String duration, String album, String url, byte[] imageData) throws IOException {
-        this.id = new SimpleStringProperty(id);
+    public Song(int id, String artistName, String songName, String length, String duration, String album, String url, byte[] imageData) throws IOException {
+        this.id = new SimpleIntegerProperty(id);
         this.artistName = new SimpleStringProperty(artistName);
         this.songName = new SimpleStringProperty(songName);
         this.length = new SimpleStringProperty(length);
@@ -41,16 +39,16 @@ public class Song {
 
     }
 
-    public String getId() {
-        return id.get();
-    }
-
-    public StringProperty idProperty() {
+    public IntegerProperty getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id.set(id);
+    public IntegerProperty idProperty() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = new SimpleIntegerProperty(id);
     }
 
     public String getArtistName() {

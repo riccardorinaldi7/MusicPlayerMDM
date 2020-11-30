@@ -71,7 +71,7 @@ public class Controller {
     @FXML
     private TableView<Song> songTable;
     @FXML
-    private TableColumn<Song, String> idColumn;
+    private TableColumn<Song, Integer> idColumn;
     @FXML
     private TableColumn<Song, String> artistNameColumn;
     @FXML
@@ -324,7 +324,7 @@ public class Controller {
             }
         });
 
-        idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+        idColumn.setCellValueFactory(new PropertyValueFactory<Song, Integer>("id"));
         artistNameColumn.setCellValueFactory(cellData -> cellData.getValue().artistNameProperty());
         songNameColumn.setCellValueFactory(cellData -> cellData.getValue().songNameProperty());
         //durationColumn.setCellValueFactory(cellData -> cellData.getValue().durationProperty());
@@ -446,7 +446,7 @@ public class Controller {
                         Mp3File mp3 = new Mp3File(file.getPath());
                         ID3v2 tag = mp3.getId3v2Tag();
                         String title = tag.getTitle() == null ? name.split("[.]")[0] : tag.getTitle(); //use filename if no song title exists
-                        Song song = new Song(String.valueOf(i), tag.getArtist(), title, kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath(), tag.getAlbumImage());
+                        Song song = new Song(i, tag.getArtist(), title, kbToMb(file.length()), secToMin(mp3.getLengthInSeconds()),tag.getAlbum(), file.getAbsolutePath(), tag.getAlbumImage());
                         players.add(createMediaPlayer(file.getAbsolutePath()));
                         songData.add(song);
                     }
@@ -488,7 +488,7 @@ public class Controller {
 
             mediaView = new MediaView(mediaPlayer);
             //viewPlayIcon();
-            mediaView = new MediaView(players.get(Integer.parseInt(song.getId()) - 1));
+            mediaView = new MediaView(players.get(song.getId().getValue().intValue() - 1));
 
             // Put some value before playing
             volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
@@ -1102,7 +1102,7 @@ public class Controller {
                 if(currentActive == null) return;
 
                 //remove both from tableview and from players
-                int idRemovedSong = Integer.parseInt(currentActive.getId()) - 1;
+                int idRemovedSong = currentActive.getId().getValue().intValue() - 1;
                 String nameRemovedSong = currentActive.getSongName();
 
                 /************ WARNING ***********
@@ -1114,7 +1114,7 @@ public class Controller {
                 songTable.refresh();
                 print("removeFile: removed " + nameRemovedSong + " from table...");
 
-                if(players.indexOf(mediaView.getMediaPlayer()) == Integer.parseInt(currentActive.getId())){
+                if(players.indexOf(mediaView.getMediaPlayer()) == currentActive.getId().getValue().intValue()){
                     mediaView.getMediaPlayer().stop();
                     mediaView.setMediaPlayer(null);
                     //songSlider.setValue(0.0);
@@ -1290,7 +1290,7 @@ public class Controller {
 
     private void updateSongIds(ObservableList<Song> items, int start) {
         for(int i=start; i<items.size(); i++)
-            items.get(i).setId(Integer.toString(i+1));
+            items.get(i).setId(i+1);
 
     }
 
