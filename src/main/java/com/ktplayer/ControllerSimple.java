@@ -671,7 +671,7 @@ public class ControllerSimple {
             path.replace("\\", "/");
 
             // If there's another media set, we remove its mediaview and mediaplayer before setting the new ones
-            if((mediaView != null) && (mediaPlayer != null)) {
+            if((mediaView != null) && (mediaView.getMediaPlayer() != null)) {
 
                 print("playPauseSong(Song): deleting old mediaview and mediaplayer...");
 
@@ -878,17 +878,6 @@ public class ControllerSimple {
             @Override
             public void run() {
                 do {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            final MediaPlayer player = mediaView.getMediaPlayer();
-                            if((player.getStatus() != Status.PAUSED) && (player.getStatus() != Status.STOPPED) && (player.getStatus() != Status.READY)) {
-                                
-                               
-                                
-                            }
-                        }
-                    });
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException ex) {
