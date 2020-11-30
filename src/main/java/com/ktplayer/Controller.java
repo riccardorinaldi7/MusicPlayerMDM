@@ -324,7 +324,7 @@ public class Controller {
             }
         });
 
-        idColumn.setCellValueFactory(new PropertyValueFactory<Song, Integer>("id"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         artistNameColumn.setCellValueFactory(cellData -> cellData.getValue().artistNameProperty());
         songNameColumn.setCellValueFactory(cellData -> cellData.getValue().songNameProperty());
         //durationColumn.setCellValueFactory(cellData -> cellData.getValue().durationProperty());

@@ -21,8 +21,8 @@ A very simple music player
 
 ## ToDo List
 
-- [ ] Fare tutorial da far partire al primo avvio dell'applicazione
-- [ ] Agganciare tutorial a "How to use" sia Simple che Advanced
+- [X] Fare tutorial da far partire al primo avvio dell'applicazione
+- [X] Agganciare tutorial a "How to use" sia Simple che Advanced
 
 ---
 
