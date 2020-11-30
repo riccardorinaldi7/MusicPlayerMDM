@@ -284,6 +284,13 @@ public class ControllerSimple {
         updateSongIds(songTable.getItems(), idRemovedSong);
         songTable.refresh();
         print("removeFile: removed " + nameRemovedSong + " from table...");
+
+        if(players.indexOf(mediaView.getMediaPlayer()) == Integer.parseInt(currentActive.getId())){
+            mediaView.getMediaPlayer().stop();
+            mediaView.setMediaPlayer(null);
+            showSongInfo((Song) null);
+        }
+
         players.remove(idRemovedSong);
         //print("removeFile: removed player's song");
         //print("Current player list: ");
@@ -746,6 +753,7 @@ public class ControllerSimple {
 
             // ********************************************************************************************************
         	songTable.getSelectionModel().clearSelection(); //TOLTA SELEZIONE modifica del 19/11/2020
+            currentActive = null;
         	// ********************************************************************************************************
         }
         else {

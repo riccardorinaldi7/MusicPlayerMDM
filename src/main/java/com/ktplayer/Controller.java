@@ -469,7 +469,7 @@ public class Controller {
             path.replace("\\", "/");
 
             // If there's another media set, we remove its mediaview and mediaplayer before setting the new ones
-            if((mediaView != null) && (mediaPlayer != null)) {
+            if((mediaView != null) && (mediaView.getMediaPlayer() != null)) {
             	
             	print("playPauseSong(Song): deleting old mediaview and mediaplayer...");
             	
@@ -613,6 +613,7 @@ public class Controller {
             
             // ********************************************************************************************************
         	songTable.getSelectionModel().clearSelection(); //TOLTA SELEZIONE modifica del 19/11/2020
+            currentActive = null;
         	// ********************************************************************************************************
         	
             
@@ -769,9 +770,11 @@ public class Controller {
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
-                mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() /100);
+                if(mediaView.getMediaPlayer() != null){
+                    mediaView.getMediaPlayer().setVolume(volumeSlider.getValue() /100);
+                    volume = mediaView.getMediaPlayer().getVolume();
+                }
                 volumeValue.setText(String.valueOf((int)volumeSlider.getValue()));
-                volume = mediaView.getMediaPlayer().getVolume();
                 volumeIconChanger();
             }
         });
@@ -1110,6 +1113,16 @@ public class Controller {
                 updateSongIds(songTable.getItems(), idRemovedSong);
                 songTable.refresh();
                 print("removeFile: removed " + nameRemovedSong + " from table...");
+
+                if(players.indexOf(mediaView.getMediaPlayer()) == Integer.parseInt(currentActive.getId())){
+                    mediaView.getMediaPlayer().stop();
+                    mediaView.setMediaPlayer(null);
+                    //songSlider.setValue(0.0);
+                    currentDuration.setText("00:00");
+                    totalDuration.setText("00:00");
+                    showSongInfo((Song) null);
+                }
+
                 players.remove(idRemovedSong);
                 //print("removeFile: removed player's song");
                 //print("Current player list: ");
