@@ -977,6 +977,8 @@ public class ControllerSimple {
         Tooltip.install(plusVol, 		new Tooltip(resources.getString("tt_incrvol")));
         Tooltip.install(muteIcon, 		new Tooltip(resources.getString("tt_muted")));
         Tooltip.install(volumeIcon, 		new Tooltip(resources.getString("tt_volumepane")));       
+     
+        
         
     }
 

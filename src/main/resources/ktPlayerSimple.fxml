@@ -90,17 +90,17 @@
 
                                        <children>
 
-                                          <ImageView fx:id="addButton" fitHeight="80.0" fitWidth="80.0"  pickOnBounds="true" preserveRatio="true"  AnchorPane.leftAnchor="150.0" >
+                                          <ImageView fx:id="addButton" fitHeight="90.0" fitWidth="90.0"  pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="150.0" >
                                              
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
 
-											<ImageView fx:id="removeButton" accessibleRole="BUTTON" fitHeight="80.0" fitWidth="80.0"  pickOnBounds="true" preserveRatio="true"  AnchorPane.leftAnchor="260.0" >
+											<ImageView fx:id="removeButton" accessibleRole="BUTTON" fitHeight="90.0" fitWidth="90.0"  pickOnBounds="true" preserveRatio="true"  AnchorPane.leftAnchor="260.0" >
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                              
                                           </ImageView>
 
-										<ImageView fx:id="exitProgramButton" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true"  AnchorPane.rightAnchor="150.0" >
+										<ImageView fx:id="exitProgramButton" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="03.0" AnchorPane.rightAnchor="143.0" >
                                           
                                              <cursor> <Cursor fx:constant="HAND" /> </cursor>
                                           </ImageView>
